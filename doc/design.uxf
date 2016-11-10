@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>288</x>
+      <y>264</y>
+      <w>224</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>Country
+--
+-name: String
+-neighbours: Country[]
+-humans: Human[]
+-num_death_people: int
+-num_immunes: int
+-num_infected: int
+-num_sick: int
+--
+public void pass_day()
+get_name(): String
+public String[] get_neighbour_list()
+public Country get_neighbour(String)
+public enter(Human)
+public exit(Human)
+public int get_num_immune()
+public int get_num_infected()
+public int get_num_sick()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>304</y>
+      <w>64</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>552</x>
+      <y>264</y>
+      <w>264</w>
+      <h>248</h>
+    </coordinates>
+    <panel_attributes>Human implements HealthState
+--
+-name: String
+-id: int
+-current_country: Country
+-day_to_move: int
+-HealthState cur_hstate: HealthState
+-HealthState immune: HealthState
+-HealthState sick: HealthState
+-HealthState infected: HealthState
+-HealthState health: HealthState
+--
+public void pass_day()
+public bool is_sick()
+publc bool is_infected()
+public bool is_immune()
+--
+private int decide_day_to_move()
+private Country decide_destination()
+private void move(Country dest)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>616</x>
+      <y>552</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>#TODO: write HealthState 
+as &lt;&lt;interface&gt;&gt;
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>856</x>
+      <y>448</y>
+      <w>120</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>h_state.is_infected()
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>808</x>
+      <y>448</y>
+      <w>64</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>296</x>
+      <y>128</y>
+      <w>184</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Simulator
+--
+-countries: Country[]
+-int: num_passed_days
+--
+pass_day(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>368</x>
+      <y>200</y>
+      <w>24</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>72</x>
+      <y>384</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>for (human h: humans)
+    h.pass_day();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>80</x>
+      <y>176</y>
+      <w>168</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>for (Country c: countries)
+    c.pass_day();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>848</x>
+      <y>480</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>dest.enter(self)
+self.cur_country.exit(self)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>808</x>
+      <y>488</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>856</x>
+      <y>392</y>
+      <w>144</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>self.h_state.pass_day()
+if day_to_move == 0:
+    self.move()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>176</y>
+      <w>72</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>224</x>
+      <y>384</y>
+      <w>72</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>808</x>
+      <y>400</y>
+      <w>64</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
