@@ -2,7 +2,8 @@ JFLAGS = -g
 JC = javac
 
 CLASSES = \
-		simulation/My.java \
+		simulation/Human.java \
+		simulation/Country.java \
 		test/Test.java
 
 default: 
