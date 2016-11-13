@@ -1,42 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
-  <zoom_level>9</zoom_level>
+  <zoom_level>7</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>567</x>
-      <y>171</y>
-      <w>315</w>
-      <h>288</h>
+      <x>448</x>
+      <y>168</y>
+      <w>245</w>
+      <h>462</h>
     </coordinates>
     <panel_attributes>Country
 --
 -private name: String
 -private neighbours: Country[]
--private humans: Human[]
--private numDeath: int
--private numImmune: int
+-private citizens: Human[]
+-private graveyard: Human[]
+-private numHealthy: int
 -private numInfected: int
 -private numSick: int
+-private numImmune: int
+-private numDeath: int
+-private numInfectious: int
+-private numVisiblyInfectious: int
 --
+public Country(String name)
 public void passDay()
+public enter(Human h)
+public exit(Human h)
+public Country[] getNeighbours()
+publoc void recordDeath(Human h)
+public String toString()
 public String getName()
-public int getNumImmune()
+public int getNumDeath()
+public void incrNumDeath()
+public int getNumHealthy()
+public void incrNumHealthy()
+public void decrNumHealthy()
 public int getNumInfected()
+public int incrNumInfected()
+public void decrNumInfected()
 public int getNumSick()
-public Country[] getNeighbourList()
-public Human getHuman(int bornId)
-public enter(Human)
-public exit(Human)
-public void giveBirth(name, bornId)</panel_attributes>
+public int incrNumSick()
+public int decrNumSick()
+public int getNumImmune()
+public int incrNumImmune()
+public int decrNumImmune()
+public int getNumInfectious()
+public void incrNumInfectious()
+public void decrNumInfectious()
+public int getNumVisiblyInfectious()
+public int incrNumVisiblyInfectious()
+public int decrNumVisiblyInfectious()
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>873</x>
-      <y>216</y>
-      <w>72</w>
-      <h>27</h>
+      <x>686</x>
+      <y>203</y>
+      <w>56</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
@@ -44,10 +67,10 @@ public void giveBirth(name, bornId)</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>927</x>
-      <y>171</y>
-      <w>405</w>
-      <h>315</h>
+      <x>728</x>
+      <y>168</y>
+      <w>392</w>
+      <h>343</h>
     </coordinates>
     <panel_attributes>Human
 --
@@ -56,53 +79,63 @@ public void giveBirth(name, bornId)</panel_attributes>
 -birthDay: int
 -final bornCountry: Country
 -currentCountry: Country
--remainToMove: int
+-remDayToStay: int
 -HealthState curentHealth: HealthState
 -HealthState immune: HealthState
 -HealthState sick: HealthState
 -HealthState infected: HealthState
 -HealthState healthy: HealthState
+-SimulationGlobals simGlobs
 --
+public Human(String name, int bornId, int birthDate, Country bornCountry)
 public void passDay()
-public bool isSick()
-publc bool isInfected()
-public bool isImmune()
---
-private int decideDayToMove()
-private Country decideDestination(Country[] neighbours)
+private Country selectDest(Country[] neighbours)
 private void move(Country dest)
-public void die()</panel_attributes>
+public int decideDayToSay()
+public int getRemDayToStay()
+private void decrRemDayToStay()
+public void die()
+public String getName()
+public boolean isHealthy()
+public boolean isInfected()
+public boolean isSick()
+public boolean isImmune()
+public boolean isInfectious()
+public boolean isVisiblyInfectious()
+public String toString()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>927</x>
-      <y>504</y>
-      <w>306</w>
-      <h>144</h>
+      <x>749</x>
+      <y>595</y>
+      <w>245</w>
+      <h>147</h>
     </coordinates>
     <panel_attributes>abstract class HealthState 
 --
--int: numDaysInState;
--private Human: human
+-int: numInfectedDays;
+-Human: human
+-globals: HealthGlobals
 --
-public abstract bool isSick()
-public abstract bool isInfected()
-public abstract bool isImmune()
-public abstract passDay()
-private void setHealthState(HealthState state)
-
- </panel_attributes>
+public abstract void passDay()
+public abstract boolean isVisiblyInfectious()
+public abstract boolean isInfectious()
+public bool isHealthy()
+public bool isInfected()
+public bool isSick()
+public bool isImmune()
+public void initialize(Human h) </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1368</x>
-      <y>405</y>
-      <w>189</w>
-      <h>27</h>
+      <x>1162</x>
+      <y>322</y>
+      <w>147</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>currentHealth.isImmune()
 bg=white</panel_attributes>
@@ -111,10 +144,10 @@ bg=white</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>639</x>
-      <y>18</y>
-      <w>207</w>
-      <h>108</h>
+      <x>504</x>
+      <y>49</y>
+      <w>161</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>Simulator
 --
@@ -129,10 +162,10 @@ public int getNextBornId()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>720</x>
-      <y>117</y>
-      <w>27</w>
-      <h>72</h>
+      <x>567</x>
+      <y>126</y>
+      <w>21</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
@@ -140,12 +173,12 @@ public int getNextBornId()</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>342</x>
-      <y>306</y>
-      <w>171</w>
-      <h>45</h>
+      <x>273</x>
+      <y>273</y>
+      <w>133</w>
+      <h>35</h>
     </coordinates>
-    <panel_attributes>for (human h: humans)
+    <panel_attributes>for (human h: citizens)
     h.passDay();
 </panel_attributes>
     <additional_attributes/>
@@ -153,10 +186,10 @@ public int getNextBornId()</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>396</x>
-      <y>72</y>
-      <w>189</w>
-      <h>45</h>
+      <x>315</x>
+      <y>91</y>
+      <w>147</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>for (Country c: countries)
     c.passDay();
@@ -166,10 +199,10 @@ public int getNextBornId()</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1368</x>
-      <y>441</y>
-      <w>207</w>
-      <h>45</h>
+      <x>1162</x>
+      <y>392</y>
+      <w>161</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>dest.enter(self)
 self.currentCountry.exit(self)
@@ -179,14 +212,14 @@ self.currentCountry.exit(self)
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1368</x>
-      <y>324</y>
-      <w>198</w>
-      <h>72</h>
+      <x>1162</x>
+      <y>252</y>
+      <w>154</w>
+      <h>56</h>
     </coordinates>
-    <panel_attributes>self.currentHealth.passDay()
-self.remainToMove--
-if remainToMove == 0:
+    <panel_attributes>this.decrNumDayToStay()
+this.currentHealth.passDay()
+if this.remDayToStay == 0:
     self.move()
 </panel_attributes>
     <additional_attributes/>
@@ -195,9 +228,9 @@ if remainToMove == 0:
     <id>UMLNote</id>
     <coordinates>
       <x>0</x>
-      <y>441</y>
-      <w>513</w>
-      <h>45</h>
+      <y>553</y>
+      <w>413</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>humans.add(Human(Simulator.getBornId(), Simulator.getDayPassed(), name))
 </panel_attributes>
@@ -206,81 +239,95 @@ if remainToMove == 0:
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>549</x>
-      <y>684</y>
-      <w>171</w>
-      <h>81</h>
+      <x>350</x>
+      <y>805</y>
+      <w>182</w>
+      <h>84</h>
     </coordinates>
-    <panel_attributes>Healthy
+    <panel_attributes>Healthy extends HealthState
 --
-private void passDay()
-public isHealthy()
+public isHealthy() //@Override
+public boolean isInfectious()
+public boolean isVisiblyInfectious()
+--
+public void passDay()
+--
 private void beInfected()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>801</x>
-      <y>684</y>
-      <w>162</w>
-      <h>81</h>
+      <x>560</x>
+      <y>805</y>
+      <w>210</w>
+      <h>91</h>
     </coordinates>
-    <panel_attributes>Infected
+    <panel_attributes>Infected extends HealthState
 --
-private void passDay()
-public bool isInfected()
+public bool isInfected() //@Override
+public boolean isInfectious()
+public boolean isVisiblyInfectious()
+--
+public void passDay()
+--
 private void beSick()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1044</x>
-      <y>684</y>
-      <w>153</w>
-      <h>90</h>
+      <x>784</x>
+      <y>805</y>
+      <w>189</w>
+      <h>105</h>
     </coordinates>
-    <panel_attributes>Sick
+    <panel_attributes>Sick extends HealthState
 --
-private void passDay()
-public isSick()
-private void shallDie()
-private beHealthy()</panel_attributes>
+public isSick() //@Override
+public boolean isInfectious()
+public boolean isVisiblyInfectiou
+--
+public void passDay()
+--
+private void beImmune()
+private void die()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1260</x>
-      <y>684</y>
-      <w>162</w>
-      <h>63</h>
+      <x>1169</x>
+      <y>805</y>
+      <w>168</w>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>Immune
+    <panel_attributes>Immune extends HealthState
+--
+public isImmune() //@Override
 --
 private void passDay()
-public isImmune()</panel_attributes>
+private beHealthy()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>441</y>
-      <w>81</w>
-      <h>27</h>
+      <x>406</x>
+      <y>560</y>
+      <w>56</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;60.0;100.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>882</x>
-      <y>81</y>
-      <w>135</w>
-      <h>45</h>
+      <x>693</x>
+      <y>98</y>
+      <w>105</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>nextBornId++
 return nextBornId</panel_attributes>
@@ -289,10 +336,10 @@ return nextBornId</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>837</x>
-      <y>108</y>
-      <w>63</w>
-      <h>27</h>
+      <x>658</x>
+      <y>119</y>
+      <w>49</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
@@ -300,10 +347,10 @@ return nextBornId</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>576</x>
-      <y>81</y>
-      <w>81</w>
-      <h>27</h>
+      <x>455</x>
+      <y>98</y>
+      <w>63</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
@@ -311,34 +358,220 @@ return nextBornId</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1323</x>
-      <y>351</y>
+      <x>1113</x>
+      <y>322</y>
       <w>63</w>
-      <h>27</h>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1113</x>
+      <y>399</y>
+      <w>63</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1001</x>
+      <y>868</y>
+      <w>98</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>this.human.die()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>966</x>
+      <y>868</y>
+      <w>49</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
-    <id>Relation</id>
+    <id>UMLNote</id>
     <coordinates>
-      <x>1323</x>
-      <y>405</y>
-      <w>63</w>
-      <h>27</h>
+      <x>1162</x>
+      <y>357</y>
+      <w>210</w>
+      <h>21</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+    <panel_attributes>this.currentCountry.recordDeath(this)
+bg=white</panel_attributes>
+    <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1323</x>
-      <y>450</y>
+      <x>1113</x>
+      <y>357</y>
       <w>63</w>
-      <h>27</h>
+      <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1113</x>
+      <y>273</y>
+      <w>63</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1106</x>
+      <y>560</y>
+      <w>245</w>
+      <h>231</h>
+    </coordinates>
+    <panel_attributes>HealthGlobals 
+--
+-private dayToSick: int
+-private dayToDie: int 
+-private dayToImmune: int 
+-private dayToBackHealthy: int 
+-private probToTransmitVirus: double
+-private probToDie: double
+--
+public int getDayToSick()
+public void setDayToSick(int x)
+public int getDayToDie()
+public void setDayToDie(int x)
+public int getDayToImmune()
+public void setDayToImmune(int x)
+public int getDayBackToHealthy()
+public void setDayBackToHealthy()
+public int getProbToTransmitVirus()
+public void setProbToTransmitVirus(double x)
+public int getProbToDie()
+public void setProbToDie(int x)
+ </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>987</x>
+      <y>560</y>
+      <w>133</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;100.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>812</x>
+      <y>504</y>
+      <w>21</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>399</x>
+      <y>301</y>
+      <w>63</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>245</x>
+      <y>812</y>
+      <w>77</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>return true</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>819</y>
+      <w>49</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>609</x>
+      <y>679</y>
+      <w>77</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>return false</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>679</x>
+      <y>686</y>
+      <w>84</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1148</x>
+      <y>42</y>
+      <w>245</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>SimulationGlobals
+--
+private simDayLimit: int
+private maxDayToStay: int
+private minDayToStay: int
+--
+public int getMaxDayToStay
+public void setMaxDayToStay
+public int getMinDayToStay
+public void setMinDayToStay</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>952</x>
+      <y>49</y>
+      <w>210</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;170.0;280.0;10.0</additional_attributes>
   </element>
 </diagram>
