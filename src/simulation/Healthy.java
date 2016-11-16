@@ -1,4 +1,4 @@
-package simulation;
+ package simulation;
 import java.util.Random;
 
 public class Healthy extends HealthState {
@@ -23,9 +23,7 @@ public class Healthy extends HealthState {
     private void beInfected() {
         this.human.currentHealth = this.human.infected;
         this.human.currentHealth.numInfectedDays = 0;
-        this.human.currentCountry.decrNumHealthy();
-        this.human.currentCountry.incrNumInfected();
-        this.human.currentCountry.incrNumInfectious();
+        this.human.notifyInfected();
     }
 
     public void passDay() {
@@ -33,10 +31,9 @@ public class Healthy extends HealthState {
             Random random = new Random();
             double prob = this.globals.getProbToTransmitVirus();
             if (prob > random.nextDouble()) {
-                System.out.println(this.human.getName() + "infected\n");
+                System.out.println(this.human.getName() + " is infected");
                 this.beInfected();
             }
         }
-        System.out.println("pass day in healthy state\n");
     }
 }

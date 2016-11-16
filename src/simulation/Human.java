@@ -1,5 +1,6 @@
 package simulation;
 import java.util.Random;
+import java.util.*;
 
 public class Human {
 
@@ -36,8 +37,7 @@ public class Human {
         } else {
             this.currentHealth = this.healthy;
         }
-
-        bornCountry.enter(this);
+        bornCountry.recordEnter(this);
     }
 
     public void passDay() {
@@ -54,23 +54,47 @@ public class Human {
     }
 
     private Country selectDest() {
-        Country[] countries = this.currentCountry.getNeighbours();
-        int rnd = new Random().nextInt(countries.length);
-        return countries[rnd];
+        ArrayList<Country> countries = this.currentCountry.getNeighbours();
+        int rnd = new Random().nextInt(countries.size());
+        return countries.get(rnd);
     }
 
-    public int decideDayToStay() {
+    private int decideDayToStay() {
         int max_day = this.simGlobs.getMaxDayToStay();
         int min_day = this.simGlobs.getMinDayToStay();
         Random random = new Random();
-        return random.nextInt(max_day-min_day) - 1;
+        return random.nextInt(max_day-min_day) + min_day;
     }
 
     public void move(Country dest) {
-        this.currentCountry.exit(this);
-        this.currentCountry = dest;
         this.remDayToStay = this.decideDayToStay();
-        dest.enter(this);
+        System.out.println(this.name + " enters gate of " + dest.getName());
+        System.out.println(this.name + " would stay for " + this.remDayToStay);
+        dest.enterGate(this);
+    }
+
+    public void notifyInfected() {
+        this.currentCountry.decrNumHealthy();
+        this.currentCountry.incrNumInfected();
+        this.currentCountry.incrNumInfectious();
+    }
+
+    public void notifySick() {
+        this.currentCountry.decrNumInfected();
+        this.currentCountry.incrNumSick();
+        this.currentCountry.incrNumVisiblyInfectious();
+    }
+
+    public void notifyImmune() {
+        this.currentCountry.decrNumSick();
+        this.currentCountry.incrNumImmune();
+        this.currentCountry.decrNumVisiblyInfectious();
+    }
+
+    public void notifyRecovery() {
+        this.currentCountry.decrNumImmune();
+        this.currentCountry.incrNumHealthy();
+        this.currentCountry.decrNumInfectious();
     }
 
     public int getRemDayToStay() {

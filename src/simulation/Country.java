@@ -3,8 +3,10 @@ import java.util.*;
 
 public class Country {
     private String name;
-    private Country[] neighbours;
+
+    private ArrayList<Country> neighbours = new ArrayList<Country>();
     private ArrayList<Human> citizens = new ArrayList<Human>();
+    private ArrayList<Human> gate = new ArrayList<Human>();
     private ArrayList<Human> graveyard = new ArrayList<Human>();
 
     private int numHealthy;
@@ -25,12 +27,27 @@ public class Country {
     }
 
     public void passDay() {
-        for (Human h: citizens) {
+        Iterator itr = this.citizens.iterator();
+        while (itr.hasNext()) {
+            Object h = itr.next();
             h.passDay();
         }
     }
 
-    public void enter(Human h) {
+    public void openGate() {
+        for (Human h: this.gate) {
+            h.currentCountry.recordExit(h);
+            h.currentCountry = this;
+            this.recordEnter(h);
+        }
+        this.gate = new ArrayList<Human>();
+    }
+
+    public void enterGate(Human h) {
+        this.gate.add(h);
+    }
+
+    public void recordEnter(Human h) {
         if (h.isHealthy()) {
             this.incrNumHealthy();
         } else if(h.isInfected()) {
@@ -48,18 +65,26 @@ public class Country {
             }
         }
 
-        System.out.println("Welcome " + h.getName());
+        System.out.println(" [ " + this.getName() + " ] " + "Welcome " + h.getName());
         this.citizens.add(h);
+    }
+
+    public void addNeighbour(Country c) {
+        this.neighbours.add(c);
+    }
+
+    public void removeNeighbour(Country c) {
+        this.neighbours.remove(c);
     }
 
     public void recordDeath(Human h) {
         this.incrNumDeath();
-        this.exit(h);
-        System.out.println("RIP " + h.getName());
         this.graveyard.add(h);
+        System.out.println("RIP " + h.getName());
+        this.recordExit(h);
     }
 
-    public void exit(Human h) {
+    public void recordExit(Human h) {
         if (h.isHealthy()) {
             this.decrNumHealthy();
         } else if(h.isInfected()) {
@@ -76,10 +101,11 @@ public class Country {
                 this.decrNumVisiblyInfectious();
             }
         }
+        System.out.println(" [ " + this.getName() + " ] " + "Goodbye " + h.getName());
         this.citizens.remove(h);
     }
 
-    public Country[] getNeighbours() {
+    public ArrayList<Country> getNeighbours() {
         return this.neighbours;
     }
 

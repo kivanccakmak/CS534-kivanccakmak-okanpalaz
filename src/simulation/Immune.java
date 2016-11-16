@@ -29,8 +29,6 @@ public class Immune extends HealthState {
     private void beHealthy() {
         this.human.currentHealth = this.human.healthy;
         this.numInfectedDays = 0;
-        this.human.currentCountry.decrNumImmune();
-        this.human.currentCountry.incrNumHealthy();
-        this.human.currentCountry.decrNumInfectious();
+        this.human.notifyRecovery();
     }
 }

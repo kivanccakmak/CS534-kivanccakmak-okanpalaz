@@ -24,7 +24,7 @@ public class Sick extends HealthState {
         this.numInfectedDays++;
         if (this.numInfectedDays == this.globals.getDayToDie()) {
             Random random = new Random();
-            if (this.globals.getProbToDie() < random.nextDouble()) {
+            if (this.globals.getProbToDie() > random.nextDouble()) {
                 this.die();
             }
         } else if (this.numInfectedDays == this.globals.getDayToImmune()) {
@@ -38,8 +38,7 @@ public class Sick extends HealthState {
 
     private void beImmune() {
         this.human.currentHealth = this.human.immune;
-        this.human.currentCountry.decrNumSick();
-        this.human.currentCountry.incrNumImmune();
-        this.human.currentCountry.decrNumVisiblyInfectious();
+        System.out.println(this.human.getName() + " is Immune");
+        this.human.notifyImmune();
     }
 }

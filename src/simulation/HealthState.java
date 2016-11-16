@@ -3,7 +3,7 @@ package simulation;
 public abstract class HealthState {
 
     int numInfectedDays;
-    HealthGlobals globals;
+    HealthGlobals globals = new HealthGlobals();
     Human human;
 
     public abstract void passDay();

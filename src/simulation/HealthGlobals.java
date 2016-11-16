@@ -7,53 +7,29 @@ public class HealthGlobals {
     private int dayToBackHealthy = 18;
 
     private double probToTransmitVirus = 0.4;
-    private double probToDie = 0.25;
+    private double probToDie = 0.9;
 
     public int getDayToSick() {
-        return this.dayToSick;
-    }
-
-    public void setDayToSick(int x) {
-        this.dayToSick = x;
+        return dayToSick;
     }
 
     public int getDayToDie() {
-        return this.dayToDie;
-    }
-
-    public void setDayToDie(int x) {
-        this.dayToDie = x;
+        return dayToDie;
     }
 
     public int getDayToImmune() {
-        return this.dayToImmune;
-    }
-
-    public void setDayToImmune(int x) {
-        this.dayToImmune = x;
+        return dayToImmune;
     }
 
     public double getProbToTransmitVirus() {
-        return this.probToTransmitVirus;
-    }
-
-    public void setProbToTransmitVirus(double x) {
-        this.probToTransmitVirus = x;
+        return probToTransmitVirus;
     }
 
     public double getProbToDie() {
-        return this.probToDie;
-    }
-
-    public void setProbToDie() {
-        this.probToDie = probToDie;
+        return probToDie;
     }
 
     public int getDayToBackHealthy() {
-        return this.dayToBackHealthy;
-    }
-
-    public void setDayToBackHealthy(int x) {
-        this.dayToBackHealthy = x;
+        return dayToBackHealthy;
     }
 }

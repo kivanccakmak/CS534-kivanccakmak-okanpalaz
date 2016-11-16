@@ -28,9 +28,8 @@ public class Infected extends HealthState {
 
     private void beSick() {
         this.human.currentHealth = this.human.sick;
-        this.human.currentCountry.decrNumInfected();
-        this.human.currentCountry.incrNumSick();
-        this.human.currentCountry.incrNumVisiblyInfectious();
+        System.out.println(this.human.getName() + " is sick");
+        this.human.notifySick();
     }
 
 }
