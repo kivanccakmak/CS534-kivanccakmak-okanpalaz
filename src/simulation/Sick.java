@@ -25,15 +25,13 @@ public class Sick extends HealthState {
         if (this.numInfectedDays == this.globals.getDayToDie()) {
             Random random = new Random();
             if (this.globals.getProbToDie() > random.nextDouble()) {
-                this.die();
+                this.isDeath = true;
             }
-        } else if (this.numInfectedDays == this.globals.getDayToImmune()) {
+            return;
+        }
+        if (this.numInfectedDays == this.globals.getDayToImmune()) {
             this.beImmune();
         }
-    }
-
-    private void die() {
-        this.human.die();
     }
 
     private void beImmune() {

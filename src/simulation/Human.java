@@ -7,8 +7,8 @@ public class Human {
     private String name;
     private int bornId;
     private int birthDay;
-    private final Country bornCountry;
     public Country currentCountry;
+    private Country targetCountry;
     private int remDayToStay;
 
     HealthState currentHealth;
@@ -22,7 +22,7 @@ public class Human {
     public Human(String name, int bornId, int birthDay, 
             Country bornCountry, boolean isBornInfected) {
         this.name = name;
-        this.bornCountry = bornCountry;
+        this.targetCountry = null;
         this.currentCountry = bornCountry;
         this.bornId = bornId;
         this.birthDay = birthDay;
@@ -37,20 +37,47 @@ public class Human {
         } else {
             this.currentHealth = this.healthy;
         }
-        bornCountry.recordEnter(this);
+        bornCountry.requestEnter(this);
     }
 
-    public void passDay() {
-        this.decrRemDayToStay();
+    public void updateHealth() {
         this.currentHealth.passDay();
-        if (this.remDayToStay == 0) {
-            if (this.currentCountry.getNumVisiblyInfectious() > 0) {
-                Country dest = this.selectDest();
-                this.move(dest);
-            }
-        } else {
-            this.remDayToStay = this.decideDayToStay();
+    }
+
+    public boolean getIsDeath() {
+        return this.currentHealth.getIsDeath();
+    }
+
+    public void clearTargetCountry() {
+        this.targetCountry = null;
+    }
+
+    //decide to move from country or not if remained days is zero.
+    //otherwise, just decrease remained days.
+    public boolean updateLocation() {
+        boolean shallMove = false;
+        this.decrRemDayToStay();
+        if (this.remDayToStay != 0) {
+            return shallMove;
         }
+
+        //now decide to move
+        if (this.currentCountry.getNumVisiblyInfectious() > 0) {
+            Country dest = this.selectDest();
+            System.out.println(this.name + " " + this.currentCountry.getName()
+                    + " -> " + dest.getName());
+            this.targetCountry = dest;
+            shallMove = true;
+        }
+
+        //either he decide to move or stay, select random days
+        //for new country or this country
+        this.remDayToStay = this.decideDayToStay();
+        return shallMove;
+    }
+
+    public Country getTargetCountry() {
+        return this.targetCountry;
     }
 
     private Country selectDest() {
@@ -64,13 +91,6 @@ public class Human {
         int min_day = this.simGlobs.getMinDayToStay();
         Random random = new Random();
         return random.nextInt(max_day-min_day) + min_day;
-    }
-
-    public void move(Country dest) {
-        this.remDayToStay = this.decideDayToStay();
-        System.out.println(this.name + " enters gate of " + dest.getName());
-        System.out.println(this.name + " would stay for " + this.remDayToStay);
-        dest.enterGate(this);
     }
 
     public void notifyInfected() {
@@ -133,8 +153,8 @@ public class Human {
         return this.name;
     }
 
-    public void die() {
-        this.currentCountry.recordDeath(this);
+    public int getBornId() {
+        return this.bornId;
     }
 
     @Override
@@ -142,8 +162,6 @@ public class Human {
         String out = "";
         out += "name: " + this.name + "\n";
         out += "id: " + this.bornId + "\n";
-        out += "bornCountry: " +
-            this.bornCountry.getName() + "\n";
         out += "current country: " +
             this.currentCountry.getName() + "\n";
         if (this.isHealthy()) {

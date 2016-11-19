@@ -6,7 +6,6 @@ public class Country {
 
     private ArrayList<Country> neighbours = new ArrayList<Country>();
     private ArrayList<Human> citizens = new ArrayList<Human>();
-    private ArrayList<Human> gate = new ArrayList<Human>();
     private ArrayList<Human> graveyard = new ArrayList<Human>();
 
     private int numHealthy;
@@ -27,27 +26,52 @@ public class Country {
     }
 
     public void passDay() {
-        Iterator itr = this.citizens.iterator();
-        while (itr.hasNext()) {
-            Object h = itr.next();
-            h.passDay();
-        }
+        FuncInterfaceDeathCheck fi_health;
+        fi_health = (h, c) -> {
+            h.updateHealth();
+            if (h.getIsDeath()) {
+                c.recordDeath(h);
+                c.graveyard.add(h);
+                return true;
+            } else {
+                return false;
+            }
+        };
+        this.citizens.removeIf(p -> fi_health.iter(p, this));
+
+        //TODO: if person decides to move and if we just
+        //remove from citizen array and send to other countries
+        //citizen array; we re-check his move.
+
+        //TODO: remove all nodes have intention to move
+        //and keep them into pool
+
+        //TODO: inject them into their new countries.
+
+        FuncInterfaceMoveCheck fi_move;
+        fi_move = (h) -> {
+            boolean ret = h.updateLocation();
+            if (ret) {
+                Country dest = h.getTargetCountry();
+                this.recordExit(h);
+                dest.requestEnter(h);
+                return true;
+            }
+            return false;
+        };
+        this.citizens.removeIf(p -> fi_move.iter(p));
     }
 
-    public void openGate() {
-        for (Human h: this.gate) {
-            h.currentCountry.recordExit(h);
-            h.currentCountry = this;
-            this.recordEnter(h);
-        }
-        this.gate = new ArrayList<Human>();
+    public void requestEnter(Human h) {
+        this.recordEnter(h);
+        //System.out.println(" [ " + this.getName() + " ] "
+                //+ "Welcome " + h.getName());
+        this.citizens.add(h);
+        h.currentCountry = this;
+        h.clearTargetCountry();
     }
 
-    public void enterGate(Human h) {
-        this.gate.add(h);
-    }
-
-    public void recordEnter(Human h) {
+    private void recordEnter(Human h) {
         if (h.isHealthy()) {
             this.incrNumHealthy();
         } else if(h.isInfected()) {
@@ -64,9 +88,6 @@ public class Country {
                 this.incrNumVisiblyInfectious();
             }
         }
-
-        System.out.println(" [ " + this.getName() + " ] " + "Welcome " + h.getName());
-        this.citizens.add(h);
     }
 
     public void addNeighbour(Country c) {
@@ -79,7 +100,6 @@ public class Country {
 
     public void recordDeath(Human h) {
         this.incrNumDeath();
-        this.graveyard.add(h);
         System.out.println("RIP " + h.getName());
         this.recordExit(h);
     }
@@ -101,8 +121,8 @@ public class Country {
                 this.decrNumVisiblyInfectious();
             }
         }
-        System.out.println(" [ " + this.getName() + " ] " + "Goodbye " + h.getName());
-        this.citizens.remove(h);
+        //System.out.println(" [ " + this.getName() + " ] " +
+                //"Goodbye " + h.getName());
     }
 
     public ArrayList<Country> getNeighbours() {
@@ -204,4 +224,12 @@ public class Country {
         out += "# death people: " + this.numDeath + "\n";
         return out;
     }
+}
+
+interface FuncInterfaceMoveCheck {
+    public boolean iter(Human h);
+}
+
+interface FuncInterfaceDeathCheck {
+    public boolean iter(Human h, Country c);
 }

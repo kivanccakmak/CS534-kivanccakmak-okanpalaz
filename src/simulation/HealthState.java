@@ -5,6 +5,7 @@ public abstract class HealthState {
     int numInfectedDays;
     HealthGlobals globals = new HealthGlobals();
     Human human;
+    protected boolean isDeath = false;
 
     public abstract void passDay();
     public abstract boolean isVisiblyInfectious();
@@ -24,5 +25,9 @@ public abstract class HealthState {
 
     public boolean isImmune() {
         return false;
+    }
+
+    public boolean getIsDeath() {
+        return this.isDeath;
     }
 }

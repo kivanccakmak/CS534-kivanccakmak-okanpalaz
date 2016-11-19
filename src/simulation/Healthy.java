@@ -19,7 +19,7 @@ public class Healthy extends HealthState {
     public boolean isVisiblyInfectious() {
         return false;
     }
-    
+
     private void beInfected() {
         this.human.currentHealth = this.human.infected;
         this.human.currentHealth.numInfectedDays = 0;

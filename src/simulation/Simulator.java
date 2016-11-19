@@ -66,10 +66,6 @@ public class Simulator {
         }
 
         for (Country c: this.countries) {
-            c.openGate();
-        }
-
-        for (Country c: this.countries) {
             System.out.println(c.toString());
         }
     }
@@ -80,10 +76,10 @@ public class Simulator {
         if (this.daysToSimulate == 0) {
             return;
         }
+
         while (this.dayPassed < this.daysToSimulate) {
             this.passDay();
             this.dayPassed++;
         }
     }
-
 }
