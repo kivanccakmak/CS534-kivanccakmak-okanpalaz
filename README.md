@@ -9,7 +9,7 @@ export CLASSPATH
 cd src   
 make   
 
-###run dummy test
+###run test
 
 cd src   
 java test.Test   
