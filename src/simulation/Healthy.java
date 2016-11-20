@@ -23,11 +23,10 @@ public class Healthy extends HealthState {
     private void beInfected() {
         this.human.currentHealth = this.human.infected;
         this.human.currentHealth.numInfectedDays = 0;
-        this.human.notifyInfected();
     }
 
     public void passDay() {
-        if (this.human.currentCountry.getNumInfectious() > 0) {
+        if (this.human.hasInfectiousCountry()) {
             Random random = new Random();
             double prob = this.globals.getProbToTransmitVirus();
             if (prob > random.nextDouble()) {

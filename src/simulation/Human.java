@@ -3,11 +3,10 @@ import java.util.Random;
 import java.util.*;
 
 public class Human {
-
-    private String name;
-    private int bornId;
-    private int birthDay;
-    public Country currentCountry;
+    private final String name;
+    private final int bornId;
+    private final int birthDay;
+    private Country currentCountry;
     private Country targetCountry;
     private int remDayToStay;
 
@@ -31,13 +30,12 @@ public class Human {
         this.infected = new Infected(this);
         this.sick = new Sick(this);
         this.immune = new Immune(this);
-
         if (isBornInfected) {
             this.currentHealth = this.infected;
         } else {
             this.currentHealth = this.healthy;
         }
-        bornCountry.requestEnter(this);
+        this.currentCountry.giveBirth(this);
     }
 
     public void updateHealth() {
@@ -48,40 +46,45 @@ public class Human {
         return this.currentHealth.getIsDeath();
     }
 
-    public void clearTargetCountry() {
-        this.targetCountry = null;
-    }
-
-    //decide to move from country or not if remained days is zero.
-    //otherwise, just decrease remained days.
+    //decide to move from country or not, if days expired.
     public boolean updateLocation() {
         boolean shallMove = false;
-        this.decrRemDayToStay();
+        this.remDayToStay--;
         if (this.remDayToStay != 0) {
-            return shallMove;
+            return false;
         }
 
         //now decide to move
         if (this.currentCountry.getNumVisiblyInfectious() > 0) {
             Country dest = this.selectDest();
-            System.out.println(this.name + " " + this.currentCountry.getName()
-                    + " -> " + dest.getName());
             this.targetCountry = dest;
             shallMove = true;
+            this.printMoveMessage(dest, this.currentCountry);
         }
 
-        //either he decide to move or stay, select random days
-        //for new country or this country
+        //either he move or stay, select random days
         this.remDayToStay = this.decideDayToStay();
         return shallMove;
+    }
+
+    private void printMoveMessage(Country dest, Country src) {
+        String msg = "";
+        msg += this.name + " " + src.getName() +
+            " -> " + dest.getName();
+        System.out.println(msg);
     }
 
     public Country getTargetCountry() {
         return this.targetCountry;
     }
 
+    public void clearTargetCountry() {
+        this.targetCountry = null;
+    }
+
     private Country selectDest() {
-        ArrayList<Country> countries = this.currentCountry.getNeighbours();
+        ArrayList<Country> countries =
+            this.currentCountry.getNeighbours();
         int rnd = new Random().nextInt(countries.size());
         return countries.get(rnd);
     }
@@ -93,36 +96,12 @@ public class Human {
         return random.nextInt(max_day-min_day) + min_day;
     }
 
-    public void notifyInfected() {
-        this.currentCountry.decrNumHealthy();
-        this.currentCountry.incrNumInfected();
-        this.currentCountry.incrNumInfectious();
-    }
-
-    public void notifySick() {
-        this.currentCountry.decrNumInfected();
-        this.currentCountry.incrNumSick();
-        this.currentCountry.incrNumVisiblyInfectious();
-    }
-
-    public void notifyImmune() {
-        this.currentCountry.decrNumSick();
-        this.currentCountry.incrNumImmune();
-        this.currentCountry.decrNumVisiblyInfectious();
-    }
-
-    public void notifyRecovery() {
-        this.currentCountry.decrNumImmune();
-        this.currentCountry.incrNumHealthy();
-        this.currentCountry.decrNumInfectious();
-    }
-
-    public int getRemDayToStay() {
-        return this.remDayToStay;
-    }
-
-    private void decrRemDayToStay() {
-        this.remDayToStay--;
+    public boolean hasInfectiousCountry() {
+        int numInfectious = this.currentCountry.getNumInfectious();
+        if (numInfectious > 0) {
+            return true;
+        }
+        return false;
     }
 
     public boolean isHealthy() {

@@ -7,7 +7,7 @@ public class HealthGlobals {
     private int dayToBackHealthy = 18;
 
     private double probToTransmitVirus = 0.4;
-    private double probToDie = 0.9;
+    private double probToDie = 0.25;
 
     public int getDayToSick() {
         return dayToSick;

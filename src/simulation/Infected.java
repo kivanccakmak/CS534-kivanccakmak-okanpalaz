@@ -29,7 +29,6 @@ public class Infected extends HealthState {
     private void beSick() {
         this.human.currentHealth = this.human.sick;
         System.out.println(this.human.getName() + " is sick");
-        this.human.notifySick();
     }
 
 }

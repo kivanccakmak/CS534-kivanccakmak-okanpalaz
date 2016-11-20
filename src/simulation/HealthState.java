@@ -2,7 +2,7 @@ package simulation;
 
 public abstract class HealthState {
 
-    int numInfectedDays;
+    protected int numInfectedDays;
     HealthGlobals globals = new HealthGlobals();
     Human human;
     protected boolean isDeath = false;

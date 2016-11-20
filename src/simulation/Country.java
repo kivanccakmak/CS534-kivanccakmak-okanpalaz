@@ -3,10 +3,10 @@ import java.util.*;
 
 public class Country {
     private String name;
-
-    private ArrayList<Country> neighbours = new ArrayList<Country>();
-    private ArrayList<Human> citizens = new ArrayList<Human>();
-    private ArrayList<Human> graveyard = new ArrayList<Human>();
+    private ArrayList<Country> neighbours;
+    private ArrayList<Human> citizens;
+    private ArrayList<Human> graveyard;
+    private ArrayList<Human> arrivals;
 
     private int numHealthy;
     private int numInfected;
@@ -18,205 +18,143 @@ public class Country {
 
     public Country(String name) {
         this.name = name;
+        this.neighbours = new ArrayList<Country>();
+        this.citizens = new ArrayList<Human>();
+        this.graveyard = new ArrayList<Human>();
+        this.arrivals = new ArrayList<Human>();
         this.numHealthy = 0;
         this.numInfected = 0;
         this.numSick = 0;
         this.numImmune = 0;
         this.numDeath = 0;
+        this.numInfectious = 0;
+        this.numVisiblyInfectious = 0;
     }
 
-    public void passDay() {
-        FuncInterfaceDeathCheck fi_health;
-        fi_health = (h, c) -> {
+    public void giveBirth(Human h) {
+        System.out.println(h.getName() + " born");
+        this.citizens.add(h);
+        this.countHealthStats();
+    }
+
+    private void reqEnter(Human h) {
+        this.arrivals.add(h);
+    }
+
+    private void countHealthStats() {
+        this.numHealthy = 0;
+        this.numInfected = 0;
+        this.numSick = 0;
+        this.numImmune = 0;
+        this.numInfectious = 0;
+        this.numVisiblyInfectious = 0;
+
+        for (Human h: this.citizens) {
+            if (h.isHealthy()) {
+                this.numHealthy++;
+            } else if (h.isInfected()) {
+                this.numInfected++;
+            } else if (h.isSick()) {
+                this.numSick++;
+            } else if (h.isImmune()) {
+                this.numImmune++;
+            }
+            if (h.isInfectious()) {
+                this.numInfectious++;
+                if (h.isVisiblyInfectious()) {
+                    this.numVisiblyInfectious++;
+                }
+            }
+        }
+    }
+
+    public void reqUpdateHealth() {
+        FuncInterfaceDeathCheck health;
+        health = (h, c) -> {
             h.updateHealth();
             if (h.getIsDeath()) {
-                c.recordDeath(h);
+                System.out.println("RIP " + h.getName());
+                c.numDeath++;
                 c.graveyard.add(h);
                 return true;
             } else {
                 return false;
             }
         };
-        this.citizens.removeIf(p -> fi_health.iter(p, this));
+        this.citizens.removeIf(p -> health.iter(p, this));
+    }
 
-        //TODO: if person decides to move and if we just
-        //remove from citizen array and send to other countries
-        //citizen array; we re-check his move.
-
-        //TODO: remove all nodes have intention to move
-        //and keep them into pool
-
-        //TODO: inject them into their new countries.
-
-        FuncInterfaceMoveCheck fi_move;
-        fi_move = (h) -> {
-            boolean ret = h.updateLocation();
-            if (ret) {
+    public void reqUpdateLocation() {
+        this.countHealthStats();
+        FuncInterfaceMoveCheck location;
+        location = (h, c) -> {
+            boolean shallMove = h.updateLocation();
+            if (shallMove) {
                 Country dest = h.getTargetCountry();
-                this.recordExit(h);
-                dest.requestEnter(h);
+                dest.reqEnter(h);
                 return true;
             }
             return false;
         };
-        this.citizens.removeIf(p -> fi_move.iter(p));
+        this.citizens.removeIf(p -> location.iter(p, this));
     }
 
-    public void requestEnter(Human h) {
-        this.recordEnter(h);
-        //System.out.println(" [ " + this.getName() + " ] "
-                //+ "Welcome " + h.getName());
-        this.citizens.add(h);
-        h.currentCountry = this;
-        h.clearTargetCountry();
+    public void reqCountHealthStats() {
+        this.countHealthStats();
     }
 
-    private void recordEnter(Human h) {
-        if (h.isHealthy()) {
-            this.incrNumHealthy();
-        } else if(h.isInfected()) {
-            this.incrNumInfected();
-        } else if(h.isSick()) {
-            this.incrNumSick();
-        } else if(h.isImmune()) {
-            this.incrNumImmune();
+    public void reqPullArrivals() {
+        for (Human h: this.arrivals) {
+            this.citizens.add(h);
+            h.clearTargetCountry();
         }
-
-        if (h.isInfectious()) {
-            this.incrNumInfectious();
-            if (h.isVisiblyInfectious()) {
-                this.incrNumVisiblyInfectious();
-            }
-        }
+        this.arrivals.clear();
     }
 
     public void addNeighbour(Country c) {
         this.neighbours.add(c);
     }
 
-    public void removeNeighbour(Country c) {
-        this.neighbours.remove(c);
-    }
-
-    public void recordDeath(Human h) {
-        this.incrNumDeath();
-        System.out.println("RIP " + h.getName());
-        this.recordExit(h);
-    }
-
-    public void recordExit(Human h) {
-        if (h.isHealthy()) {
-            this.decrNumHealthy();
-        } else if(h.isInfected()) {
-            this.decrNumInfected();
-        } else if(h.isSick()) {
-            this.decrNumSick();
-        } else if(h.isImmune()) {
-            this.decrNumImmune();
-        }
-
-        if (h.isInfectious()) {
-            this.decrNumInfectious();
-            if (h.isVisiblyInfectious()) {
-                this.decrNumVisiblyInfectious();
-            }
-        }
-        //System.out.println(" [ " + this.getName() + " ] " +
-                //"Goodbye " + h.getName());
+    public String getName() {
+        return this.name;
     }
 
     public ArrayList<Country> getNeighbours() {
         return this.neighbours;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     public int getNumHealthy() {
         return this.numHealthy;
-    }
-
-    public void incrNumHealthy() {
-        this.numHealthy++;
-    }
-
-    public void decrNumHealthy() {
-        this.numHealthy--;
     }
 
     public int getNumInfected() {
         return this.numInfected;
     }
 
-    public void incrNumInfected() {
-        this.numInfected++;
-    }
-
-    public void decrNumInfected() {
-        this.numInfected--;
-    }
-
     public int getNumSick() {
         return this.numSick;
-    }
-
-    public void incrNumSick() {
-        this.numSick++;
-    }
-
-    public void decrNumSick() {
-        this.numSick--;
     }
 
     public int getNumImmune() {
         return this.numImmune;
     }
 
-    public void incrNumImmune() {
-        this.numImmune++;
-    }
-
-    public void decrNumImmune() {
-        this.numImmune--;
-    }
-
     public int getNumInfectious() {
         return this.numInfectious;
-    }
-
-    public void incrNumInfectious() {
-        this.numInfectious++;
-    }
-
-    public void decrNumInfectious() {
-        this.numInfectious--;
     }
 
     public int getNumVisiblyInfectious() {
         return this.numVisiblyInfectious;
     }
 
-    public void incrNumVisiblyInfectious() {
-        this.numVisiblyInfectious++;
-    }
-
-    public void decrNumVisiblyInfectious() {
-        this.numVisiblyInfectious--;
-    }
-
     public int getNumDeath() {
         return this.numDeath;
-    }
-
-    public void incrNumDeath() {
-        this.numDeath++;
     }
 
     @Override
     public String toString() {
         String out = "";
-        out += "name: " + this.name + "\n";
+        out += "\n[" + this.name + "]\n";
         out += "# healthy people: " + this.numHealthy + "\n";
         out += "# infected people: " + this.numInfected + "\n";
         out += "# sick people: " + this.numSick + "\n";
@@ -227,7 +165,7 @@ public class Country {
 }
 
 interface FuncInterfaceMoveCheck {
-    public boolean iter(Human h);
+    public boolean iter(Human h, Country c);
 }
 
 interface FuncInterfaceDeathCheck {

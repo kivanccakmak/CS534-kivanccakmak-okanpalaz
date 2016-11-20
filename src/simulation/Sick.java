@@ -37,6 +37,5 @@ public class Sick extends HealthState {
     private void beImmune() {
         this.human.currentHealth = this.human.immune;
         System.out.println(this.human.getName() + " is Immune");
-        this.human.notifyImmune();
     }
 }

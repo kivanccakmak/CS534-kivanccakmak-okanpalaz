@@ -21,9 +21,8 @@ public class Simulator {
     }
     
     //now just creates 3 countries with 6 people, 2 infected; 4 healthy
-    public void initSimulation () {
+    private void initSimulator () {
         int birthDay = 0; 
-        int bornId;
 
         Country tr = new Country("Turkey");
         Country grc = new Country("Greece");
@@ -31,53 +30,56 @@ public class Simulator {
 
         tr.addNeighbour(grc);
         tr.addNeighbour(rus);
-
         grc.addNeighbour(tr);
         grc.addNeighbour(rus);
-
         rus.addNeighbour(tr);
         rus.addNeighbour(grc);
-        
-        bornId = this.getNextBornId();
-        Human kivanc = new Human("Kivanc", bornId, birthDay, tr, false);
-        bornId = this.getNextBornId();
-        Human okan = new Human("Okan", bornId, birthDay, tr, false);
 
-        bornId = this.getNextBornId();
-        Human yorgo = new Human("Yorgo", bornId, birthDay, grc, false); 
-        bornId = this.getNextBornId();
-        Human kostas = new Human("Kostas", bornId, birthDay, grc, false);
-
-        bornId = this.getNextBornId();
-        Human yuri = new Human("Yuri", bornId, birthDay, rus, true);
-        bornId = this.getNextBornId();
-        Human oleg = new Human("Oleg", bornId, birthDay, rus, true);
+        Human kivanc = new Human("Kivanc", getNextBornId(), birthDay, tr, false);
+        Human okan = new Human("Okan", getNextBornId(), birthDay, tr, false);
+        Human yorgo = new Human("Yorgo", getNextBornId(), birthDay, grc, false);
+        Human kostas = new Human("Kostas", getNextBornId(), birthDay, grc, false);
+        Human yuri = new Human("Yuri", getNextBornId(), birthDay, rus, true);
+        Human oleg = new Human("Oleg", getNextBornId(), birthDay, rus, true);
         
         this.countries.add(tr);
         this.countries.add(rus);
         this.countries.add(grc);
+        for (Country c: this.countries) {
+            c.reqPullArrivals();
+        }
     }
 
-    public void passDay() {
-        System.out.println("== DAY" + this.dayPassed + " ==\n");
+    private void passDay() {
+        System.out.println("== DAY " + this.dayPassed + " ==\n");
 
-        for (Country c: this.countries) {
-            c.passDay();
-        }
+        for (Country c: this.countries)
+            c.reqUpdateHealth();
 
+        for (Country c: this.countries)
+            c.reqUpdateLocation();
+
+        for (Country c: this.countries)
+            c.reqPullArrivals();
+
+        for (Country c: this.countries)
+            c.reqCountHealthStats();
+
+        printCountryStatus();
+    }
+
+    public void printCountryStatus() {
         for (Country c: this.countries) {
             System.out.println(c.toString());
         }
     }
 
     public void simulate() {
-        this.initSimulation();
-
+        this.initSimulator();
         if (this.daysToSimulate == 0) {
             return;
         }
-
-        while (this.dayPassed < this.daysToSimulate) {
+        while (this.daysToSimulate > this.dayPassed) {
             this.passDay();
             this.dayPassed++;
         }
