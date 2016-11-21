@@ -9,21 +9,16 @@ public class Country {
     private HealthStats stats;
 
     public class HealthStats {
-        private int healthy;
-        private int sick;
-        private int immune;
-        private int dead;
-        private int infected;
-        public void addHealthy() { healthy++; }
-        public void addSick() { sick++; }
-        public void addImmune() { immune++; }
-        public void addDead() { dead++; }
-        public void addInfected() { infected++; }
-        public int getHealthy() { return healthy; }
-        public int getSick() { return sick; }
-        public int getImmnune() { return immune; }
-        public int getDead() { return dead; }
-        public int getInfected() { return infected; }
+        private long healthy;
+        private long sick;
+        private long immune;
+        private long dead;
+        private long infected;
+        public long healthyCount() { return healthy; }
+        public long sickCount() { return sick; }
+        public long immuneCount() { return immune; }
+        public long deadCount() { return dead; }
+        public long infectedCount() { return infected; }
     }
 
     public Country(String n) {
@@ -36,12 +31,11 @@ public class Country {
 
     public void updateHealthStats() {
         HealthStats newStats = new HealthStats();
-        people.stream().filter(p -> p.isHealthy()).forEach(p -> stats.addHealthy());
-        people.stream().filter(p -> p.isDead()).forEach(p -> stats.addDead());
-        people.stream().filter(p -> p.isSick()).forEach(p -> stats.addSick());
-        people.stream().filter(p -> p.isImmune()).forEach(p -> stats.addImmune());
-        people.stream().filter(p -> p.isDead()).forEach(p -> stats.addDead());
-        people.stream().filter(p -> p.isInfected()).forEach(p -> stats.addInfected());
+        newStats.healthy = people.stream().filter(p -> p.isHealthy()).count();
+        newStats.sick = people.stream().filter(p -> p.isSick()).count();
+        newStats.immune = people.stream().filter(p -> p.isImmune()).count();
+        newStats.dead = people.stream().filter(p -> p.isDead()).count();
+        newStats.infected = people.stream().filter(p -> p.isInfected()).count();
         stats = newStats;
     }
 
