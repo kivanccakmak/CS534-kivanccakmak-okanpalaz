@@ -14,12 +14,6 @@ public class Simulator {
         this.nextBornId = 0;
     }
 
-    private int getNextBornId() {
-        int val = this.nextBornId;
-        this.nextBornId++;
-        return val;
-    }
-
     //now just creates 3 countries with 6 people, 2 infected; 4 healthy
     private void initSimulator () {
         int birthDay = 0;
@@ -28,25 +22,24 @@ public class Simulator {
         Country grc = new Country("Greece");
         Country rus = new Country("Russia");
 
-        tr.addNeighbour(grc);
-        tr.addNeighbour(rus);
-        grc.addNeighbour(tr);
-        grc.addNeighbour(rus);
-        rus.addNeighbour(tr);
-        rus.addNeighbour(grc);
+        tr.addNeighbor(grc);
+        tr.addNeighbor(rus);
+        grc.addNeighbor(tr);
+        grc.addNeighbor(rus);
+        rus.addNeighbor(tr);
+        rus.addNeighbor(grc);
 
-        Human kivanc = new Human("Kivanc", getNextBornId(), birthDay, tr, false);
-        Human okan = new Human("Okan", getNextBornId(), birthDay, tr, false);
-        Human yorgo = new Human("Yorgo", getNextBornId(), birthDay, grc, false);
-        Human kostas = new Human("Kostas", getNextBornId(), birthDay, grc, false);
-        Human yuri = new Human("Yuri", getNextBornId(), birthDay, rus, true);
-        Human oleg = new Human("Oleg", getNextBornId(), birthDay, rus, true);
+        Human kivanc = new Human(birthDay, tr, false);
+        Human okan = new Human(birthDay, tr, false);
+        Human yorgo = new Human(birthDay, grc, false);
+        Human kostas = new Human(birthDay, grc, false);
+        Human yuri = new Human(birthDay, rus, true);
+        Human oleg = new Human(birthDay, rus, true);
 
         this.countries.add(tr);
         this.countries.add(rus);
         this.countries.add(grc);
         for (Country c: this.countries) {
-            c.reqPullArrivals();
         }
     }
 
@@ -54,16 +47,7 @@ public class Simulator {
         System.out.println("== DAY " + this.dayPassed + " ==\n");
 
         for (Country c: this.countries)
-            c.reqUpdateHealth();
-
-        for (Country c: this.countries)
-            c.reqUpdateLocation();
-
-        for (Country c: this.countries)
-            c.reqPullArrivals();
-
-        for (Country c: this.countries)
-            c.reqCountHealthStats();
+            c.updateHealth();
 
         printCountryStatus();
     }

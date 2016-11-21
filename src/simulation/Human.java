@@ -2,15 +2,87 @@ package simulation;
 import java.util.Random;
 import java.util.*;
 
-public class Human {
-    private final String name;
-    private final int bornId;
-    private final int birthDay;
-    private Country currentCountry;
-    private Country targetCountry;
-    private int remDayToStay;
+abstract class HealthState {
+    protected Human human;
 
-    HealthState currentHealth;
+    public abstract void passDay();
+
+    public HealthState(Human h) {
+        human = h;
+    }
+
+    public boolean isVisiblyInfected() {
+        return false;
+    }
+
+    public boolean isInfectious() {
+        return false;
+    }
+
+    public boolean isHealthy() {
+        return false;
+    }
+
+    public boolean isInfected() {
+        return false;
+    }
+
+    public boolean isSick() {
+        return false;
+    }
+
+    public boolean isImmune() {
+        return false;
+    }
+
+    public boolean isDead() {
+        return false;
+    }
+}
+
+class Healthy extends HealthState {
+    public Healthy(Human h) {
+        super(h);
+    }
+
+    public void passDay() {
+    }
+}
+
+class Immune extends HealthState {
+    public Immune(Human h) {
+        super(h);
+    }
+
+    public void passDay() {
+    }
+}
+
+class Infected extends HealthState {
+    public Infected(Human h) {
+        super(h);
+    }
+
+    public void passDay() {
+    }
+}
+
+class Sick extends HealthState {
+    public Sick(Human h) {
+        super(h);
+    }
+
+    public void passDay() {
+    }
+}
+
+public class Human {
+    static int idGen = 0;
+    private final int id;
+    private final int birthDay;
+    private Country country;
+
+    HealthState health;
     HealthState healthy;
     HealthState infected;
     HealthState sick;
@@ -18,132 +90,85 @@ public class Human {
 
     SimulationGlobals simGlobs = new SimulationGlobals();
 
-    public Human(String name, int bornId, int birthDay,
-            Country bornCountry, boolean isBornInfected) {
-        this.name = name;
-        this.targetCountry = null;
-        this.currentCountry = bornCountry;
-        this.bornId = bornId;
-        this.birthDay = birthDay;
-        this.remDayToStay = this.decideDayToStay();
-        this.healthy = new Healthy(this);
-        this.infected = new Infected(this);
-        this.sick = new Sick(this);
-        this.immune = new Immune(this);
-        if (isBornInfected) {
-            this.currentHealth = this.infected;
+    private static int genId() {
+        idGen++;
+        return idGen;
+    }
+
+    public Human(int b, Country c, boolean isInfected) {
+        id = genId();
+        country = c;
+        birthDay = b;
+        healthy = new Healthy(this);
+        infected = new Infected(this);
+        sick = new Sick(this);
+        immune = new Immune(this);
+        if (isInfected) {
+            health = infected;
         } else {
-            this.currentHealth = this.healthy;
+            health = healthy;
         }
-        this.currentCountry.giveBirth(this);
+        country.addHuman(this);
     }
 
-    public void updateHealth() {
-        this.currentHealth.passDay();
+    public void updateHealth(Country.HealthStats h) {
+        health.passDay();
     }
 
-    public boolean getIsDeath() {
-        return this.currentHealth.getIsDeath();
+    public boolean isDead() {
+        return health.isDead();
     }
 
-    //decide to move from country or not, if days expired.
-    public boolean updateLocation() {
-        boolean shallMove = false;
-        this.remDayToStay--;
-        if (this.remDayToStay != 0) {
-            return false;
-        }
-
-        //now decide to move
-        if (this.currentCountry.getNumVisiblyInfectious() > 0) {
-            Country dest = this.selectDest();
-            this.targetCountry = dest;
-            shallMove = true;
-            this.printMoveMessage(dest, this.currentCountry);
-        }
-
-        //either he move or stay, select random days
-        this.remDayToStay = this.decideDayToStay();
-        return shallMove;
+    public boolean isHealthy() {
+        return health.isHealthy();
     }
 
-    private void printMoveMessage(Country dest, Country src) {
-        String msg = "";
-        msg += this.name + " " + src.getName() +
-            " -> " + dest.getName();
-        System.out.println(msg);
+    public boolean isInfected() {
+        return health.isInfected();
     }
 
-    public Country getTargetCountry() {
-        return this.targetCountry;
+    public boolean isSick() {
+        return health.isSick();
     }
 
-    public void clearTargetCountry() {
-        this.targetCountry = null;
+    public boolean isImmune() {
+        return health.isImmune();
+    }
+
+    public boolean isInfectious() {
+        return health.isInfectious();
     }
 
     private Country selectDest() {
-        ArrayList<Country> countries =
-            this.currentCountry.getNeighbours();
+        ArrayList<Country> countries = country.getNeighbors();
         int rnd = new Random().nextInt(countries.size());
         return countries.get(rnd);
     }
 
     private int decideDayToStay() {
-        int max_day = this.simGlobs.getMaxDayToStay();
-        int min_day = this.simGlobs.getMinDayToStay();
+        int max_day = simGlobs.getMaxDayToStay();
+        int min_day = simGlobs.getMinDayToStay();
         Random random = new Random();
         return random.nextInt(max_day-min_day) + min_day;
     }
 
-    public boolean hasInfectiousCountry() {
-        int numInfectious = this.currentCountry.getNumInfectious();
-        if (numInfectious > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isHealthy() {
-        return this.currentHealth.isHealthy();
-    }
-
-    public boolean isInfected() {
-        return this.currentHealth.isInfected();
-    }
-
-    public boolean isSick() {
-        return this.currentHealth.isSick();
-    }
-
-    public boolean isImmune() {
-        return this.currentHealth.isImmune();
-    }
-
-    public boolean isInfectious() {
-        return this.currentHealth.isInfectious();
-    }
-
-    public boolean isVisiblyInfectious() {
-        return this.currentHealth.isVisiblyInfectious();
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
     public int getBornId() {
-        return this.bornId;
+        return id;
+    }
+
+    private void move(Country destCountry) {
+        country.removeHuman(this);
+        destCountry.addHuman(this);
+        country = destCountry;
     }
 
     @Override
     public String toString() {
         String out = "";
-        out += "name: " + this.name + "\n";
-        out += "id: " + this.bornId + "\n";
+        out += "id: " + id + "\n";
         out += "current country: " +
-            this.currentCountry.getName() + "\n";
-        if (this.isHealthy()) {
+            country.getName() + "\n";
+        if (isHealthy()) {
             out += "status: healthy\n";
         }
         return out;

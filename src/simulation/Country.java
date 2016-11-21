@@ -3,171 +3,79 @@ import java.util.*;
 
 public class Country {
     private String name;
-    private ArrayList<Country> neighbours;
-    private ArrayList<Human> citizens;
-    private ArrayList<Human> graveyard;
+    private ArrayList<Country> neighbors;
+    private ArrayList<Human> people;
     private ArrayList<Human> arrivals;
+    private HealthStats stats;
 
-    private int numHealthy;
-    private int numInfected;
-    private int numSick;
-    private int numImmune;
-    private int numDeath;
-    private int numInfectious;
-    private int numVisiblyInfectious;
-
-    public Country(String name) {
-        this.name = name;
-        this.neighbours = new ArrayList<Country>();
-        this.citizens = new ArrayList<Human>();
-        this.graveyard = new ArrayList<Human>();
-        this.arrivals = new ArrayList<Human>();
-        this.numHealthy = 0;
-        this.numInfected = 0;
-        this.numSick = 0;
-        this.numImmune = 0;
-        this.numDeath = 0;
-        this.numInfectious = 0;
-        this.numVisiblyInfectious = 0;
+    public class HealthStats {
+        private int healthy;
+        private int sick;
+        private int immune;
+        private int dead;
+        private int infected;
+        public void addHealthy() { healthy++; }
+        public void addSick() { sick++; }
+        public void addImmune() { immune++; }
+        public void addDead() { dead++; }
+        public void addInfected() { infected++; }
+        public int getHealthy() { return healthy; }
+        public int getSick() { return sick; }
+        public int getImmnune() { return immune; }
+        public int getDead() { return dead; }
+        public int getInfected() { return infected; }
     }
 
-    public void giveBirth(Human h) {
-        System.out.println(h.getName() + " born");
-        this.citizens.add(h);
-        this.countHealthStats();
+    public Country(String n) {
+        name = name;
+        neighbors = new ArrayList<Country>();
+        people = new ArrayList<Human>();
+        arrivals = new ArrayList<Human>();
+        stats = new HealthStats();
     }
 
-    private void reqEnter(Human h) {
-        this.arrivals.add(h);
+    public void updateHealthStats() {
+        HealthStats newStats = new HealthStats();
+        people.stream().filter(p -> p.isHealthy()).forEach(p -> stats.addHealthy());
+        people.stream().filter(p -> p.isDead()).forEach(p -> stats.addDead());
+        people.stream().filter(p -> p.isSick()).forEach(p -> stats.addSick());
+        people.stream().filter(p -> p.isImmune()).forEach(p -> stats.addImmune());
+        people.stream().filter(p -> p.isDead()).forEach(p -> stats.addDead());
+        people.stream().filter(p -> p.isInfected()).forEach(p -> stats.addInfected());
+        stats = newStats;
     }
 
-    private void countHealthStats() {
-        this.numHealthy = 0;
-        this.numInfected = 0;
-        this.numSick = 0;
-        this.numImmune = 0;
-        this.numInfectious = 0;
-        this.numVisiblyInfectious = 0;
-
-        for (Human h: this.citizens) {
-            if (h.isHealthy()) {
-                this.numHealthy++;
-            } else if (h.isInfected()) {
-                this.numInfected++;
-            } else if (h.isSick()) {
-                this.numSick++;
-            } else if (h.isImmune()) {
-                this.numImmune++;
-            }
-            if (h.isInfectious()) {
-                this.numInfectious++;
-                if (h.isVisiblyInfectious()) {
-                    this.numVisiblyInfectious++;
-                }
-            }
-        }
+    // Called each time a day passes
+    public void updateHealth() {
+        people.stream().forEach(p -> p.updateHealth(stats));
     }
 
-    public void reqUpdateHealth() {
-        FuncInterfaceDeathCheck health;
-        health = (h, c) -> {
-            h.updateHealth();
-            if (h.getIsDeath()) {
-                System.out.println("RIP " + h.getName());
-                c.numDeath++;
-                c.graveyard.add(h);
-                return true;
-            } else {
-                return false;
-            }
-        };
-        this.citizens.removeIf(p -> health.iter(p, this));
+    public void updateActions() {
     }
 
-    public void reqUpdateLocation() {
-        this.countHealthStats();
-        FuncInterfaceMoveCheck location;
-        location = (h, c) -> {
-            boolean shallMove = h.updateLocation();
-            if (shallMove) {
-                Country dest = h.getTargetCountry();
-                dest.reqEnter(h);
-                return true;
-            }
-            return false;
-        };
-        this.citizens.removeIf(p -> location.iter(p, this));
+    public void removeHuman(Human h) {
+        people.remove(h);
     }
 
-    public void reqCountHealthStats() {
-        this.countHealthStats();
+    public void addHuman(Human h) {
+        people.add(h);
     }
 
-    public void reqPullArrivals() {
-        for (Human h: this.arrivals) {
-            this.citizens.add(h);
-            h.clearTargetCountry();
-        }
-        this.arrivals.clear();
-    }
-
-    public void addNeighbour(Country c) {
-        this.neighbours.add(c);
+    public void addNeighbor(Country c) {
+        neighbors.add(c);
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
-    public ArrayList<Country> getNeighbours() {
-        return this.neighbours;
-    }
-
-    public int getNumHealthy() {
-        return this.numHealthy;
-    }
-
-    public int getNumInfected() {
-        return this.numInfected;
-    }
-
-    public int getNumSick() {
-        return this.numSick;
-    }
-
-    public int getNumImmune() {
-        return this.numImmune;
-    }
-
-    public int getNumInfectious() {
-        return this.numInfectious;
-    }
-
-    public int getNumVisiblyInfectious() {
-        return this.numVisiblyInfectious;
-    }
-
-    public int getNumDeath() {
-        return this.numDeath;
+    public ArrayList<Country> getNeighbors() {
+        return neighbors;
     }
 
     @Override
     public String toString() {
         String out = "";
-        out += "\n[" + this.name + "]\n";
-        out += "# healthy people: " + this.numHealthy + "\n";
-        out += "# infected people: " + this.numInfected + "\n";
-        out += "# sick people: " + this.numSick + "\n";
-        out += "# immune people: " + this.numImmune + "\n";
-        out += "# death people: " + this.numDeath + "\n";
         return out;
     }
-}
-
-interface FuncInterfaceMoveCheck {
-    public boolean iter(Human h, Country c);
-}
-
-interface FuncInterfaceDeathCheck {
-    public boolean iter(Human h, Country c);
 }
