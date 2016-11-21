@@ -14,7 +14,7 @@ CLASSES = \
 	simulation/Simulator.java \
 	test/Test.java \
 
-default: 
+default:
 	$(JC) $(JFLAGS) $(CLASSES)
 
 clean:

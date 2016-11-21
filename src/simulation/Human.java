@@ -18,7 +18,7 @@ public class Human {
 
     SimulationGlobals simGlobs = new SimulationGlobals();
 
-    public Human(String name, int bornId, int birthDay, 
+    public Human(String name, int bornId, int birthDay,
             Country bornCountry, boolean isBornInfected) {
         this.name = name;
         this.targetCountry = null;

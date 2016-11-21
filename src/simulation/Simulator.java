@@ -2,7 +2,7 @@ package simulation;
 import java.util.*;
 
 public class Simulator {
-    
+
     private ArrayList<Country> countries = new ArrayList<Country>();
     private int daysToSimulate;
     private int dayPassed;
@@ -19,10 +19,10 @@ public class Simulator {
         this.nextBornId++;
         return val;
     }
-    
+
     //now just creates 3 countries with 6 people, 2 infected; 4 healthy
     private void initSimulator () {
-        int birthDay = 0; 
+        int birthDay = 0;
 
         Country tr = new Country("Turkey");
         Country grc = new Country("Greece");
@@ -41,7 +41,7 @@ public class Simulator {
         Human kostas = new Human("Kostas", getNextBornId(), birthDay, grc, false);
         Human yuri = new Human("Yuri", getNextBornId(), birthDay, rus, true);
         Human oleg = new Human("Oleg", getNextBornId(), birthDay, rus, true);
-        
+
         this.countries.add(tr);
         this.countries.add(rus);
         this.countries.add(grc);
