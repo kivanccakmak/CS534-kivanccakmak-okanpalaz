@@ -1,5 +1,4 @@
 package simulation;
-import java.util.Random;
 import java.util.*;
 
 abstract class HealthState {
@@ -11,7 +10,7 @@ abstract class HealthState {
         human = h;
     }
 
-    public boolean isVisiblyInfected() {
+    public boolean isVisiblyInfectious() {
         return false;
     }
 
@@ -20,10 +19,6 @@ abstract class HealthState {
     }
 
     public boolean isHealthy() {
-        return false;
-    }
-
-    public boolean isInfected() {
         return false;
     }
 
@@ -63,6 +58,11 @@ class Infected extends HealthState {
         super(h);
     }
 
+    @Override
+    public boolean isInfectious() {
+        return true;
+    }
+
     public void passDay() {
     }
 }
@@ -70,6 +70,35 @@ class Infected extends HealthState {
 class Sick extends HealthState {
     public Sick(Human h) {
         super(h);
+    }
+
+    @Override
+    public boolean isInfectious() {
+        return true;
+    }
+
+    @Override
+    public boolean isVisiblyInfectious() {
+        return true;
+    }
+
+    public void passDay() {
+    }
+}
+
+class Dead extends HealthState {
+    public Dead(Human h) {
+        super(h);
+    }
+
+    @Override
+    public boolean isInfectious() {
+        return true;
+    }
+
+    @Override
+    public boolean isVisiblyInfectious() {
+        return true;
     }
 
     public void passDay() {
@@ -80,6 +109,7 @@ public class Human {
     static int idGen = 0;
     private final int id;
     private final int birthDay;
+    private int daysUntilMove;
     private Country country;
 
     HealthState health;
@@ -87,6 +117,7 @@ public class Human {
     HealthState infected;
     HealthState sick;
     HealthState immune;
+    HealthState dead;
 
     private static int genId() {
         idGen++;
@@ -101,15 +132,44 @@ public class Human {
         infected = new Infected(this);
         sick = new Sick(this);
         immune = new Immune(this);
+        dead = new Dead(this);
         if (isInfected) {
             health = infected;
         } else {
             health = healthy;
         }
+        updateMoveDate();
         country.addHuman(this);
     }
 
-    public void updateHealth(Country.HealthStats h) {
+    private void updateMoveDate() {
+        int upper = SimulationGlobals.getMaxDayToStay();
+        int lower = SimulationGlobals.getMinDayToStay();
+        daysUntilMove = lower + SimulationGlobals.getRng().nextInt(upper - lower);
+    }
+
+    private Country selectDest() {
+        // TODO: is this mutating the list?
+        ArrayList<Country> available = country.neighbors()
+            .stream()
+            .filter(c -> !c.hasVisiblyInfectious())
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        if (available.size() > 0) {
+            int rnd = SimulationGlobals.getRng().nextInt(available.size());
+            return available.get(rnd);
+        } else {
+            return null;
+        }
+    }
+
+    private void move(Country destCountry) {
+        country.removeHuman(this);
+        destCountry.addHuman(this);
+        country = destCountry;
+    }
+
+    public void passDay(Country.HealthStats h) {
         health.passDay();
     }
 
@@ -121,43 +181,20 @@ public class Human {
         return health.isHealthy();
     }
 
-    public boolean isInfected() {
-        return health.isInfected();
+    public boolean isInfectious() {
+        return health.isInfectious();
     }
 
-    public boolean isSick() {
-        return health.isSick();
+    public boolean isVisiblyInfectious() {
+        return health.isVisiblyInfectious();
     }
 
     public boolean isImmune() {
         return health.isImmune();
     }
 
-    public boolean isInfectious() {
-        return health.isInfectious();
-    }
-
-    private Country selectDest() {
-        ArrayList<Country> countries = country.getNeighbors();
-        int rnd = new Random().nextInt(countries.size());
-        return countries.get(rnd);
-    }
-
-    private int decideDayToStay() {
-        int max_day = SimulationGlobals.getMaxDayToStay();
-        int min_day = SimulationGlobals.getMinDayToStay();
-        Random random = new Random();
-        return random.nextInt(max_day-min_day) + min_day;
-    }
-
-    public int getBornId() {
+    public int id() {
         return id;
-    }
-
-    private void move(Country destCountry) {
-        country.removeHuman(this);
-        destCountry.addHuman(this);
-        country = destCountry;
     }
 
     @Override
@@ -165,7 +202,7 @@ public class Human {
         String out = "";
         out += "id: " + id + "\n";
         out += "current country: " +
-            country.getName() + "\n";
+            country.name() + "\n";
         if (isHealthy()) {
             out += "status: healthy\n";
         }

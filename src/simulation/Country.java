@@ -9,40 +9,43 @@ public class Country {
 
     public class HealthStats {
         private long healthy;
-        private long sick;
+        private long infectious;
+        private long visiblyInfectious;
         private long immune;
         private long dead;
-        private long infected;
+
         public long healthyCount() { return healthy; }
-        public long sickCount() { return sick; }
+        public long infectiousCount() { return infectious; }
+        public long visiblyInfectiousCount() { return visiblyInfectious; }
         public long immuneCount() { return immune; }
         public long deadCount() { return dead; }
-        public long infectedCount() { return infected; }
     }
 
     public Country(String n) {
         name = name;
         neighbors = new ArrayList<Country>();
         people = new ArrayList<Human>();
-        stats = new HealthStats();
+        updateHealthStats();
     }
 
+    // Called to create a snapshot each time a day passes
     public void updateHealthStats() {
         HealthStats newStats = new HealthStats();
         newStats.healthy = people.stream().filter(p -> p.isHealthy()).count();
-        newStats.sick = people.stream().filter(p -> p.isSick()).count();
+        newStats.infectious = people.stream().filter(p -> p.isInfectious()).count();
+        newStats.visiblyInfectious = people.stream().filter(p -> p.isVisiblyInfectious()).count();
         newStats.immune = people.stream().filter(p -> p.isImmune()).count();
         newStats.dead = people.stream().filter(p -> p.isDead()).count();
-        newStats.infected = people.stream().filter(p -> p.isInfected()).count();
         stats = newStats;
     }
 
-    // Called each time a day passes
-    public void updateHealth() {
-        people.stream().forEach(p -> p.updateHealth(stats));
+
+    public void passDay() {
+        people.stream().forEach(p -> p.passDay(stats));
     }
 
-    public void updateActions() {
+    public boolean hasVisiblyInfectious() {
+        return stats.visiblyInfectiousCount() > 0;
     }
 
     public void removeHuman(Human h) {
@@ -57,11 +60,11 @@ public class Country {
         neighbors.add(c);
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public ArrayList<Country> getNeighbors() {
+    public ArrayList<Country> neighbors() {
         return neighbors;
     }
 

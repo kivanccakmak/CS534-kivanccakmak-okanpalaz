@@ -46,8 +46,13 @@ public class Simulator {
     private void passDay() {
         System.out.println("== DAY " + this.dayPassed + " ==\n");
 
+        // Get the daily snapshot
         for (Country c: this.countries)
-            c.updateHealth();
+            c.updateHealthStats();
+
+        // Run daily actions
+        for (Country c: this.countries)
+            c.passDay();
 
         printCountryStatus();
     }
