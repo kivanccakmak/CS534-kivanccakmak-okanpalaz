@@ -88,8 +88,6 @@ public class Human {
     HealthState sick;
     HealthState immune;
 
-    SimulationGlobals simGlobs = new SimulationGlobals();
-
     private static int genId() {
         idGen++;
         return idGen;
@@ -146,8 +144,8 @@ public class Human {
     }
 
     private int decideDayToStay() {
-        int max_day = simGlobs.getMaxDayToStay();
-        int min_day = simGlobs.getMinDayToStay();
+        int max_day = SimulationGlobals.getMaxDayToStay();
+        int min_day = SimulationGlobals.getMinDayToStay();
         Random random = new Random();
         return random.nextInt(max_day-min_day) + min_day;
     }

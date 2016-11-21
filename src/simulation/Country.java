@@ -5,7 +5,6 @@ public class Country {
     private String name;
     private ArrayList<Country> neighbors;
     private ArrayList<Human> people;
-    private ArrayList<Human> arrivals;
     private HealthStats stats;
 
     public class HealthStats {
@@ -25,7 +24,6 @@ public class Country {
         name = name;
         neighbors = new ArrayList<Country>();
         people = new ArrayList<Human>();
-        arrivals = new ArrayList<Human>();
         stats = new HealthStats();
     }
 

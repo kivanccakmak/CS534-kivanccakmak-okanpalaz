@@ -1,19 +1,22 @@
 package simulation;
 
 public class SimulationGlobals {
-    private int simDayLimit = 50;
-    private int maxDayToStay = 5;
-    private int minDayToStay = 1;
+    private static int simDayLimit = 50;
+    private static int maxDayToStay = 5;
+    private static int minDayToStay = 1;
 
-    public int getMaxDayToStay() {
+    private SimulationGlobals() {
+    }
+
+    public static int getMaxDayToStay() {
         return maxDayToStay;
     }
 
-    public int getMinDayToStay() {
+    public static int getMinDayToStay() {
         return minDayToStay;
     }
 
-    public int getSimDayLimit() {
+    public static int getSimDayLimit() {
         return simDayLimit;
     }
 }
