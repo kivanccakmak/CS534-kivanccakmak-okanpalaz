@@ -4,10 +4,14 @@ import java.util.*;
 abstract class HealthState {
     protected Human human;
 
-    public abstract void passDay();
+    public void passDay() {
+    }
 
     public HealthState(Human h) {
         human = h;
+    }
+
+    public void infectionChance(boolean infectious) {
     }
 
     public boolean isVisiblyInfectious() {
@@ -19,10 +23,6 @@ abstract class HealthState {
     }
 
     public boolean isHealthy() {
-        return false;
-    }
-
-    public boolean isSick() {
         return false;
     }
 
@@ -40,20 +40,22 @@ class Healthy extends HealthState {
         super(h);
     }
 
-    public void passDay() {
-    }
-}
-
-class Immune extends HealthState {
-    public Immune(Human h) {
-        super(h);
+    @Override
+    public boolean isHealthy() {
+        return true;
     }
 
-    public void passDay() {
+    @Override
+    public void infectionChance(boolean infectious) {
+        if (HealthGlobals.infectionDiceThrow()) {
+            human.getInfected();
+        }
     }
 }
 
 class Infected extends HealthState {
+    private int days = 0;
+
     public Infected(Human h) {
         super(h);
     }
@@ -63,11 +65,18 @@ class Infected extends HealthState {
         return true;
     }
 
+    @Override
     public void passDay() {
+        days++;
+        if (days == HealthGlobals.getDaysUntilSick()) {
+            human.getSick();
+        }
     }
 }
 
 class Sick extends HealthState {
+    private int days = 0;
+
     public Sick(Human h) {
         super(h);
     }
@@ -82,9 +91,47 @@ class Sick extends HealthState {
         return true;
     }
 
+    @Override
     public void passDay() {
+        days++;
+        if (days == HealthGlobals.getDaysUntilDeathChance()) {
+            if (HealthGlobals.dieDiceThrow()) {
+                human.die();
+            }
+        }
+
+        if (days == HealthGlobals.getDaysUntilImmune()) {
+            human.becomeImmune();
+        }
     }
 }
+
+class Immune extends HealthState {
+    private int days = 0;
+
+    public Immune(Human h) {
+        super(h);
+    }
+
+    @Override
+    public boolean isInfectious() {
+        return true;
+    }
+
+    @Override
+    public boolean isImmune() {
+        return true;
+    }
+
+    @Override
+    public void passDay() {
+        days++;
+        if (days == HealthGlobals.getDaysUntilHealthy()) {
+            human.getHealthy();
+        }
+    }
+}
+
 
 class Dead extends HealthState {
     public Dead(Human h) {
@@ -100,9 +147,6 @@ class Dead extends HealthState {
     public boolean isVisiblyInfectious() {
         return true;
     }
-
-    public void passDay() {
-    }
 }
 
 public class Human {
@@ -111,13 +155,7 @@ public class Human {
     private final int birthDay;
     private int daysUntilMove;
     private Country country;
-
     HealthState health;
-    HealthState healthy;
-    HealthState infected;
-    HealthState sick;
-    HealthState immune;
-    HealthState dead;
 
     private static int genId() {
         idGen++;
@@ -128,35 +166,29 @@ public class Human {
         id = genId();
         country = c;
         birthDay = b;
-        healthy = new Healthy(this);
-        infected = new Infected(this);
-        sick = new Sick(this);
-        immune = new Immune(this);
-        dead = new Dead(this);
         if (isInfected) {
-            health = infected;
+            getInfected();
         } else {
-            health = healthy;
+            getHealthy();
         }
-        updateMoveDate();
+        genMoveDate();
         country.addHuman(this);
     }
 
-    private void updateMoveDate() {
+    private void genMoveDate() {
         int upper = SimulationGlobals.getMaxDayToStay();
         int lower = SimulationGlobals.getMinDayToStay();
-        daysUntilMove = lower + SimulationGlobals.getRng().nextInt(upper - lower);
+        daysUntilMove = lower + HealthGlobals.getRng().nextInt(upper - lower);
     }
 
     private Country selectDest() {
-        // TODO: is this mutating the list?
         ArrayList<Country> available = country.neighbors()
             .stream()
             .filter(c -> !c.hasVisiblyInfectious())
             .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
         if (available.size() > 0) {
-            int rnd = SimulationGlobals.getRng().nextInt(available.size());
+            int rnd = HealthGlobals.getRng().nextInt(available.size());
             return available.get(rnd);
         } else {
             return null;
@@ -164,17 +196,29 @@ public class Human {
     }
 
     private void move(Country destCountry) {
-        country.removeHuman(this);
         destCountry.addHuman(this);
         country = destCountry;
+        health.infectionChance(country.hasInfectious());
     }
 
-    public void passDay(Country.HealthStats h) {
+    public void passDay() {
         health.passDay();
+
+        if (!health.isDead()) {
+            daysUntilMove--;
+        }
+
+        if (daysUntilMove == 0) {
+            genMoveDate();
+            Country dest = selectDest();
+            if (dest != null) {
+                move(dest);
+            }
+        }
     }
 
-    public boolean isDead() {
-        return health.isDead();
+    public Country country() {
+        return country;
     }
 
     public boolean isHealthy() {
@@ -192,6 +236,31 @@ public class Human {
     public boolean isImmune() {
         return health.isImmune();
     }
+
+    public boolean isDead() {
+        return health.isDead();
+    }
+
+    public void getHealthy() {
+        health = new Healthy(this);
+    }
+
+    public void getInfected() {
+        health = new Infected(this);
+    }
+
+    public void getSick() {
+        health = new Sick(this);
+    }
+
+    public void becomeImmune() {
+        health = new Immune(this);
+    }
+
+    public void die() {
+        health = new Dead(this);
+    }
+
 
     public int id() {
         return id;

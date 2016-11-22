@@ -19,10 +19,21 @@ public class Country {
         public long visiblyInfectiousCount() { return visiblyInfectious; }
         public long immuneCount() { return immune; }
         public long deadCount() { return dead; }
+
+        @Override
+        public String toString() {
+            String out = "";
+            out += "Healthy: " + healthy + "\n";
+            out += "Infectious: " + infectious + "\n";
+            out += "Visibly Infectious: " + visiblyInfectious + "\n";
+            out += "Immune: " + immune + "\n";
+            out += "Dead: " + dead + "\n";
+            return out;
+        }
     }
 
     public Country(String n) {
-        name = name;
+        name = n;
         neighbors = new ArrayList<Country>();
         people = new ArrayList<Human>();
         updateHealthStats();
@@ -41,11 +52,18 @@ public class Country {
 
 
     public void passDay() {
-        people.stream().forEach(p -> p.passDay(stats));
+        people.stream().forEach(p -> p.passDay());
+
+        // remove people who moved
+        people.removeIf(p -> p.country() != this);
     }
 
     public boolean hasVisiblyInfectious() {
         return stats.visiblyInfectiousCount() > 0;
+    }
+
+    public boolean hasInfectious() {
+        return stats.infectiousCount() > 0;
     }
 
     public void removeHuman(Human h) {
