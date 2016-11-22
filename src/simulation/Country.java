@@ -94,7 +94,7 @@ public class Country {
 
     @Override
     public String toString() {
-        String out = "";
+        String out = name + ":\n";
         out += stats;
         return out;
     }

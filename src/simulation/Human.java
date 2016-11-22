@@ -175,7 +175,6 @@ class Dead extends HealthState {
 public class Human {
     static int idGen = 0;
     private final int id;
-    private final int birthDay;
     private int daysUntilMove;
     private Country country;
     HealthState health;
@@ -185,10 +184,9 @@ public class Human {
         return idGen;
     }
 
-    public Human(int b, Country c, boolean isInfected) {
+    public Human(Country c, boolean isInfected) {
         id = genId();
         country = c;
-        birthDay = b;
         if (isInfected) {
             getInfected();
         } else {
