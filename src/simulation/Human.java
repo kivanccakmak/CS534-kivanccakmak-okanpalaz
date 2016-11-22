@@ -14,15 +14,15 @@ abstract class HealthState {
     public void infectionChance(boolean infectious) {
     }
 
-    public boolean isVisiblyInfectious() {
-        return false;
-    }
-
-    public boolean isInfectious() {
-        return false;
-    }
-
     public boolean isHealthy() {
+        return false;
+    }
+
+    public boolean isInfected() {
+        return false;
+    }
+
+    public boolean isSick() {
         return false;
     }
 
@@ -31,6 +31,14 @@ abstract class HealthState {
     }
 
     public boolean isDead() {
+        return false;
+    }
+
+    public boolean isInfectious() {
+        return false;
+    }
+
+    public boolean isVisiblyInfectious() {
         return false;
     }
 }
@@ -61,6 +69,11 @@ class Infected extends HealthState {
     }
 
     @Override
+    public boolean isInfected() {
+        return true;
+    }
+
+    @Override
     public boolean isInfectious() {
         return true;
     }
@@ -79,6 +92,11 @@ class Sick extends HealthState {
 
     public Sick(Human h) {
         super(h);
+    }
+
+    @Override
+    public boolean isSick() {
+        return true;
     }
 
     @Override
@@ -114,12 +132,12 @@ class Immune extends HealthState {
     }
 
     @Override
-    public boolean isInfectious() {
+    public boolean isImmune() {
         return true;
     }
 
     @Override
-    public boolean isImmune() {
+    public boolean isInfectious() {
         return true;
     }
 
@@ -136,6 +154,11 @@ class Immune extends HealthState {
 class Dead extends HealthState {
     public Dead(Human h) {
         super(h);
+    }
+
+    @Override
+    public boolean isDead() {
+        return true;
     }
 
     @Override
@@ -225,12 +248,12 @@ public class Human {
         return health.isHealthy();
     }
 
-    public boolean isInfectious() {
-        return health.isInfectious();
+    public boolean isInfected() {
+        return health.isInfected();
     }
 
-    public boolean isVisiblyInfectious() {
-        return health.isVisiblyInfectious();
+    public boolean isSick() {
+        return health.isSick();
     }
 
     public boolean isImmune() {
@@ -239,6 +262,14 @@ public class Human {
 
     public boolean isDead() {
         return health.isDead();
+    }
+
+    public boolean isInfectious() {
+        return health.isInfectious();
+    }
+
+    public boolean isVisiblyInfectious() {
+        return health.isVisiblyInfectious();
     }
 
     public void getHealthy() {

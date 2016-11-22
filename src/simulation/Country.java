@@ -9,23 +9,27 @@ public class Country {
 
     public class HealthStats {
         private long healthy;
-        private long infectious;
-        private long visiblyInfectious;
+        private long infected;
+        private long sick;
         private long immune;
         private long dead;
+        private long infectious;
+        private long visiblyInfectious;
 
         public long healthyCount() { return healthy; }
-        public long infectiousCount() { return infectious; }
-        public long visiblyInfectiousCount() { return visiblyInfectious; }
+        public long infectedCount() { return infected; }
+        public long sickCount() { return sick; }
         public long immuneCount() { return immune; }
         public long deadCount() { return dead; }
+        public long infectiousCount() { return infectious; }
+        public long visiblyInfectiousCount() { return visiblyInfectious; }
 
         @Override
         public String toString() {
             String out = "";
             out += "Healthy: " + healthy + "\n";
-            out += "Infectious: " + infectious + "\n";
-            out += "Visibly Infectious: " + visiblyInfectious + "\n";
+            out += "Infected: " + infected + "\n";
+            out += "Sick: " + sick + "\n";
             out += "Immune: " + immune + "\n";
             out += "Dead: " + dead + "\n";
             return out;
@@ -43,10 +47,12 @@ public class Country {
     public void updateHealthStats() {
         HealthStats newStats = new HealthStats();
         newStats.healthy = people.stream().filter(p -> p.isHealthy()).count();
-        newStats.infectious = people.stream().filter(p -> p.isInfectious()).count();
-        newStats.visiblyInfectious = people.stream().filter(p -> p.isVisiblyInfectious()).count();
+        newStats.infected = people.stream().filter(p -> p.isInfected()).count();
+        newStats.sick = people.stream().filter(p -> p.isSick()).count();
         newStats.immune = people.stream().filter(p -> p.isImmune()).count();
         newStats.dead = people.stream().filter(p -> p.isDead()).count();
+        newStats.infectious = people.stream().filter(p -> p.isInfectious()).count();
+        newStats.visiblyInfectious = people.stream().filter(p -> p.isVisiblyInfectious()).count();
         stats = newStats;
     }
 
@@ -89,6 +95,7 @@ public class Country {
     @Override
     public String toString() {
         String out = "";
+        out += stats;
         return out;
     }
 }
