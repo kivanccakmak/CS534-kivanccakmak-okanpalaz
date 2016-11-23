@@ -4,8 +4,10 @@ import java.util.*;
 
 public class Test {
     public static void main(String[] args) {
-        SimulationGlobals glob = new SimulationGlobals();
-        Simulator sim = new Simulator(glob.getSimDayLimit());
-        sim.simulate();
+        Simulator sim = new Simulator(3, 3);
+        sim.populate(100, 10.0);
+        for (int i = 0; i < 1000; i++) {
+            sim.passDay();
+        }
     }
 }
