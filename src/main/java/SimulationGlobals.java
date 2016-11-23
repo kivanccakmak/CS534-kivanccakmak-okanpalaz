@@ -1,5 +1,3 @@
-package simulation;
-
 public class SimulationGlobals {
     private static int simDayLimit = 50;
     private static int maxDayToStay = 5;

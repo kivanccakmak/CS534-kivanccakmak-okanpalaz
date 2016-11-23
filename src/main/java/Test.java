@@ -1,5 +1,3 @@
-package test;
-import simulation.*;
 import java.util.*;
 
 public class Test {

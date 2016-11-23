@@ -1,4 +1,3 @@
-package simulation;
 import java.util.*;
 
 public class Country {
