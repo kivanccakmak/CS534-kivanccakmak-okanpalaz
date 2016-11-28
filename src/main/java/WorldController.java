@@ -1,15 +1,10 @@
-
 public class WorldController {
     private WorldView view;
+    private int numHorizontal = 3;
+    private int numVertical = 3;
+    private int numPeople = 10;
+    private double percentInfected = 0.10;
 
     public WorldController() {
-        int numHorizontal = SimulationGlobals.getNumVerticalCountries();
-        int numVertical = SimulationGlobals.getNumVerticalCountries();
-        this.view = new WorldPanelView(numHorizontal, numVertical);
-    }
-
-    public void startSimulation() {
-        view.setSize(500, 500);
-        view.setVisible(true);
     }
 }

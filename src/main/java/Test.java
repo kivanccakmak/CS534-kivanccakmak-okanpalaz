@@ -1,35 +1,22 @@
 import java.util.*;
-
 import java.awt.FlowLayout;
-
 import javax.swing.*;
+
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.ParseException;
+import org.json.simple.parser.JSONParser;
 
 public class Test {
     public static void main(String[] args) {
-        int numHorizontal = SimulationGlobals.getNumHorizontalCountries();
-        int numVertical = SimulationGlobals.getNumVerticalCountries();
-
-        System.out.println(numHorizontal + " " + numVertical);
-
-
+        JSONObject obj = new JSONObject();
+        obj.put("name", "mkyong.com");
+        obj.put("age", new Integer(100));
+        System.out.println(obj);
+        //Simulator sim = new Simulator(3, 3);
+        //sim.populate(100, 10.0);
+        //ArrayList<JSONObject> info = new ArrayList<JSONObject>();
+        //info = sim.getWorldInfo();
+        //System.out.println(info);
     }
 }
-
-//JFrame frame = new JFrame("JFrame Example");
-
-//JPanel panel = new JPanel();
-//panel.setLayout(new FlowLayout());
-
-//JLabel label = new JLabel("This is a label!");
-
-//JButton button = new JButton();
-//button.setText("Press me");
-
-//panel.add(label);
-//panel.add(button);
-
-//frame.add(panel);
-//frame.setSize(300, 300);
-//frame.setLocationRelativeTo(null);
-//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//frame.setVisible(true);
