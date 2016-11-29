@@ -4,6 +4,7 @@ public class Country {
     private String name;
     private ArrayList<Country> neighbors;
     private ArrayList<Human> people;
+    private ArrayList<Human> arrivals;
     private HealthStats stats;
 
     public class HealthStats {
@@ -39,6 +40,7 @@ public class Country {
         name = n;
         neighbors = new ArrayList<Country>();
         people = new ArrayList<Human>();
+        arrivals = new ArrayList<Human>();
         updateHealthStats();
     }
 
@@ -63,6 +65,13 @@ public class Country {
         people.removeIf(p -> p.country() != this);
     }
 
+    public void completeDay() {
+        for (Human h: arrivals) {
+            people.add(h);
+        }
+        arrivals.clear();
+    }
+
     public boolean hasVisiblyInfectious() {
         return stats.visiblyInfectiousCount() > 0;
     }
@@ -77,6 +86,10 @@ public class Country {
 
     public void addHuman(Human h) {
         people.add(h);
+    }
+
+    public void moveHuman(Human h) {
+        arrivals.add(h);
     }
 
     public void addNeighbor(Country c) {

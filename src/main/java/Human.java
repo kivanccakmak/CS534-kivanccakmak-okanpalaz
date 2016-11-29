@@ -216,7 +216,7 @@ public class Human {
     }
 
     private void move(Country destCountry) {
-        destCountry.addHuman(this);
+        destCountry.moveHuman(this);
         country = destCountry;
         health.infectionChance(country.hasInfectious());
     }

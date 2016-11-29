@@ -92,6 +92,11 @@ public class Simulator {
             c.passDay();
         }
 
+        // Process move actions
+        for (Country c: countries) {
+            c.completeDay();
+        }
+
         for (Country c: countries) {
             System.out.println(c.toString());
         }
