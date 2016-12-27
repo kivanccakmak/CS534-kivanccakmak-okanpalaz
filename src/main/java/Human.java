@@ -3,54 +3,23 @@ import java.util.*;
 abstract class HealthState {
     protected Human human;
 
-    public void passDay() {
-    }
-
-    public HealthState(Human h) {
-        human = h;
-    }
-
-    public void infectionChance(boolean infectious) {
-    }
-
-    public boolean isHealthy() {
-        return false;
-    }
-
-    public boolean isInfected() {
-        return false;
-    }
-
-    public boolean isSick() {
-        return false;
-    }
-
-    public boolean isImmune() {
-        return false;
-    }
-
-    public boolean isDead() {
-        return false;
-    }
-
-    public boolean isInfectious() {
-        return false;
-    }
-
-    public boolean isVisiblyInfectious() {
-        return false;
-    }
+    public void passDay() { }
+    public HealthState(Human h) { human = h; }
+    public void infectionChance(boolean infectious) { }
+    public boolean isHealthy() { return false; }
+    public boolean isInfected() { return false; }
+    public boolean isSick() { return false; }
+    public boolean isImmune() { return false; }
+    public boolean isDead() { return false; }
+    public boolean isInfectious() { return false; }
+    public boolean isVisiblyInfectious() { return false; }
 }
 
 class Healthy extends HealthState {
-    public Healthy(Human h) {
-        super(h);
-    }
+    public Healthy(Human h) { super(h); }
 
     @Override
-    public boolean isHealthy() {
-        return true;
-    }
+    public boolean isHealthy() { return true; }
 
     @Override
     public void infectionChance(boolean infectious) {
@@ -63,19 +32,13 @@ class Healthy extends HealthState {
 class Infected extends HealthState {
     private int days = 0;
 
-    public Infected(Human h) {
-        super(h);
-    }
+    public Infected(Human h) { super(h); }
 
     @Override
-    public boolean isInfected() {
-        return true;
-    }
+    public boolean isInfected() { return true; }
 
     @Override
-    public boolean isInfectious() {
-        return true;
-    }
+    public boolean isInfectious() { return true; }
 
     @Override
     public void passDay() {
@@ -94,19 +57,13 @@ class Sick extends HealthState {
     }
 
     @Override
-    public boolean isSick() {
-        return true;
-    }
+    public boolean isSick() { return true; }
 
     @Override
-    public boolean isInfectious() {
-        return true;
-    }
+    public boolean isInfectious() { return true; }
 
     @Override
-    public boolean isVisiblyInfectious() {
-        return true;
-    }
+    public boolean isVisiblyInfectious() { return true; }
 
     @Override
     public void passDay() {
@@ -126,19 +83,13 @@ class Sick extends HealthState {
 class Immune extends HealthState {
     private int days = 0;
 
-    public Immune(Human h) {
-        super(h);
-    }
+    public Immune(Human h) { super(h); }
 
     @Override
-    public boolean isImmune() {
-        return true;
-    }
+    public boolean isImmune() { return true; }
 
     @Override
-    public boolean isInfectious() {
-        return true;
-    }
+    public boolean isInfectious() { return true; }
 
     @Override
     public void passDay() {
@@ -156,19 +107,13 @@ class Dead extends HealthState {
     }
 
     @Override
-    public boolean isDead() {
-        return true;
-    }
+    public boolean isDead() { return true; }
 
     @Override
-    public boolean isInfectious() {
-        return true;
-    }
+    public boolean isInfectious() { return true; }
 
     @Override
-    public boolean isVisiblyInfectious() {
-        return true;
-    }
+    public boolean isVisiblyInfectious() { return true; }
 }
 
 public class Human {
@@ -237,62 +182,26 @@ public class Human {
         }
     }
 
-    public Country country() {
-        return country;
-    }
+    public int id() { return id; }
+    public Country country() { return country; }
 
-    public boolean isHealthy() {
-        return health.isHealthy();
-    }
+    // Health state query methods
+    public boolean isHealthy() { return health.isHealthy(); }
+    public boolean isInfected() { return health.isInfected(); }
+    public boolean isSick() { return health.isSick(); }
+    public boolean isImmune() { return health.isImmune(); }
+    public boolean isDead() { return health.isDead(); }
+    public boolean isInfectious() { return health.isInfectious(); }
+    public boolean isVisiblyInfectious() { return health.isVisiblyInfectious(); }
+    //
 
-    public boolean isInfected() {
-        return health.isInfected();
-    }
-
-    public boolean isSick() {
-        return health.isSick();
-    }
-
-    public boolean isImmune() {
-        return health.isImmune();
-    }
-
-    public boolean isDead() {
-        return health.isDead();
-    }
-
-    public boolean isInfectious() {
-        return health.isInfectious();
-    }
-
-    public boolean isVisiblyInfectious() {
-        return health.isVisiblyInfectious();
-    }
-
-    public void getHealthy() {
-        health = new Healthy(this);
-    }
-
-    public void getInfected() {
-        health = new Infected(this);
-    }
-
-    public void getSick() {
-        health = new Sick(this);
-    }
-
-    public void becomeImmune() {
-        health = new Immune(this);
-    }
-
-    public void die() {
-        health = new Dead(this);
-    }
-
-
-    public int id() {
-        return id;
-    }
+    // Health releated actions
+    protected void getHealthy() { health = new Healthy(this); }
+    protected void getInfected() { health = new Infected(this); }
+    protected void getSick() { health = new Sick(this); }
+    protected void becomeImmune() { health = new Immune(this); }
+    protected void die() { health = new Dead(this); }
+    //
 
     @Override
     public String toString() {

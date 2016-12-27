@@ -72,37 +72,18 @@ public class Country {
         arrivals.clear();
     }
 
-    public boolean hasVisiblyInfectious() {
-        return stats.visiblyInfectiousCount() > 0;
-    }
+	// Initilization methods
+    public void addHuman(Human h) { people.add(h); }
+    public void removeHuman(Human h) { people.remove(h); }
+    public void addNeighbor(Country c) { neighbors.add(c); }
 
-    public boolean hasInfectious() {
-        return stats.infectiousCount() > 0;
-    }
+	// Methods called from Human
+    public void moveHuman(Human h) { arrivals.add(h); }
+    public boolean hasVisiblyInfectious() { return stats.visiblyInfectiousCount() > 0; }
+    public boolean hasInfectious() { return stats.infectiousCount() > 0; }
+    public ArrayList<Country> neighbors() { return neighbors; }
 
-    public void removeHuman(Human h) {
-        people.remove(h);
-    }
-
-    public void addHuman(Human h) {
-        people.add(h);
-    }
-
-    public void moveHuman(Human h) {
-        arrivals.add(h);
-    }
-
-    public void addNeighbor(Country c) {
-        neighbors.add(c);
-    }
-
-    public String name() {
-        return name;
-    }
-
-    public ArrayList<Country> neighbors() {
-        return neighbors;
-    }
+    public String name() { return name; }
 
     @Override
     public String toString() {
