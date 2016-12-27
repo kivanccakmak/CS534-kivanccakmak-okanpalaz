@@ -58,14 +58,14 @@ public class Country {
     }
 
 
-    public void passDay() {
+    public void runHealthActions() {
         people.stream().forEach(p -> p.passDay());
 
         // remove people who moved
         people.removeIf(p -> p.country() != this);
     }
 
-    public void completeDay() {
+    public void processMoves() {
         for (Human h: arrivals) {
             people.add(h);
         }
