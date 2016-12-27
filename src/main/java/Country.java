@@ -8,6 +8,7 @@ public class Country {
     private String name;
     private ArrayList<Country> neighbors;
     private ArrayList<Human> people;
+    private ArrayList<Human> arrivals;
     private HealthStats stats;
 
     public class HealthStats {
@@ -43,6 +44,7 @@ public class Country {
         name = n;
         neighbors = new ArrayList<Country>();
         people = new ArrayList<Human>();
+        arrivals = new ArrayList<Human>();
         updateHealthStats();
     }
 
@@ -73,40 +75,32 @@ public class Country {
     }
 
 
-    public void passDay() {
+    public void runHealthActions() {
         people.stream().forEach(p -> p.passDay());
 
         // remove people who moved
         people.removeIf(p -> p.country() != this);
     }
 
-    public boolean hasVisiblyInfectious() {
-        return stats.visiblyInfectiousCount() > 0;
+    public void processMoves() {
+        for (Human h: arrivals) {
+            people.add(h);
+        }
+        arrivals.clear();
     }
 
-    public boolean hasInfectious() {
-        return stats.infectiousCount() > 0;
-    }
+	// Initilization methods
+    public void addHuman(Human h) { people.add(h); }
+    public void removeHuman(Human h) { people.remove(h); }
+    public void addNeighbor(Country c) { neighbors.add(c); }
 
-    public void removeHuman(Human h) {
-        people.remove(h);
-    }
+	// Methods called from Human
+    public void moveHuman(Human h) { arrivals.add(h); }
+    public boolean hasVisiblyInfectious() { return stats.visiblyInfectiousCount() > 0; }
+    public boolean hasInfectious() { return stats.infectiousCount() > 0; }
+    public ArrayList<Country> neighbors() { return neighbors; }
 
-    public void addHuman(Human h) {
-        people.add(h);
-    }
-
-    public void addNeighbor(Country c) {
-        neighbors.add(c);
-    }
-
-    public String name() {
-        return name;
-    }
-
-    public ArrayList<Country> neighbors() {
-        return neighbors;
-    }
+    public String name() { return name; }
 
     @Override
     public String toString() {
