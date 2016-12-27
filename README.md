@@ -2,18 +2,10 @@
 
 Simulation Game
 
-##compile
+##Compile
 
-CLASSPATH=/path/CS534-kivanccakmak-okanpalaz/src
-export CLASSPATH
-cd src
-make
+./gradlew jar
 
-###run test
+##Run Test
 
-cd src
-java test.Test
-
-
-
-
+java -cp build/libs/epidemic.jar Test

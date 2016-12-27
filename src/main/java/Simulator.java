@@ -1,4 +1,3 @@
-package simulation;
 import java.util.*;
 
 public class Simulator {
@@ -83,14 +82,19 @@ public class Simulator {
     public void passDay() {
         System.out.println("== DAY " + dayPassed + " ==\n");
 
-        // Get the daily snapshot
+        // Get the daily stat snapshot for decisions
         for (Country c: countries) {
             c.updateHealthStats();
         }
 
-        // Run daily actions
+        // Run health related actions
         for (Country c: countries) {
-            c.passDay();
+            c.runHealthActions();
+        }
+
+        // Complete moves
+        for (Country c: countries) {
+            c.processMoves();
         }
 
         for (Country c: countries) {
