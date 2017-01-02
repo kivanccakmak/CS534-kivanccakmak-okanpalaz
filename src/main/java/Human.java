@@ -23,7 +23,7 @@ class Healthy extends HealthState {
 
     @Override
     public void infectionChance(boolean infectious) {
-        if (HealthGlobals.infectionDiceThrow()) {
+        if (infectious && HealthGlobals.infectionDiceThrow()) {
             human.getInfected();
         }
     }
