@@ -7,31 +7,43 @@ public class Simulator {
     private int cols;
 
     private void westNeighborAdd(Country c, int index) {
+        int neighbor;
         if (index % cols != 0) {
-            int neighbor = index - 1;
-            c.addNeighbor(countries.get(neighbor));
+            neighbor = index - 1;
+        } else {
+            neighbor = index - 1 + cols;
         }
+        c.addNeighbor(countries.get(neighbor));
     }
 
     private void eastNeighborAdd(Country c, int index) {
+        int neighbor;
         if ((index % cols) != (cols - 1)) {
-            int neighbor = index + 1;
-            c.addNeighbor(countries.get(neighbor));
+            neighbor = index + 1;
+        } else {
+            neighbor = index + 1 - cols;
         }
+        c.addNeighbor(countries.get(neighbor));
     }
 
     private void northNeighborAdd(Country c, int index) {
+        int neighbor;
         if (index - rows > 0) {
-            int neighbor = index - rows;
-            c.addNeighbor(countries.get(neighbor));
+            neighbor = index - rows;
+        } else {
+            neighbor = countries.size() - cols + (index % cols);
         }
+        c.addNeighbor(countries.get(neighbor));
     }
 
     private void southNeighborAdd(Country c, int index) {
+        int neighbor;
         if (index + rows < countries.size()) {
-            int neighbor = index + rows;
-            c.addNeighbor(countries.get(neighbor));
+            neighbor = index + rows;
+        } else {
+            neighbor = index % cols;
         }
+        c.addNeighbor(countries.get(neighbor));
     }
 
     // Generate a NxM grid
