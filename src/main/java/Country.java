@@ -13,6 +13,8 @@ public class Country {
         private long sick;
         private long immune;
         private long dead;
+        private long superHealthy;
+
         private long infectious;
         private long visiblyInfectious;
 
@@ -21,6 +23,8 @@ public class Country {
         public long sickCount() { return sick; }
         public long immuneCount() { return immune; }
         public long deadCount() { return dead; }
+        public long superHealthyCount() { return superHealthy; }
+
         public long infectiousCount() { return infectious; }
         public long visiblyInfectiousCount() { return visiblyInfectious; }
 
@@ -52,6 +56,8 @@ public class Country {
         newStats.sick = people.stream().filter(p -> p.isSick()).count();
         newStats.immune = people.stream().filter(p -> p.isImmune()).count();
         newStats.dead = people.stream().filter(p -> p.isDead()).count();
+        newStats.superHealthy = people.stream().filter(p -> p.isSuperHealthy()).count();
+
         newStats.infectious = people.stream().filter(p -> p.isInfectious()).count();
         newStats.visiblyInfectious = people.stream().filter(p -> p.isVisiblyInfectious()).count();
         stats = newStats;
@@ -72,12 +78,12 @@ public class Country {
         arrivals.clear();
     }
 
-	// Initilization methods
+    // Initilization methods
     public void addHuman(Human h) { people.add(h); }
     public void removeHuman(Human h) { people.remove(h); }
     public void addNeighbor(Country c) { neighbors.add(c); }
 
-	// Methods called from Human
+    // Methods called from Human
     public void moveHuman(Human h) { arrivals.add(h); }
     public boolean hasVisiblyInfectious() { return stats.visiblyInfectiousCount() > 0; }
     public boolean hasInfectious() { return stats.infectiousCount() > 0; }

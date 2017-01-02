@@ -3,16 +3,30 @@ import java.util.*;
 abstract class HealthState {
     protected Human human;
 
-    public void passDay() { }
     public HealthState(Human h) { human = h; }
+
+    // Actions
+    public void passDay() { }
     public void infectionChance(boolean infectious) { }
+
+    // Type queries
     public boolean isHealthy() { return false; }
     public boolean isInfected() { return false; }
     public boolean isSick() { return false; }
     public boolean isImmune() { return false; }
     public boolean isDead() { return false; }
+    public boolean isSuperHealthy() { return false; }
+
+    // State queries
     public boolean isInfectious() { return false; }
     public boolean isVisiblyInfectious() { return false; }
+}
+
+class SuperHealthy extends HealthState {
+    public SuperHealthy(Human h) { super(h); }
+
+    @Override
+    public boolean isSuperHealthy() { return true; }
 }
 
 class Healthy extends HealthState {
@@ -185,15 +199,19 @@ public class Human {
     public int id() { return id; }
     public Country country() { return country; }
 
-    // Health state query methods
+    //// Health state query methods
+    // Type queries
     public boolean isHealthy() { return health.isHealthy(); }
     public boolean isInfected() { return health.isInfected(); }
     public boolean isSick() { return health.isSick(); }
     public boolean isImmune() { return health.isImmune(); }
     public boolean isDead() { return health.isDead(); }
+    public boolean isSuperHealthy() { return health.isSuperHealthy(); }
+
+    // State queries
     public boolean isInfectious() { return health.isInfectious(); }
     public boolean isVisiblyInfectious() { return health.isVisiblyInfectious(); }
-    //
+    ////
 
     // Health releated actions
     protected void getHealthy() { health = new Healthy(this); }
@@ -201,6 +219,7 @@ public class Human {
     protected void getSick() { health = new Sick(this); }
     protected void becomeImmune() { health = new Immune(this); }
     protected void die() { health = new Dead(this); }
+    protected void getSuperHealthy() { health = new SuperHealthy(this); }
     //
 
     @Override
