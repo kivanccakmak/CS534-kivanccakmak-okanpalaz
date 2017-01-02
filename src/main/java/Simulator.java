@@ -115,4 +115,8 @@ public class Simulator {
         }
         return info;
     }
+
+    public int getDayPassed() {
+        return this.dayPassed;
+    }
 }
