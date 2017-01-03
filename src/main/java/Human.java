@@ -9,6 +9,7 @@ abstract class HealthState {
     // Actions
     public void passDay() { }
     public void infectionChance(boolean infectious) { }
+    public void vaccinate() { }
 
     // Type queries
     public boolean isHealthy() { return false; }
@@ -21,6 +22,7 @@ abstract class HealthState {
     // State queries
     public boolean isInfectious() { return false; }
     public boolean isVisiblyInfectious() { return false; }
+    public boolean isVaccineCandiate() { return isHealthy(); }
 }
 
 class SuperHealthy extends HealthState {
@@ -35,6 +37,9 @@ class Healthy extends HealthState {
 
     @Override
     public boolean isHealthy() { return true; }
+
+    @Override
+    public void vaccinate() { human.getSuperHealthy(); }
 
     @Override
     public void infectionChance(boolean infectious) {
@@ -135,7 +140,7 @@ public class Human {
     static int idGen = 0;
     private final int id;
     private int daysUntilMove;
-    private Country country;
+    protected Country country;
     HealthState health;
 
     private static int genId() {
@@ -143,14 +148,10 @@ public class Human {
         return idGen;
     }
 
-    public Human(Country c, boolean isInfected) {
+    public Human(Country c) {
         id = genId();
         country = c;
-        if (isInfected) {
-            getInfected();
-        } else {
-            getHealthy();
-        }
+        getHealthy();
         genMoveDate();
         country.addHuman(this);
     }
@@ -212,6 +213,7 @@ public class Human {
     // State queries
     public boolean isInfectious() { return health.isInfectious(); }
     public boolean isVisiblyInfectious() { return health.isVisiblyInfectious(); }
+    public boolean isVaccineCandiate() { return health.isVaccineCandiate(); }
     ////
 
     // Health releated actions
@@ -221,6 +223,7 @@ public class Human {
     protected void becomeImmune() { health = new Immune(this); }
     protected void die() { health = new Dead(this); }
     protected void getSuperHealthy() { health = new SuperHealthy(this); }
+    protected void vaccinate() { health.vaccinate(); }
     //
 
     @Override
