@@ -36,6 +36,7 @@ public class Country {
             out += "Sick: " + sick + "\n";
             out += "Immune: " + immune + "\n";
             out += "Dead: " + dead + "\n";
+            out += "SuperHealthy: " + superHealthy + "\n";
             return out;
         }
     }
@@ -65,7 +66,10 @@ public class Country {
 
 
     public void runHealthActions() {
-        people.stream().forEach(p -> p.passDay());
+        // avoid stream inside stream
+        for (Human p: people) {
+            p.passDay();
+        }
 
         // remove people who moved
         people.removeIf(p -> p.country() != this);
@@ -88,6 +92,7 @@ public class Country {
     public boolean hasVisiblyInfectious() { return stats.visiblyInfectiousCount() > 0; }
     public boolean hasInfectious() { return stats.infectiousCount() > 0; }
     public ArrayList<Country> neighbors() { return neighbors; }
+    public ArrayList<Human> residents() { return people; }
 
     public String name() { return name; }
 
@@ -95,6 +100,7 @@ public class Country {
     public String toString() {
         String out = name + ":\n";
         out += stats;
+        out += "Population: " + people.size() + "\n";
         return out;
     }
 }

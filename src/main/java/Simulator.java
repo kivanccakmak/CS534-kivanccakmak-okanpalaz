@@ -69,35 +69,59 @@ public class Simulator {
         }
     }
 
-    public void populate(int count, double percentInfected, double percentSuper) {
+    public void populate(int count, double percentInfected, double percentSuper, double percentDoctor, int vaccineCnt) {
         Random rng = new Random();
-        // TODO: Throw exception percentages don't make sense
-        int infected = Math.round(((float)(percentInfected / 100.0)) * count);
+        // TODO: Throw error if percentages don't make sense
+
+        // Doctor percentage doesn't overlap with Super and Infected percentages
+        int docs = Math.round(((float)(percentDoctor / 100.0)) * count);
+        int regular = count - docs;
+
         int supers = Math.round(((float)(percentSuper / 100.0)) * count);
-        int healthy = count - infected - supers;
+        int infected = Math.round(((float)(percentInfected / 100.0)) * count);
 
-        for (int i = 0; i < infected; i++) {
+        ArrayList<Human> ppl = new ArrayList<Human>();
+
+        Doctor.setDailyVaccines(vaccineCnt);
+
+        // First create Humans and Doctors
+        for (int i = 0; i < docs; i++) {
             int idx = rng.nextInt(countries.size());
             Country dest = countries.get(idx);
 
-            // Human adds itself to the list
-            new Human(dest, Human.InitialHealth.INFECTED);
+            // Human adds itself to the Country
+            ppl.add(new Doctor(dest));
         }
 
-        for (int i = 0; i < healthy; i++) {
+        for (int i = 0; i < regular; i++) {
             int idx = rng.nextInt(countries.size());
             Country dest = countries.get(idx);
 
-            // Human adds itself to the list
-            new Human(dest, Human.InitialHealth.HEALTHY);
+            // Human adds itself to the Country
+            ppl.add(new Human(dest));
         }
 
-        for (int i = 0; i < supers; i++) {
-            int idx = rng.nextInt(countries.size());
-            Country dest = countries.get(idx);
+        // Then generate health state
+        int cnt = 0;
+        while(cnt < infected) {
+            int idx = rng.nextInt(ppl.size());
+            Human h = ppl.get(idx);
 
-            // Human adds itself to the list
-            new Human(dest, Human.InitialHealth.SUPERHEALTHY);
+            if (h.isHealthy()) {
+                h.getInfected();
+                cnt++;
+            }
+        }
+
+        cnt = 0;
+        while(cnt < supers) {
+            int idx = rng.nextInt(ppl.size());
+            Human h = ppl.get(idx);
+
+            if (h.isHealthy()) {
+                h.getSuperHealthy();
+                cnt++;
+            }
         }
     }
 
