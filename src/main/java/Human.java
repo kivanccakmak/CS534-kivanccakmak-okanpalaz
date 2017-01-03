@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.*;
 
 abstract class HealthState {
     protected Human human;
@@ -173,10 +174,10 @@ public class Human {
     }
 
     private Country selectDest() {
-        ArrayList<Country> available = country.neighbors()
+        List<Country> available = country.neighbors()
             .stream()
             .filter(c -> !c.hasVisiblyInfectious())
-            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            .collect(Collectors.toList());
 
         if (available.size() > 0) {
             int rnd = HealthGlobals.getRng().nextInt(available.size());
