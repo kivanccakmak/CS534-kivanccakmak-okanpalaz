@@ -138,30 +138,18 @@ public class Human {
     private Country country;
     HealthState health;
 
-    public enum InitialHealth {
-        HEALTHY,
-        INFECTED,
-        SUPERHEALTHY,
-    }
-
     private static int genId() {
         idGen++;
         return idGen;
     }
 
-    public Human(Country c, InitialHealth h) {
+    public Human(Country c, boolean isInfected) {
         id = genId();
         country = c;
-        switch (h) {
-            case HEALTHY:
-                getHealthy();
-                break;
-            case INFECTED:
-                getInfected();
-                break;
-            case SUPERHEALTHY:
-                getSuperHealthy();
-                break;
+        if (isInfected) {
+            getInfected();
+        } else {
+            getHealthy();
         }
         genMoveDate();
         country.addHuman(this);
