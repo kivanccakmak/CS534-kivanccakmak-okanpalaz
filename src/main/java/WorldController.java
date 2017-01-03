@@ -1,11 +1,15 @@
 import java.util.*;
 
 public class WorldController {
+    private int numHorizontal;
+    private int numVertical;
     private WorldView view;
     private Simulator simulator;
 
     public WorldController(int numVertical, int numHorizontal,
             int count, double percentInfected ) {
+        this.numHorizontal = numHorizontal;
+        this.numVertical = numVertical;
         this.view = new WorldPanelView(numVertical, numHorizontal, this);
         this.simulator = new Simulator(numVertical, numHorizontal);
         this.simulator.populate(count, percentInfected);
@@ -14,11 +18,13 @@ public class WorldController {
     //TODO: no cell click would be used
     //just, automatically update  cells at each passDay.
     public void cellClicked(int row, int col) {
-        //TODO: query simulator to get country -or world- info
-        //ps: this is just for dummy integration
-        String str = "";
-        str += "info " + this.simulator.getDayPassed();
-        this.view.showCell(row, col, str);
+        for (int i = 0; i < this.numHorizontal; i++) {
+            for (int j = 0; j < this.numVertical; j++) {
+                int idx = numHorizontal * i + j;
+                String info = this.simulator.getCountryInfo(idx);
+                this.view.showCell(i, j, info);
+            }
+        }
         passDay();
     }
 

@@ -36,6 +36,9 @@ public class Country {
             out += "Sick: " + sick + "\n";
             out += "Immune: " + immune + "\n";
             out += "Dead: " + dead + "\n";
+            System.out.println("**");
+            System.out.println(out);
+            System.out.println("**");
             return out;
         }
     }

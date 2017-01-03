@@ -101,10 +101,6 @@ public class Simulator {
             c.processMoves();
         }
 
-        for (Country c: countries) {
-            System.out.println(c.toString());
-        }
-
         dayPassed++;
     }
 
@@ -114,6 +110,16 @@ public class Simulator {
             info.add(c.getCountryInfo());
         }
         return info;
+    }
+
+    public String getCountryInfo(int idx) {
+        Country c = this.countries.get(idx);
+        String out = c.toString();
+        System.out.println("==");
+        //TODO: find where does rowxcol arrives
+        System.out.println(out);
+        System.out.println("==");
+        return out;
     }
 
     public int getDayPassed() {

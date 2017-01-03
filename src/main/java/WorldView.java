@@ -12,11 +12,12 @@ public abstract class WorldView extends JFrame {
 
     public WorldView(int numVertical, int numHorizontal, final WorldController cntrl) {
         components = new JComponent[numVertical][numHorizontal];
+        setTitle("World Map");
         setLayout(new GridLayout(numVertical, numHorizontal));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         for (int i = 0; i < numVertical; i++) {
             for (int j = 0; j < numHorizontal; j++) {
-                components[i][j] = getNewCell();
+                components[i][j] = getNewCell(i, j);
                 add(components[i][j]);
                 final int row = i;
                 final int col = j;
@@ -35,5 +36,5 @@ public abstract class WorldView extends JFrame {
 
     public abstract void showCell(int row, int col, String stats);
 
-    protected abstract JComponent getNewCell();
+    protected abstract JComponent getNewCell(int row, int col);
 }
