@@ -69,17 +69,19 @@ public class Simulator {
         }
     }
 
-    public void populate(int count, double percentInfected) {
+    public void populate(int count, double percentInfected, double percentSuper) {
         Random rng = new Random();
+        // TODO: Throw exception percentages don't make sense
         int infected = Math.round(((float)(percentInfected / 100.0)) * count);
-        int healthy = count - infected;
+        int supers = Math.round(((float)(percentSuper / 100.0)) * count);
+        int healthy = count - infected - supers;
 
         for (int i = 0; i < infected; i++) {
             int idx = rng.nextInt(countries.size());
             Country dest = countries.get(idx);
 
             // Human adds itself to the list
-            new Human(dest, true);
+            new Human(dest, Human.InitialHealth.INFECTED);
         }
 
         for (int i = 0; i < healthy; i++) {
@@ -87,7 +89,15 @@ public class Simulator {
             Country dest = countries.get(idx);
 
             // Human adds itself to the list
-            new Human(dest, false);
+            new Human(dest, Human.InitialHealth.HEALTHY);
+        }
+
+        for (int i = 0; i < supers; i++) {
+            int idx = rng.nextInt(countries.size());
+            Country dest = countries.get(idx);
+
+            // Human adds itself to the list
+            new Human(dest, Human.InitialHealth.SUPERHEALTHY);
         }
     }
 
