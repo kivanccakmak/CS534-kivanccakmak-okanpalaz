@@ -9,7 +9,9 @@ public class Country {
     private ArrayList<Country> neighbors;
     private ArrayList<Human> people;
     private ArrayList<Human> arrivals;
+    private Simulator simulator;
     private HealthStats stats;
+
 
     public class HealthStats {
         private long healthy;
@@ -48,11 +50,12 @@ public class Country {
         }
     }
 
-    public Country(String n) {
+    public Country(Simulator s, String n) {
         name = n;
         neighbors = new ArrayList<Country>();
         people = new ArrayList<Human>();
         arrivals = new ArrayList<Human>();
+        simulator = s;
         updateHealthStats();
     }
 
@@ -112,6 +115,7 @@ public class Country {
     public boolean hasVisiblyInfectious() { return stats.visiblyInfectiousCount() > 0; }
     public boolean hasInfectious() { return stats.infectiousCount() > 0; }
     public ArrayList<Country> neighbors() { return neighbors; }
+    public ArrayList<Country> allCountries() { return simulator.countryList(); }
     public ArrayList<Human> residents() { return people; }
 
     public String name() { return name; }

@@ -2,24 +2,15 @@ import java.util.*;
 import java.util.stream.*;
 
 public class Doctor extends Human  {
-    private static int dailyVaccines = 10;
-
-    public static void setDailyVaccines(int v) {
-        if (v >= 0) {
-            dailyVaccines = v;
-        } else {
-            // TODO: Error
-        }
-    }
-
     public Doctor(Country c) {
         super(c);
     }
 
     @Override
     public void passDay() {
+        SimulationRules rules = SimulationRules.getInstance();
         // reset daily vaccines
-        int vaccines = dailyVaccines;
+        int vaccines = rules.getDailyVaccines();
 
         List<Human> candidates = country.residents()
             .stream()

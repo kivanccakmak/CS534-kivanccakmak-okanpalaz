@@ -59,7 +59,7 @@ public class Simulator {
 
         for (int row = 0; row < cols; row++) {
             for (int col = 0; col < cols; col++) {
-                countries.add(new Country((row + 1) + "x" + (col + 1)));
+                countries.add(new Country(this, (row + 1) + "x" + (col + 1)));
             }
         }
 
@@ -73,7 +73,7 @@ public class Simulator {
         }
     }
 
-    public void populate(int count, double percentInfected, double percentSuper, double percentDoctor, int vaccineCnt) {
+    public void populate(int count, double percentInfected, double percentSuper, double percentDoctor) {
         Random rng = new Random();
         // TODO: Throw error if percentages don't make sense
 
@@ -85,8 +85,6 @@ public class Simulator {
         int infected = Math.round(((float)(percentInfected / 100.0)) * count);
 
         ArrayList<Human> ppl = new ArrayList<Human>();
-
-        Doctor.setDailyVaccines(vaccineCnt);
 
         // First create Humans and Doctors
         for (int i = 0; i < docs; i++) {
@@ -127,6 +125,10 @@ public class Simulator {
                 cnt++;
             }
         }
+    }
+
+    public ArrayList<Country> countryList() {
+        return countries;
     }
 
     public void passDay() {

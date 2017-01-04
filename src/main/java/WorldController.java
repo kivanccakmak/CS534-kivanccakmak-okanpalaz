@@ -11,8 +11,14 @@ public class WorldController {
         this.numHorizontal = numHorizontal;
         this.numVertical = numVertical;
         this.view = new WorldPanelView(numVertical, numHorizontal, this);
+
+		SimulationRules rules = SimulationRules.getInstance();
+
+        rules.setDailyVaccines(vaccineCnt);
+        rules.setAirTravelChance(30.0);
+
         this.simulator = new Simulator(numVertical, numHorizontal);
-        this.simulator.populate(count, percentInfected, percentSuper, percentDoctor, vaccineCnt);
+        this.simulator.populate(count, percentInfected, percentSuper, percentDoctor);
     }
 
     //TODO: no cell click would be used
