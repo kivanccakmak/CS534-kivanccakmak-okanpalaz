@@ -53,7 +53,7 @@ public class Simulator {
         rows = n;
         cols = m;
 
-        for (int row = 0; row < cols; row++) {
+        for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 countries.add(new Country(this, (row + 1) + "x" + (col + 1)));
             }
