@@ -8,6 +8,7 @@ public class HealthGlobals {
     private static Random rng = new Random();
 
     private static double probToTransmitVirus = 0.4;
+    private static double probToAirtravel = 0.4;
     private static double probToDie = 0.25;
 
     private HealthGlobals() {
@@ -32,6 +33,11 @@ public class HealthGlobals {
     public static boolean infectionDiceThrow() {
         double dice = rng.nextDouble();
         return dice <= probToTransmitVirus;
+    }
+
+    public static boolean airtravelDiceThrow() {
+        double dice = rng.nextDouble();
+        return dice <= probToAirtravel;
     }
 
     public static boolean dieDiceThrow() {
