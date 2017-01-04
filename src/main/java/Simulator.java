@@ -121,6 +121,11 @@ public class Simulator {
                 cnt++;
             }
         }
+
+        // Initialize health stats for the first day
+        for (Country c: countries) {
+            c.updateHealthStats();
+        }
     }
 
     public ArrayList<Country> countryList() {
@@ -130,11 +135,6 @@ public class Simulator {
     public void passDay() {
         System.out.println("== DAY " + dayPassed + " ==\n");
 
-        // Get the daily stat snapshot for decisions
-        for (Country c: countries) {
-            c.updateHealthStats();
-        }
-
         // Run health related actions
         for (Country c: countries) {
             c.runHealthActions();
@@ -143,6 +143,11 @@ public class Simulator {
         // Complete moves
         for (Country c: countries) {
             c.processMoves();
+        }
+
+        // Get the end of the day health state snapshot
+        for (Country c: countries) {
+            c.updateHealthStats();
         }
 
         for (Country c: countries) {
