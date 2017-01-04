@@ -43,7 +43,9 @@ class Healthy extends HealthState {
 
     @Override
     public void infectionChance(boolean infectious) {
-        if (infectious && HealthGlobals.infectionDiceThrow()) {
+        SimulationRules rules = SimulationRules.getInstance();
+
+        if (infectious && rules.infectionDiceThrow()) {
             human.getInfected();
         }
     }
@@ -62,8 +64,10 @@ class Infected extends HealthState {
 
     @Override
     public void passDay() {
+        SimulationRules rules = SimulationRules.getInstance();
+
         days++;
-        if (days == HealthGlobals.getDaysUntilSick()) {
+        if (days == rules.getDaysUntilSick()) {
             human.getSick();
         }
     }
@@ -87,14 +91,16 @@ class Sick extends HealthState {
 
     @Override
     public void passDay() {
+        SimulationRules rules = SimulationRules.getInstance();
+
         days++;
-        if (days == HealthGlobals.getDaysUntilDeathChance()) {
-            if (HealthGlobals.dieDiceThrow()) {
+        if (days == rules.getDaysUntilDeathChance()) {
+            if (rules.dieDiceThrow()) {
                 human.die();
             }
         }
 
-        if (days == HealthGlobals.getDaysUntilImmune()) {
+        if (days == rules.getDaysUntilImmune()) {
             human.becomeImmune();
         }
     }
@@ -113,8 +119,10 @@ class Immune extends HealthState {
 
     @Override
     public void passDay() {
+        SimulationRules rules = SimulationRules.getInstance();
+
         days++;
-        if (days == HealthGlobals.getDaysUntilHealthy()) {
+        if (days == rules.getDaysUntilHealthy()) {
             human.getHealthy();
         }
     }
@@ -157,15 +165,18 @@ public class Human {
     }
 
     private void genMoveDate() {
-        int upper = SimulationGlobals.getMaxDayToStay();
-        int lower = SimulationGlobals.getMinDayToStay();
-        daysUntilMove = lower + HealthGlobals.getRng().nextInt(upper - lower);
+        SimulationRules rules = SimulationRules.getInstance();
+
+        int upper = rules.getMaxDayToStay();
+        int lower = rules.getMinDayToStay();
+        daysUntilMove = lower + rules.getRng().nextInt(upper - lower);
     }
 
     private Country selectDest() {
+        SimulationRules rules = SimulationRules.getInstance();
         List<Country> candidates;
 
-        if (HealthGlobals.airtravelDiceThrow()) {
+        if (rules.airtravelDiceThrow()) {
             candidates = country.allCountries()
                 .stream()
                 .filter(c -> c != country)
@@ -178,7 +189,7 @@ public class Human {
         }
 
         if (candidates.size() > 0) {
-            int rnd = HealthGlobals.getRng().nextInt(candidates.size());
+            int rnd = rules.getRng().nextInt(candidates.size());
             return candidates.get(rnd);
         } else {
             return null;
