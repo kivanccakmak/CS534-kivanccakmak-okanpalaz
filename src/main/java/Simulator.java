@@ -55,7 +55,7 @@ public class Simulator {
 
         for (int row = 0; row < cols; row++) {
             for (int col = 0; col < cols; col++) {
-                countries.add(new Country((row + 1) + "x" + (col + 1)));
+                countries.add(new Country(this, (row + 1) + "x" + (col + 1)));
             }
         }
 
@@ -123,6 +123,10 @@ public class Simulator {
                 cnt++;
             }
         }
+    }
+
+    public ArrayList<Country> countryList() {
+        return countries;
     }
 
     public void passDay() {

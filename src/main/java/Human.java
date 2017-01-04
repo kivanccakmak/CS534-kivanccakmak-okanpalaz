@@ -163,14 +163,23 @@ public class Human {
     }
 
     private Country selectDest() {
-        List<Country> available = country.neighbors()
-            .stream()
-            .filter(c -> !c.hasVisiblyInfectious())
-            .collect(Collectors.toList());
+        List<Country> candidates;
 
-        if (available.size() > 0) {
-            int rnd = HealthGlobals.getRng().nextInt(available.size());
-            return available.get(rnd);
+        if (HealthGlobals.airtravelDiceThrow()) {
+            candidates = country.allCountries()
+                .stream()
+                .filter(c -> c != country)
+                .collect(Collectors.toList());
+        } else {
+            candidates = country.neighbors()
+                .stream()
+                .filter(c -> !c.hasVisiblyInfectious())
+                .collect(Collectors.toList());
+        }
+
+        if (candidates.size() > 0) {
+            int rnd = HealthGlobals.getRng().nextInt(candidates.size());
+            return candidates.get(rnd);
         } else {
             return null;
         }
