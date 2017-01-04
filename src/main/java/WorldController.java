@@ -7,12 +7,12 @@ public class WorldController {
     private Simulator simulator;
 
     public WorldController(int numVertical, int numHorizontal,
-            int count, double percentInfected ) {
+            int count, double percentInfected, double percentSuper, double percentDoctor, int vaccineCnt) {
         this.numHorizontal = numHorizontal;
         this.numVertical = numVertical;
         this.view = new WorldPanelView(numVertical, numHorizontal, this);
         this.simulator = new Simulator(numVertical, numHorizontal);
-        this.simulator.populate(count, percentInfected);
+        this.simulator.populate(count, percentInfected, percentSuper, percentDoctor, vaccineCnt);
     }
 
     //TODO: no cell click would be used

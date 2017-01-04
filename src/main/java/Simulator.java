@@ -11,31 +11,43 @@ public class Simulator {
     private int cols;
 
     private void westNeighborAdd(Country c, int index) {
+        int neighbor;
         if (index % cols != 0) {
-            int neighbor = index - 1;
-            c.addNeighbor(countries.get(neighbor));
+            neighbor = index - 1;
+        } else {
+            neighbor = index - 1 + cols;
         }
+        c.addNeighbor(countries.get(neighbor));
     }
 
     private void eastNeighborAdd(Country c, int index) {
+        int neighbor;
         if ((index % cols) != (cols - 1)) {
-            int neighbor = index + 1;
-            c.addNeighbor(countries.get(neighbor));
+            neighbor = index + 1;
+        } else {
+            neighbor = index + 1 - cols;
         }
+        c.addNeighbor(countries.get(neighbor));
     }
 
     private void northNeighborAdd(Country c, int index) {
+        int neighbor;
         if (index - rows > 0) {
-            int neighbor = index - rows;
-            c.addNeighbor(countries.get(neighbor));
+            neighbor = index - rows;
+        } else {
+            neighbor = countries.size() - cols + (index % cols);
         }
+        c.addNeighbor(countries.get(neighbor));
     }
 
     private void southNeighborAdd(Country c, int index) {
+        int neighbor;
         if (index + rows < countries.size()) {
-            int neighbor = index + rows;
-            c.addNeighbor(countries.get(neighbor));
+            neighbor = index + rows;
+        } else {
+            neighbor = index % cols;
         }
+        c.addNeighbor(countries.get(neighbor));
     }
 
     // Generate a NxM grid
@@ -61,25 +73,59 @@ public class Simulator {
         }
     }
 
-    public void populate(int count, double percentInfected) {
+    public void populate(int count, double percentInfected, double percentSuper, double percentDoctor, int vaccineCnt) {
         Random rng = new Random();
-        int infected = Math.round(((float)(percentInfected / 100.0)) * count);
-        int healthy = count - infected;
+        // TODO: Throw error if percentages don't make sense
 
-        for (int i = 0; i < infected; i++) {
+        // Doctor percentage doesn't overlap with Super and Infected percentages
+        int docs = Math.round(((float)(percentDoctor / 100.0)) * count);
+        int regular = count - docs;
+
+        int supers = Math.round(((float)(percentSuper / 100.0)) * count);
+        int infected = Math.round(((float)(percentInfected / 100.0)) * count);
+
+        ArrayList<Human> ppl = new ArrayList<Human>();
+
+        Doctor.setDailyVaccines(vaccineCnt);
+
+        // First create Humans and Doctors
+        for (int i = 0; i < docs; i++) {
             int idx = rng.nextInt(countries.size());
             Country dest = countries.get(idx);
 
-            // Human adds itself to the list
-            new Human(dest, true);
+            // Human adds itself to the Country
+            ppl.add(new Doctor(dest));
         }
 
-        for (int i = 0; i < healthy; i++) {
+        for (int i = 0; i < regular; i++) {
             int idx = rng.nextInt(countries.size());
             Country dest = countries.get(idx);
 
-            // Human adds itself to the list
-            new Human(dest, false);
+            // Human adds itself to the Country
+            ppl.add(new Human(dest));
+        }
+
+        // Then generate health state
+        int cnt = 0;
+        while(cnt < infected) {
+            int idx = rng.nextInt(ppl.size());
+            Human h = ppl.get(idx);
+
+            if (h.isHealthy()) {
+                h.getInfected();
+                cnt++;
+            }
+        }
+
+        cnt = 0;
+        while(cnt < supers) {
+            int idx = rng.nextInt(ppl.size());
+            Human h = ppl.get(idx);
+
+            if (h.isHealthy()) {
+                h.getSuperHealthy();
+                cnt++;
+            }
         }
     }
 

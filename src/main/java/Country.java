@@ -17,6 +17,8 @@ public class Country {
         private long sick;
         private long immune;
         private long dead;
+        private long superHealthy;
+
         private long infectious;
         private long visiblyInfectious;
 
@@ -25,6 +27,8 @@ public class Country {
         public long sickCount() { return sick; }
         public long immuneCount() { return immune; }
         public long deadCount() { return dead; }
+        public long superHealthyCount() { return superHealthy; }
+
         public long infectiousCount() { return infectious; }
         public long visiblyInfectiousCount() { return visiblyInfectious; }
 
@@ -36,6 +40,7 @@ public class Country {
             out += "Sick: " + sick + "\n";
             out += "Immune: " + immune + "\n";
             out += "Dead: " + dead + "\n";
+            out += "SuperHealthy: " + superHealthy + "\n";
             System.out.println("**");
             System.out.println(out);
             System.out.println("**");
@@ -59,6 +64,8 @@ public class Country {
         newStats.sick = people.stream().filter(p -> p.isSick()).count();
         newStats.immune = people.stream().filter(p -> p.isImmune()).count();
         newStats.dead = people.stream().filter(p -> p.isDead()).count();
+        newStats.superHealthy = people.stream().filter(p -> p.isSuperHealthy()).count();
+
         newStats.infectious = people.stream().filter(p -> p.isInfectious()).count();
         newStats.visiblyInfectious = people.stream().filter(p -> p.isVisiblyInfectious()).count();
         stats = newStats;
@@ -79,7 +86,10 @@ public class Country {
 
 
     public void runHealthActions() {
-        people.stream().forEach(p -> p.passDay());
+        // avoid stream inside stream
+        for (Human p: people) {
+            p.passDay();
+        }
 
         // remove people who moved
         people.removeIf(p -> p.country() != this);
@@ -92,16 +102,17 @@ public class Country {
         arrivals.clear();
     }
 
-	// Initilization methods
+    // Initilization methods
     public void addHuman(Human h) { people.add(h); }
     public void removeHuman(Human h) { people.remove(h); }
     public void addNeighbor(Country c) { neighbors.add(c); }
 
-	// Methods called from Human
+    // Methods called from Human
     public void moveHuman(Human h) { arrivals.add(h); }
     public boolean hasVisiblyInfectious() { return stats.visiblyInfectiousCount() > 0; }
     public boolean hasInfectious() { return stats.infectiousCount() > 0; }
     public ArrayList<Country> neighbors() { return neighbors; }
+    public ArrayList<Human> residents() { return people; }
 
     public String name() { return name; }
 
@@ -109,6 +120,7 @@ public class Country {
     public String toString() {
         String out = name + ":\n";
         out += stats;
+        out += "Population: " + people.size() + "\n";
         return out;
     }
 }

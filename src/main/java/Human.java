@@ -1,18 +1,35 @@
 import java.util.*;
+import java.util.stream.*;
 
 abstract class HealthState {
     protected Human human;
 
-    public void passDay() { }
     public HealthState(Human h) { human = h; }
+
+    // Actions
+    public void passDay() { }
     public void infectionChance(boolean infectious) { }
+    public void vaccinate() { }
+
+    // Type queries
     public boolean isHealthy() { return false; }
     public boolean isInfected() { return false; }
     public boolean isSick() { return false; }
     public boolean isImmune() { return false; }
     public boolean isDead() { return false; }
+    public boolean isSuperHealthy() { return false; }
+
+    // State queries
     public boolean isInfectious() { return false; }
     public boolean isVisiblyInfectious() { return false; }
+    public boolean isVaccineCandiate() { return isHealthy(); }
+}
+
+class SuperHealthy extends HealthState {
+    public SuperHealthy(Human h) { super(h); }
+
+    @Override
+    public boolean isSuperHealthy() { return true; }
 }
 
 class Healthy extends HealthState {
@@ -22,8 +39,11 @@ class Healthy extends HealthState {
     public boolean isHealthy() { return true; }
 
     @Override
+    public void vaccinate() { human.getSuperHealthy(); }
+
+    @Override
     public void infectionChance(boolean infectious) {
-        if (HealthGlobals.infectionDiceThrow()) {
+        if (infectious && HealthGlobals.infectionDiceThrow()) {
             human.getInfected();
         }
     }
@@ -120,7 +140,7 @@ public class Human {
     static int idGen = 0;
     private final int id;
     private int daysUntilMove;
-    private Country country;
+    protected Country country;
     HealthState health;
 
     private static int genId() {
@@ -128,14 +148,10 @@ public class Human {
         return idGen;
     }
 
-    public Human(Country c, boolean isInfected) {
+    public Human(Country c) {
         id = genId();
         country = c;
-        if (isInfected) {
-            getInfected();
-        } else {
-            getHealthy();
-        }
+        getHealthy();
         genMoveDate();
         country.addHuman(this);
     }
@@ -147,10 +163,10 @@ public class Human {
     }
 
     private Country selectDest() {
-        ArrayList<Country> available = country.neighbors()
+        List<Country> available = country.neighbors()
             .stream()
             .filter(c -> !c.hasVisiblyInfectious())
-            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            .collect(Collectors.toList());
 
         if (available.size() > 0) {
             int rnd = HealthGlobals.getRng().nextInt(available.size());
@@ -185,15 +201,20 @@ public class Human {
     public int id() { return id; }
     public Country country() { return country; }
 
-    // Health state query methods
+    //// Health state query methods
+    // Type queries
     public boolean isHealthy() { return health.isHealthy(); }
     public boolean isInfected() { return health.isInfected(); }
     public boolean isSick() { return health.isSick(); }
     public boolean isImmune() { return health.isImmune(); }
     public boolean isDead() { return health.isDead(); }
+    public boolean isSuperHealthy() { return health.isSuperHealthy(); }
+
+    // State queries
     public boolean isInfectious() { return health.isInfectious(); }
     public boolean isVisiblyInfectious() { return health.isVisiblyInfectious(); }
-    //
+    public boolean isVaccineCandiate() { return health.isVaccineCandiate(); }
+    ////
 
     // Health releated actions
     protected void getHealthy() { health = new Healthy(this); }
@@ -201,6 +222,8 @@ public class Human {
     protected void getSick() { health = new Sick(this); }
     protected void becomeImmune() { health = new Immune(this); }
     protected void die() { health = new Dead(this); }
+    protected void getSuperHealthy() { health = new SuperHealthy(this); }
+    protected void vaccinate() { health.vaccinate(); }
     //
 
     @Override
