@@ -33,12 +33,8 @@ public class WorldPanelView extends WorldView {
     }
 
     public void showCell(int row, int col, String stats) {
-        //TODO: have String[] or dict
-        String out = "";
-        out = stats.replace("\n", "<br>");
-        out = "<html>" + out + "</html>";
-        System.out.println(out);
-        InfoPanel panel = (InfoPanel) this.components[row][col];
-        panel.setLabelMsg(out);
+    }
+
+    public void addCountries(int numVertical, int numHorizontal) {
     }
 }
