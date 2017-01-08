@@ -1,11 +1,149 @@
 import java.util.*;
 
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import javax.swing.JComponent;
+import javax.swing.JTextField;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JSplitPane;
 import javax.swing.border.EtchedBorder;
-import java.awt.Component;
-import java.awt.Container;
+
+class InputFields extends JPanel {
+    private WorldController cntrl;
+    private JPanel inputPanel;
+    private JPanel buttonPanel;
+
+    private JButton passButton;
+    private JButton simulateButton;
+    private JButton initButton;
+    private JButton stopButton;
+
+    private JLabel labHoriz;
+    private JTextField txtHoriz;
+
+    private JLabel labVert;
+    private JTextField txtVert;
+
+    private JLabel labPeople;
+    private JTextField txtPeople;
+
+    private JLabel labDays;
+    private JTextField txtDays;
+
+    private JLabel labInfect;
+    private JTextField txtInfect;
+
+    private JLabel labDoctor;
+    private JTextField txtDoctor;
+
+    private JLabel labVaccine;
+    private JTextField txtVaccine;
+
+    private JLabel labSuper;
+    private JTextField txtSuper;
+
+    InputFields(WorldController cntrl) {
+        this.cntrl = cntrl;
+
+        JSplitPane allInputs;
+
+        inputPanel = new JPanel();
+        fillInputPanel();
+
+        buttonPanel = new JPanel();
+        fillButtonPanel();
+        initButtonActions();
+
+        allInputs = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                true, inputPanel, buttonPanel);
+
+        this.add(allInputs);
+    }
+
+    private void fillButtonPanel() {
+        passButton = new JButton("pass day");
+        simulateButton = new JButton("simulate");
+        initButton = new JButton("init");
+        stopButton = new JButton("stop");
+
+        buttonPanel.add(simulateButton);
+        buttonPanel.add(passButton);
+        buttonPanel.add(initButton);
+        buttonPanel.add(stopButton);
+    }
+
+    private void fillInputPanel() {
+        labVert = new JLabel("# Vertical");
+        labHoriz = new JLabel("# Horizontal");
+        labPeople = new JLabel("# People");
+        labDays = new JLabel("# Days");
+        labInfect = new JLabel("% Infected");
+        labDoctor = new JLabel("% Doctor");
+        labVaccine = new JLabel("# Vaccine");
+        labSuper = new JLabel("% Super");
+
+        txtVert = new JTextField(5);
+        txtHoriz = new JTextField(5);
+        txtPeople = new JTextField(5);
+        txtDays = new JTextField(3);
+        txtInfect = new JTextField(3);
+        txtDoctor = new JTextField(3);
+        txtVaccine = new JTextField(3);
+        txtSuper = new JTextField(3);
+
+        inputPanel.add(labVert);
+        inputPanel.add(txtVert);
+        inputPanel.add(labHoriz);
+        inputPanel.add(txtHoriz);
+        inputPanel.add(labPeople);
+        inputPanel.add(txtPeople);
+        inputPanel.add(labDays);
+        inputPanel.add(txtDays);
+        inputPanel.add(labInfect);
+        inputPanel.add(txtInfect);
+        inputPanel.add(labDoctor);
+        inputPanel.add(txtDoctor);
+        inputPanel.add(labVaccine);
+        inputPanel.add(txtVaccine);
+        inputPanel.add(labSuper);
+        inputPanel.add(txtSuper);
+    }
+
+    private void initButtonActions() {
+        this.initButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+              String numVertical = getVertCountry();
+              String numHorizontal = getHorizCountry();
+              String numPeople = getNumPeople();
+              String numDays = getNumDays();
+              String percentInfected = getPercentInfected();
+              String percentSuper = getPercentSuper();
+              String percentDoctor = getPercentDoctor();
+              String numVaccine = getNumVaccine();
+              cntrl.restart(numVertical, numHorizontal, numPeople,
+                      numDays, percentInfected, percentSuper, percentDoctor,
+                        numVaccine);
+            }
+        });
+    }
+
+    private String getVertCountry() { return txtVert.getText(); }
+    private String getHorizCountry() { return txtHoriz.getText(); }
+    private String getNumPeople() { return txtPeople.getText(); }
+    private String getNumDays() { return txtDays.getText(); }
+    private String getPercentInfected() { return txtInfect.getText(); }
+    private String getPercentSuper() { return txtSuper.getText(); }
+    private String getPercentDoctor() { return txtDoctor.getText(); }
+    private String getNumVaccine() { return txtVaccine.getText(); }
+}
 
 class InfoPanel extends JPanel{
     private JLabel label;
@@ -22,19 +160,46 @@ class InfoPanel extends JPanel{
 }
 
 public class WorldPanelView extends WorldView {
-    public WorldPanelView(int numVertical, int numHorizontal,
-            final WorldController cntrl) {
-        super(numVertical, numHorizontal, cntrl);
+    private JPanel countryBlocks;
+    private JPanel textOutput;
+    private JComponent[][] components;
+
+    public WorldPanelView(WorldController cntrl) {
+        super(cntrl);
     }
 
-    protected JComponent getNewCell(int row, int col) {
+    public JComponent getOutputPanel() {
+        countryBlocks = new JPanel();
+        textOutput = new JPanel();
+        JSplitPane splitOut = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                true, countryBlocks, textOutput);
+        splitOut.setOneTouchExpandable(true);
+        splitOut.setDividerLocation(0.4);
+        return splitOut;
+    }
+
+    public JComponent getInputPanel() {
+        InputFields inputPanel = new InputFields(this.cntrl);
+        return inputPanel;
+    }
+
+    private JPanel getNewCell() {
         InfoPanel panel = new InfoPanel();
-        return panel;
+        return (JPanel) panel;
     }
 
-    public void showCell(int row, int col, String stats) {
-    }
+    public void updateOutput(String[][] stats) {}
 
-    public void addCountries(int numVertical, int numHorizontal) {
+    public void initOutput(int numVertical, int numHorizontal,
+            int numPeople, int numDays, double percentInfected,
+                double percentSuper, double percentDoctor, int numVaccine) {
+        this.countryBlocks.setLayout(new GridLayout(numVertical, numHorizontal));
+        this.components = new JComponent[numVertical][numHorizontal];
+        for (int i = 0; i < numVertical; i++) {
+            for (int j = 0; j < numHorizontal; j++) {
+                this.components[i][j] = getNewCell();
+                this.countryBlocks.add(this.components[i][j]);
+            }
+        }
     }
 }

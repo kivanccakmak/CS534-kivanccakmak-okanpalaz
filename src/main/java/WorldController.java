@@ -16,11 +16,15 @@ public class WorldController {
     private Simulator simulator;
 
     public WorldController() {
+        this.view = new WorldPanelView(this);
+        this.view.setSize(300, 300);
+        this.view.setVisible(true);
     }
 
+    // for debugging purposes, won't be trigged from UI
     public void initialize(int numVertical, int numHorizontal, int numPeople,
             double percentInfected, double percentSuper, double percentDoctor,
-            int numVaccine) {
+                int numVaccine) {
         this.numHorizontal = numHorizontal;
         this.numVertical = numVertical;
         this.numPeople = numPeople;
@@ -35,10 +39,10 @@ public class WorldController {
 
     public void restart(String numVertical, String numHorizontal,
             String numPeople, String numDays, String percentInfected,
-            String percentSuper, String percentDoctor, String numVaccine) {
-
+                String percentSuper, String percentDoctor, String numVaccine) {
         int ret = isValidInputs(numVertical, numHorizontal, numPeople,
                 percentInfected, percentSuper, percentDoctor, numVaccine);
+        System.out.println("ret: " + ret);
         if (ret != 1) { return; }
 
         this.numVertical = Integer.parseInt(numVertical);
@@ -54,7 +58,7 @@ public class WorldController {
 
     private int isValidInputs(String numVertical, String numHorizontal,
             String numPeople, String percentInfected, String percentSuper,
-            String percentDoctor, String numVaccine) {
+                String percentDoctor, String numVaccine) {
         int iTemp;
         double dTemp;
 
@@ -123,29 +127,16 @@ public class WorldController {
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
         errMsg = sw.toString();
-        System.out.println(errMsg); //TODO: send event to quee, trigs pop-up
-    }
-
-    //TODO: no cell click would be used
-    //just, automatically update  cells at each passDay.
-    public void cellClicked(int row, int col) {
-        for (int i = 0; i < this.numHorizontal; i++) {
-            for (int j = 0; j < this.numVertical; j++) {
-                int idx = numHorizontal * i + j;
-                String info = this.simulator.getCountryInfo(idx);
-                this.view.showCell(i, j, info);
-            }
-        }
-        passDay();
+        //TODO: send event to quee, trigs pop-up
+        System.out.println(errMsg);
     }
 
     public void startSimulation() {
-        this.view = new WorldPanelView(numVertical, numHorizontal, this);
-        this.simulator = new Simulator(numVertical, numHorizontal);
-        this.simulator.populate(numPeople, percentInfected,
-                percentSuper, percentDoctor);
-        this.view.setSize(300, 300);
-        this.view.setVisible(true);
+        this.simulator = new Simulator(this.numVertical, this.numHorizontal);
+        this.simulator.populate(numPeople, percentInfected, percentSuper, percentDoctor);
+        this.view.initOutput(numVertical, numHorizontal, numPeople,
+                numDays, percentInfected, percentSuper, percentDoctor,
+                    numVaccine);
     }
 
     //TODO: set button in view to trig this function
