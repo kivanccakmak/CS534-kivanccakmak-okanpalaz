@@ -1,40 +1,63 @@
 import java.util.*;
 
-import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JComponent;
+import javax.swing.border.EtchedBorder;
 
-public abstract class WorldView extends JFrame {
-    protected JComponent[][] components;
-    //TODO: we need dayPass() button.
+// to act query from controller
+interface CntrlHandler {
+    public abstract void initOutput(int numVertical, int numHorizontal,
+            int numPeople, double percentInfected,
+                double percentSuper, double percentDoctor, int numVaccine);
 
-    public WorldView(int numVertical, int numHorizontal, final WorldController cntrl) {
-        components = new JComponent[numVertical][numHorizontal];
-        setTitle("World Map");
-        setLayout(new GridLayout(numVertical, numHorizontal));
+    public abstract void updateOutput(String[][] stats);
+}
+
+public abstract class WorldView extends JFrame  implements CntrlHandler {
+    protected JComponent inputPanel;
+    protected JComponent outputPanel;
+    protected WorldController cntrl;
+    protected int numVertical = 0;
+    protected int numHorizontal = 0;
+    JSplitPane container;
+
+    public WorldView(WorldController cntrl) {
+        this.cntrl = cntrl;
+        setTitle("Epidemic Simulator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        for (int i = 0; i < numVertical; i++) {
-            for (int j = 0; j < numHorizontal; j++) {
-                components[i][j] = getNewCell(i, j);
-                add(components[i][j]);
-                final int row = i;
-                final int col = j;
-                //TODO: this might be only for showing detailed data
-                //we should show summary sick/healthy info at each dayPass()
-                //not because mouse click.
-                components[i][j].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mousePressed(MouseEvent arg0) {
-                        cntrl.cellClicked(row, col);
-                    }
-                });
-            }
-        }
+        inputPanel = (JComponent) getInputPanel();
+        container = new JSplitPane(JSplitPane.VERTICAL_SPLIT, inputPanel, null);
     }
 
-    public abstract void showCell(int row, int col, String stats);
+    public abstract JComponent getInputPanel();
 
-    protected abstract JComponent getNewCell(int row, int col);
+    public abstract JComponent getOutputPanel();
+
+    public abstract void initOutputPanel(int numVertical, int numHorizontal,
+            int numPeople, double percentInfected,
+                double percentSuper, double percentDoctor, int numVaccine);
+
+    public abstract void updateOutputPanel(String[][] stats);
+
+    public void initOutput(int numVertical, int numHorizontal,
+            int numPeople, double percentInfected,
+                double percentSuper, double percentDoctor, int numVaccine) {
+        this.remove(container);
+        this.numVertical = numVertical;
+        this.numHorizontal = numHorizontal;
+        outputPanel = (JComponent) getOutputPanel();
+        container = new JSplitPane(JSplitPane.VERTICAL_SPLIT, inputPanel, outputPanel);
+        container.setOneTouchExpandable(true);
+        container.setDividerLocation(0.4);
+        this.add(container);
+        initOutputPanel(numVertical, numHorizontal, numPeople,
+                percentInfected, percentSuper, percentDoctor, numVaccine);
+        this.setVisible(true);
+    }
+
+    public void updateOutput(String[][] stats) {
+        updateOutputPanel(stats);
+    }
 }

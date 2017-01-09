@@ -10,10 +10,11 @@ public class Test {
         double percentInfected = 0.3;
         double percentSuper = 0.3;
         double percentDoctor = 0.3;
-        int vaccineCnt = 3;
-        WorldController cntrl =
-            new WorldController(numVertical, numHorizontal,
-                    numPeople, percentInfected, percentSuper, percentDoctor, vaccineCnt);
+        int numVaccine = 3;
+        WorldController cntrl = new WorldController();
+        cntrl.initialize(numVertical, numHorizontal, numPeople,
+                percentInfected, percentSuper, percentDoctor,
+                numVaccine);
         cntrl.startSimulation();
     }
 }
