@@ -35,7 +35,8 @@ public abstract class WorldView extends JFrame  implements CntrlRequester, Cntrl
         this.cntrl = cntrl;
         setTitle("Epidemic Simulator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        container = new JSplitPane(JSplitPane.VERTICAL_SPLIT, null, null);
+        inputPanel = (JComponent) getInputPanel();
+        container = new JSplitPane(JSplitPane.VERTICAL_SPLIT, inputPanel, null);
     }
 
     public abstract JComponent getInputPanel();
@@ -46,7 +47,6 @@ public abstract class WorldView extends JFrame  implements CntrlRequester, Cntrl
             int numPeople, int numDays, double percentInfected,
                 double percentSuper, double percentDoctor, int numVaccine) {
         this.remove(container);
-        inputPanel = (JComponent) getInputPanel();
         outputPanel = (JComponent) getOutputPanel();
         container = new JSplitPane(JSplitPane.VERTICAL_SPLIT, inputPanel, outputPanel);
         container.setOneTouchExpandable(true);
