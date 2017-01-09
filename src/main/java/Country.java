@@ -1,4 +1,8 @@
 import java.util.*;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.ParseException;
+import org.json.simple.parser.JSONParser;
 
 public class Country {
     private String name;
@@ -67,6 +71,19 @@ public class Country {
         stats = newStats;
     }
 
+    public JSONObject getCountryInfo() {
+        JSONObject obj = new JSONObject();
+        
+        //obj.put("name", this.name);
+        obj.put("numHealthy", new Long(stats.healthy));
+        obj.put("numInfected", new Long(stats.infected));
+        obj.put("numSick", new Long(stats.sick));
+        obj.put("numImmune", new Long(stats.immune));
+        obj.put("numDead", new Long(stats.dead));
+
+        return obj;
+    }
+
 
     public void runHealthActions() {
         // avoid stream inside stream
@@ -102,7 +119,7 @@ public class Country {
 
     @Override
     public String toString() {
-        String out = name + ":\n";
+        String out = name + "\n";
         out += stats;
         out += "Population: " + people.size() + "\n";
         return out;

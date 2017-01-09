@@ -1,4 +1,8 @@
 import java.util.*;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.ParseException;
+import org.json.simple.parser.JSONParser;
 
 public class Simulator {
     private ArrayList<Country> countries = new ArrayList<Country>();
@@ -150,10 +154,17 @@ public class Simulator {
             c.updateHealthStats();
         }
 
-        for (Country c: countries) {
-            System.out.println(c.toString());
-        }
-
         dayPassed++;
+    }
+
+    public String getCountryInfo(int idx) {
+        Country c = this.countries.get(idx);
+        String out = c.toString();
+        //TODO: find where does rowxcol arrives
+        return out;
+    }
+
+    public int getDayPassed() {
+        return this.dayPassed;
     }
 }
