@@ -1,6 +1,7 @@
 import java.util.*;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JComponent;
 import javax.swing.border.EtchedBorder;
@@ -28,28 +29,33 @@ public abstract class WorldView extends JFrame  implements CntrlRequester, Cntrl
     protected JComponent inputPanel;
     protected JComponent outputPanel;
     protected WorldController cntrl;
+    JSplitPane container;
 
     public WorldView(WorldController cntrl) {
         this.cntrl = cntrl;
         setTitle("Epidemic Simulator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        inputPanel = (JComponent) getInputPanel();
-        outputPanel = (JComponent) getOutputPanel();
-
-        JSplitPane container = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                inputPanel, outputPanel);
-
-        container.setOneTouchExpandable(true);
-        container.setDividerLocation(0.4);
-
-        this.add(container);
-        this.setVisible(true);
+        container = new JSplitPane(JSplitPane.VERTICAL_SPLIT, null, null);
     }
 
     public abstract JComponent getInputPanel();
 
     public abstract JComponent getOutputPanel();
+
+    public void initOutput(int numVertical, int numHorizontal,
+            int numPeople, int numDays, double percentInfected,
+                double percentSuper, double percentDoctor, int numVaccine) {
+        this.remove(container);
+        inputPanel = (JComponent) getInputPanel();
+        outputPanel = (JComponent) getOutputPanel();
+        container = new JSplitPane(JSplitPane.VERTICAL_SPLIT, inputPanel, outputPanel);
+        container.setOneTouchExpandable(true);
+        container.setDividerLocation(0.4);
+        this.add(container);
+        fillOutput(numVertical, numHorizontal, numPeople, numDays,
+                percentInfected, percentSuper, percentDoctor, numVaccine);
+        this.setVisible(true);
+    }
 
     public void startSimulation(String numVertical,
             String numHorizontal, String numPeople, String numDays,
@@ -59,6 +65,10 @@ public abstract class WorldView extends JFrame  implements CntrlRequester, Cntrl
                 numDays, percentInfected, percentSuper, percentDoctor,
                     numVaccine);
     }
+
+    public abstract void fillOutput(int numVertical, int numHorizontal,
+            int numPeople, int numDays, double percentInfected,
+                double percentSuper, double percentDoctor, int numVaccine);
 
     public void passDay() {
         this.cntrl.passDay();

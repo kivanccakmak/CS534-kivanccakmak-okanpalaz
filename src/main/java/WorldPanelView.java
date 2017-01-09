@@ -190,7 +190,7 @@ public class WorldPanelView extends WorldView {
 
     public void updateOutput(String[][] stats) {}
 
-    public void initOutput(int numVertical, int numHorizontal,
+    public void fillOutput(int numVertical, int numHorizontal,
             int numPeople, int numDays, double percentInfected,
                 double percentSuper, double percentDoctor, int numVaccine) {
         this.countryBlocks.setLayout(new GridLayout(numVertical, numHorizontal));
