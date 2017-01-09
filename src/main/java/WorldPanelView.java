@@ -31,9 +31,6 @@ class InputFields extends JPanel {
     private JLabel labPeople;
     private JTextField txtPeople;
 
-    private JLabel labDays;
-    private JTextField txtDays;
-
     private JLabel labInfect;
     private JTextField txtInfect;
 
@@ -76,7 +73,6 @@ class InputFields extends JPanel {
         labVert = new JLabel("# Vertical");
         labHoriz = new JLabel("# Horizontal");
         labPeople = new JLabel("# People");
-        labDays = new JLabel("# Days");
         labInfect = new JLabel("% Infected");
         labDoctor = new JLabel("% Doctor");
         labVaccine = new JLabel("# Vaccine");
@@ -85,7 +81,6 @@ class InputFields extends JPanel {
         txtVert = new JTextField(5);
         txtHoriz = new JTextField(5);
         txtPeople = new JTextField(5);
-        txtDays = new JTextField(3);
         txtInfect = new JTextField(3);
         txtDoctor = new JTextField(3);
         txtVaccine = new JTextField(3);
@@ -97,8 +92,6 @@ class InputFields extends JPanel {
         inputPanel.add(txtHoriz);
         inputPanel.add(labPeople);
         inputPanel.add(txtPeople);
-        inputPanel.add(labDays);
-        inputPanel.add(txtDays);
         inputPanel.add(labInfect);
         inputPanel.add(txtInfect);
         inputPanel.add(labDoctor);
@@ -117,14 +110,12 @@ class InputFields extends JPanel {
               String numVertical = getVertCountry();
               String numHorizontal = getHorizCountry();
               String numPeople = getNumPeople();
-              String numDays = getNumDays();
               String percentInfected = getPercentInfected();
               String percentSuper = getPercentSuper();
               String percentDoctor = getPercentDoctor();
               String numVaccine = getNumVaccine();
               cntrl.restart(numVertical, numHorizontal, numPeople,
-                      numDays, percentInfected, percentSuper, percentDoctor,
-                        numVaccine);
+                      percentInfected, percentSuper, percentDoctor, numVaccine);
             }
         });
         this.passButton.addActionListener(new ActionListener()
@@ -138,7 +129,6 @@ class InputFields extends JPanel {
     private String getVertCountry() { return txtVert.getText(); }
     private String getHorizCountry() { return txtHoriz.getText(); }
     private String getNumPeople() { return txtPeople.getText(); }
-    private String getNumDays() { return txtDays.getText(); }
     private String getPercentInfected() { return txtInfect.getText(); }
     private String getPercentSuper() { return txtSuper.getText(); }
     private String getPercentDoctor() { return txtDoctor.getText(); }
@@ -207,7 +197,7 @@ public class WorldPanelView extends WorldView {
     }
 
     public void initOutputPanel(int numVertical, int numHorizontal,
-            int numPeople, int numDays, double percentInfected,
+            int numPeople, double percentInfected,
                 double percentSuper, double percentDoctor, int numVaccine) {
         this.countryBlocks.setLayout(new GridLayout(numVertical, numHorizontal));
         this.components = new JComponent[numVertical][numHorizontal];

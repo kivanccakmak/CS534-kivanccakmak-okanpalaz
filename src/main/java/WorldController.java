@@ -38,7 +38,7 @@ public class WorldController {
     }
 
     public void restart(String numVertical, String numHorizontal,
-            String numPeople, String numDays, String percentInfected,
+            String numPeople, String percentInfected,
                 String percentSuper, String percentDoctor, String numVaccine) {
         int ret = isValidInputs(numVertical, numHorizontal, numPeople,
                 percentInfected, percentSuper, percentDoctor, numVaccine);
@@ -135,7 +135,7 @@ public class WorldController {
         this.simulator = new Simulator(this.numVertical, this.numHorizontal);
         this.simulator.populate(numPeople, percentInfected, percentSuper, percentDoctor);
         this.view.initOutput(numVertical, numHorizontal, numPeople,
-                numDays, percentInfected, percentSuper, percentDoctor,
+                percentInfected, percentSuper, percentDoctor,
                     numVaccine);
         String[][] stats = getCountryStats();
         this.view.updateOutput(stats);
