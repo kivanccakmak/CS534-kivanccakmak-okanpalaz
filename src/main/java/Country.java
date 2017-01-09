@@ -43,9 +43,6 @@ public class Country {
             out += "Immune: " + immune + "\n";
             out += "Dead: " + dead + "\n";
             out += "SuperHealthy: " + superHealthy + "\n";
-            System.out.println("**");
-            System.out.println(out);
-            System.out.println("**");
             return out;
         }
     }
@@ -122,7 +119,7 @@ public class Country {
 
     @Override
     public String toString() {
-        String out = name + ":\n";
+        String out = name + "\n";
         out += stats;
         out += "Population: " + people.size() + "\n";
         return out;

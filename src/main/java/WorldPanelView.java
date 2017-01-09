@@ -20,9 +20,7 @@ class InputFields extends JPanel {
     private JPanel buttonPanel;
 
     private JButton passButton;
-    private JButton simulateButton;
     private JButton initButton;
-    private JButton stopButton;
 
     private JLabel labHoriz;
     private JTextField txtHoriz;
@@ -68,14 +66,10 @@ class InputFields extends JPanel {
 
     private void fillButtonPanel() {
         passButton = new JButton("pass day");
-        simulateButton = new JButton("simulate");
         initButton = new JButton("init");
-        stopButton = new JButton("stop");
 
-        buttonPanel.add(simulateButton);
         buttonPanel.add(passButton);
         buttonPanel.add(initButton);
-        buttonPanel.add(stopButton);
     }
 
     private void fillInputPanel() {

@@ -163,10 +163,7 @@ public class Simulator {
     public String getCountryInfo(int idx) {
         Country c = this.countries.get(idx);
         String out = c.toString();
-        System.out.println("==");
         //TODO: find where does rowxcol arrives
-        System.out.println(out);
-        System.out.println("==");
         return out;
     }
 
