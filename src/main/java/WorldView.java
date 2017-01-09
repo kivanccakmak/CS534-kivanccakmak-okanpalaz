@@ -6,16 +6,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JComponent;
 import javax.swing.border.EtchedBorder;
 
-// to query controller
-interface CntrlRequester {
-    public abstract void startSimulation(String numVertical,
-            String numHorizontal, String numPeople, String numDays,
-                String percentInfected, String percentSuper,
-                    String percentDoctor, String numVaccine);
-
-    public abstract void passDay();
-}
-
 // to act query from controller
 interface CntrlHandler {
     public abstract void initOutput(int numVertical, int numHorizontal,
@@ -25,10 +15,12 @@ interface CntrlHandler {
     public abstract void updateOutput(String[][] stats);
 }
 
-public abstract class WorldView extends JFrame  implements CntrlRequester, CntrlHandler {
+public abstract class WorldView extends JFrame  implements CntrlHandler {
     protected JComponent inputPanel;
     protected JComponent outputPanel;
     protected WorldController cntrl;
+    protected int numVertical = 0;
+    protected int numHorizontal = 0;
     JSplitPane container;
 
     public WorldView(WorldController cntrl) {
@@ -43,34 +35,29 @@ public abstract class WorldView extends JFrame  implements CntrlRequester, Cntrl
 
     public abstract JComponent getOutputPanel();
 
+    public abstract void initOutputPanel(int numVertical, int numHorizontal,
+            int numPeople, int numDays, double percentInfected,
+                double percentSuper, double percentDoctor, int numVaccine);
+
+    public abstract void updateOutputPanel(String[][] stats);
+
     public void initOutput(int numVertical, int numHorizontal,
             int numPeople, int numDays, double percentInfected,
                 double percentSuper, double percentDoctor, int numVaccine) {
         this.remove(container);
+        this.numVertical = numVertical;
+        this.numHorizontal = numHorizontal;
         outputPanel = (JComponent) getOutputPanel();
         container = new JSplitPane(JSplitPane.VERTICAL_SPLIT, inputPanel, outputPanel);
         container.setOneTouchExpandable(true);
         container.setDividerLocation(0.4);
         this.add(container);
-        fillOutput(numVertical, numHorizontal, numPeople, numDays,
+        initOutputPanel(numVertical, numHorizontal, numPeople, numDays,
                 percentInfected, percentSuper, percentDoctor, numVaccine);
         this.setVisible(true);
     }
 
-    public void startSimulation(String numVertical,
-            String numHorizontal, String numPeople, String numDays,
-                String percentInfected, String percentSuper,
-                    String percentDoctor, String numVaccine) {
-        this.cntrl.restart(numVertical, numHorizontal, numPeople,
-                numDays, percentInfected, percentSuper, percentDoctor,
-                    numVaccine);
-    }
-
-    public abstract void fillOutput(int numVertical, int numHorizontal,
-            int numPeople, int numDays, double percentInfected,
-                double percentSuper, double percentDoctor, int numVaccine);
-
-    public void passDay() {
-        this.cntrl.passDay();
+    public void updateOutput(String[][] stats) {
+        updateOutputPanel(stats);
     }
 }

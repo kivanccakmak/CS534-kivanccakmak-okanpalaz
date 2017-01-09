@@ -133,6 +133,12 @@ class InputFields extends JPanel {
                         numVaccine);
             }
         });
+        this.passButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e) {
+                cntrl.passDay();
+            }
+        });
     }
 
     private String getVertCountry() { return txtVert.getText(); }
@@ -188,9 +194,25 @@ public class WorldPanelView extends WorldView {
         return (JPanel) panel;
     }
 
-    public void updateOutput(String[][] stats) {}
+    public void updateOutputPanel(String[][] stats) {
+        String out = "";
+        for (int i = 0; i < numVertical; i++) {
+            for (int j = 0; j < numHorizontal; j++) {
+                InfoPanel panel = (InfoPanel) this.components[i][j];
+                out = updateToHtml(stats[i][j]);
+                panel.setLabelMsg(out);
+            }
+        }
+    }
 
-    public void fillOutput(int numVertical, int numHorizontal,
+    private String updateToHtml(String val) {
+        String out = "";
+        out = val.replace("\n", "<br>");
+        out = "<html>" + out + "</html>";
+        return out;
+    }
+
+    public void initOutputPanel(int numVertical, int numHorizontal,
             int numPeople, int numDays, double percentInfected,
                 double percentSuper, double percentDoctor, int numVaccine) {
         this.countryBlocks.setLayout(new GridLayout(numVertical, numHorizontal));

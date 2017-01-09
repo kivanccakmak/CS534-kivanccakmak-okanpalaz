@@ -137,10 +137,25 @@ public class WorldController {
         this.view.initOutput(numVertical, numHorizontal, numPeople,
                 numDays, percentInfected, percentSuper, percentDoctor,
                     numVaccine);
+        String[][] stats = getCountryStats();
+        this.view.updateOutput(stats);
     }
 
-    //TODO: set button in view to trig this function
     public void passDay() {
         this.simulator.passDay();
+        String[][] stats = getCountryStats();
+        this.view.updateOutput(stats);
+    }
+
+    private String[][] getCountryStats() {
+        String[][] stats = new String[numVertical][numHorizontal];
+        int idx = 0;
+        for (int i = 0; i < numVertical; i++) {
+            for (int j = 0; j < numHorizontal; j++) {
+                idx = i * numVertical + j;
+                stats[i][j] = this.simulator.getCountryInfo(idx);
+            }
+        }
+        return stats;
     }
 }
