@@ -172,7 +172,7 @@ public class WorldPanelView extends WorldView {
         countryBlocks = new JPanel();
         textOutput = new JPanel();
         JSplitPane splitOut = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                true, countryBlocks, textOutput);
+                true, textOutput, countryBlocks);
         splitOut.setOneTouchExpandable(true);
         splitOut.setDividerLocation(0.4);
         return splitOut;
