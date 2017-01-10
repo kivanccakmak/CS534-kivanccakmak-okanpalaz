@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.*;
 
 public class Simulator {
     private ArrayList<Country> countries = new ArrayList<Country>();
@@ -153,11 +154,12 @@ public class Simulator {
         dayPassed++;
     }
 
-    public String getCountryInfo(int idx) {
-        Country c = this.countries.get(idx);
-        String out = c.toString();
-        //TODO: find where does rowxcol arrives
-        return out;
+    public List<Country.HealthStats> getCountryStats() {
+        List<Country.HealthStats> stats = countries
+            .stream()
+            .map(c -> c.getStats())
+            .collect(Collectors.toList());
+        return stats;
     }
 
     public int getDayPassed() {

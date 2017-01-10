@@ -24,7 +24,7 @@ public class WorldController {
     // for debugging purposes, won't be trigged from UI
     public void initialize(int numVertical, int numHorizontal, int numPeople,
             double percentInfected, double percentSuper, double percentDoctor,
-                int numVaccine) {
+            int numVaccine) {
         this.numHorizontal = numHorizontal;
         this.numVertical = numVertical;
         this.numPeople = numPeople;
@@ -39,7 +39,7 @@ public class WorldController {
 
     public void restart(String numVertical, String numHorizontal,
             String numPeople, String percentInfected,
-                String percentSuper, String percentDoctor, String numVaccine) {
+            String percentSuper, String percentDoctor, String numVaccine) {
         int ret = isValidInputs(numVertical, numHorizontal, numPeople,
                 percentInfected, percentSuper, percentDoctor, numVaccine);
         System.out.println("ret: " + ret);
@@ -58,7 +58,7 @@ public class WorldController {
 
     private int isValidInputs(String numVertical, String numHorizontal,
             String numPeople, String percentInfected, String percentSuper,
-                String percentDoctor, String numVaccine) {
+            String percentDoctor, String numVaccine) {
         int iTemp;
         double dTemp;
 
@@ -136,26 +136,16 @@ public class WorldController {
         this.simulator.populate(numPeople, percentInfected, percentSuper, percentDoctor);
         this.view.initOutput(numVertical, numHorizontal, numPeople,
                 percentInfected, percentSuper, percentDoctor,
-                    numVaccine);
-        String[][] stats = getCountryStats();
-        this.view.updateOutput(stats);
+                numVaccine);
+        this.view.updateOutput(getCountryStats());
     }
 
     public void passDay() {
         this.simulator.passDay();
-        String[][] stats = getCountryStats();
-        this.view.updateOutput(stats);
+        this.view.updateOutput(getCountryStats());
     }
 
-    private String[][] getCountryStats() {
-        String[][] stats = new String[numVertical][numHorizontal];
-        int idx = 0;
-        for (int i = 0; i < numVertical; i++) {
-            for (int j = 0; j < numHorizontal; j++) {
-                idx = i * numHorizontal + j;
-                stats[i][j] = this.simulator.getCountryInfo(idx);
-            }
-        }
-        return stats;
+    private List<Country.HealthStats> getCountryStats() {
+        return simulator.getCountryStats();
     }
 }

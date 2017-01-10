@@ -10,9 +10,9 @@ import javax.swing.border.EtchedBorder;
 interface CntrlHandler {
     public abstract void initOutput(int numVertical, int numHorizontal,
             int numPeople, double percentInfected,
-                double percentSuper, double percentDoctor, int numVaccine);
+            double percentSuper, double percentDoctor, int numVaccine);
 
-    public abstract void updateOutput(String[][] stats);
+    public abstract void updateOutput(List<Country.HealthStats> stats);
 }
 
 public abstract class WorldView extends JFrame  implements CntrlHandler {
@@ -27,7 +27,7 @@ public abstract class WorldView extends JFrame  implements CntrlHandler {
         this.cntrl = cntrl;
         setTitle("Epidemic Simulator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        inputPanel = (JComponent) getInputPanel();
+        inputPanel = getInputPanel();
         container = new JSplitPane(JSplitPane.VERTICAL_SPLIT, inputPanel, null);
     }
 
@@ -37,13 +37,13 @@ public abstract class WorldView extends JFrame  implements CntrlHandler {
 
     public abstract void initOutputPanel(int numVertical, int numHorizontal,
             int numPeople, double percentInfected,
-                double percentSuper, double percentDoctor, int numVaccine);
+            double percentSuper, double percentDoctor, int numVaccine);
 
-    public abstract void updateOutputPanel(String[][] stats);
+    public abstract void updateOutputPanel(List<Country.HealthStats> stats);
 
     public void initOutput(int numVertical, int numHorizontal,
             int numPeople, double percentInfected,
-                double percentSuper, double percentDoctor, int numVaccine) {
+            double percentSuper, double percentDoctor, int numVaccine) {
         this.remove(container);
         this.numVertical = numVertical;
         this.numHorizontal = numHorizontal;
@@ -57,7 +57,7 @@ public abstract class WorldView extends JFrame  implements CntrlHandler {
         this.setVisible(true);
     }
 
-    public void updateOutput(String[][] stats) {
+    public void updateOutput(List<Country.HealthStats> stats) {
         updateOutputPanel(stats);
     }
 }

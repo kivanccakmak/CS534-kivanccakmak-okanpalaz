@@ -67,6 +67,10 @@ public class Country {
         stats = newStats;
     }
 
+    public HealthStats getStats() {
+        return stats;
+    }
+
     public void runHealthActions() {
         // avoid stream inside stream
         for (Human p: people) {

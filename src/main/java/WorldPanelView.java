@@ -103,23 +103,21 @@ class InputFields extends JPanel {
     }
 
     private void initButtonActions() {
-        this.initButton.addActionListener(new ActionListener()
-        {
+        this.initButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-              String numVertical = getVertCountry();
-              String numHorizontal = getHorizCountry();
-              String numPeople = getNumPeople();
-              String percentInfected = getPercentInfected();
-              String percentSuper = getPercentSuper();
-              String percentDoctor = getPercentDoctor();
-              String numVaccine = getNumVaccine();
-              cntrl.restart(numVertical, numHorizontal, numPeople,
-                      percentInfected, percentSuper, percentDoctor, numVaccine);
+                String numVertical = getVertCountry();
+                String numHorizontal = getHorizCountry();
+                String numPeople = getNumPeople();
+                String percentInfected = getPercentInfected();
+                String percentSuper = getPercentSuper();
+                String percentDoctor = getPercentDoctor();
+                String numVaccine = getNumVaccine();
+                cntrl.restart(numVertical, numHorizontal, numPeople,
+                        percentInfected, percentSuper, percentDoctor, numVaccine);
             }
         });
-        this.passButton.addActionListener(new ActionListener()
-        {
+        this.passButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cntrl.passDay();
             }
@@ -152,7 +150,7 @@ class InfoPanel extends JPanel{
 public class WorldPanelView extends WorldView {
     private JPanel countryBlocks;
     private JPanel textOutput;
-    private JComponent[][] components;
+    private JComponent[] components;
 
     public WorldPanelView(WorldController cntrl) {
         super(cntrl);
@@ -178,14 +176,12 @@ public class WorldPanelView extends WorldView {
         return (JPanel) panel;
     }
 
-    public void updateOutputPanel(String[][] stats) {
+    public void updateOutputPanel(List<Country.HealthStats> stats) {
         String out = "";
-        for (int i = 0; i < numVertical; i++) {
-            for (int j = 0; j < numHorizontal; j++) {
-                InfoPanel panel = (InfoPanel) this.components[i][j];
-                out = updateToHtml(stats[i][j]);
-                panel.setLabelMsg(out);
-            }
+        for (int i = 0; i < components.length; i++) {
+            InfoPanel panel = (InfoPanel) components[i];
+            out = updateToHtml(stats.get(i).toString());
+            panel.setLabelMsg(out);
         }
     }
 
@@ -198,14 +194,13 @@ public class WorldPanelView extends WorldView {
 
     public void initOutputPanel(int numVertical, int numHorizontal,
             int numPeople, double percentInfected,
-                double percentSuper, double percentDoctor, int numVaccine) {
-        this.countryBlocks.setLayout(new GridLayout(numVertical, numHorizontal));
-        this.components = new JComponent[numVertical][numHorizontal];
-        for (int i = 0; i < numVertical; i++) {
-            for (int j = 0; j < numHorizontal; j++) {
-                this.components[i][j] = getNewCell();
-                this.countryBlocks.add(this.components[i][j]);
-            }
+            double percentSuper, double percentDoctor, int numVaccine) {
+        countryBlocks.setLayout(new GridLayout(numVertical, numHorizontal));
+        components = new JComponent[numVertical * numHorizontal];
+
+        for (int i = 0; i < components.length; i++) {
+            components[i] = getNewCell();
+            this.countryBlocks.add(components[i]);
         }
     }
 }
