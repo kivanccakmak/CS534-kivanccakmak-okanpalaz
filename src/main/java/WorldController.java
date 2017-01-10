@@ -32,7 +32,7 @@ public class WorldController {
         this.percentSuper = percentSuper;
         this.percentDoctor = percentDoctor;
         this.numVaccine = numVaccine;
-		SimulationRules rules = SimulationRules.getInstance();
+        SimulationRules rules = SimulationRules.getInstance();
         rules.setDailyVaccines(numVaccine);
         rules.setAirTravelChance(30.0);
     }
@@ -152,7 +152,7 @@ public class WorldController {
         int idx = 0;
         for (int i = 0; i < numVertical; i++) {
             for (int j = 0; j < numHorizontal; j++) {
-                idx = i * numVertical + j;
+                idx = i * numHorizontal + j;
                 stats[i][j] = this.simulator.getCountryInfo(idx);
             }
         }
