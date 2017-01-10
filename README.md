@@ -8,4 +8,4 @@ Simulation Game
 
 ##Run Test
 
-java -cp build/libs/epidemic.jar Test
+./gradlew runApp

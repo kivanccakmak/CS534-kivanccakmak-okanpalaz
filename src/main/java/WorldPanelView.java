@@ -13,6 +13,32 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JSplitPane;
 import javax.swing.border.EtchedBorder;
+import java.awt.BorderLayout;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Point;
+import java.awt.RadialGradientPaint;
+import java.awt.geom.Point2D;
+import javax.swing.JPanel;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.title.TextTitle;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+import org.jfree.ui.ApplicationFrame;
+import org.jfree.ui.HorizontalAlignment;
+import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.ui.RefineryUtilities;
+
 
 class InputFields extends JPanel {
     private WorldController cntrl;
@@ -135,32 +161,93 @@ class InputFields extends JPanel {
 
 class InfoPanel extends JPanel{
     private JLabel label;
+    private ChartPanel panel;
 
     InfoPanel() {
         label = new JLabel();
-        this.add(label);
+        //this.add(label);
         this.setBorder(new EtchedBorder());
+
+        DefaultPieDataset dataset = new DefaultPieDataset();
+
+        JFreeChart chart = ChartFactory.createPieChart(
+                "Test",
+                dataset,
+                false,
+                true,
+                false
+                );
+        panel = new ChartPanel(chart);
+        this.setLayout(new BorderLayout());
+        this.add(panel);
     }
 
     public void setLabelMsg(String msg) {
         this.label.setText(msg);
     }
+
+    public void updateDat(JPanel chart, Country.HealthStats stats) {
+        this.removeAll();
+        this.setLayout(new BorderLayout());
+        this.add(chart);
+        this.updateUI();
+    }
 }
 
 public class WorldPanelView extends WorldView {
-    private JPanel countryBlocks;
-    private JPanel textOutput;
+    private JPanel leftPanel;
+    private JPanel rightPanel;
     private JComponent[] components;
+
+    private JFreeChart statToChart(Country.HealthStats stats) {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        if (stats.sickCount() > 0) {
+            dataset.setValue("Sick", new Double(stats.sickCount()));
+        }
+        if (stats.healthyCount() > 0) {
+            dataset.setValue("Healthy", new Double(stats.healthyCount()));
+        }
+        if (stats.infectedCount() > 0) {
+            dataset.setValue("Infected", new Double(stats.infectedCount()));
+        }
+        if (stats.immuneCount() > 0) {
+            dataset.setValue("Immune", new Double(stats.immuneCount()));
+        }
+        if (stats.superHealthyCount() > 0) {
+            dataset.setValue("Super", new Double(stats.superHealthyCount()));
+        }
+        if (stats.deadCount() > 0) {
+            dataset.setValue("Dead", new Double(stats.deadCount()));
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart(
+                "Test",
+                dataset,
+                false,
+                true,
+                false
+                );
+
+        ((PiePlot)chart.getPlot()).setSectionPaint("Healthy", Color.green);
+        ((PiePlot)chart.getPlot()).setSectionPaint("Sick", Color.red);
+        ((PiePlot)chart.getPlot()).setSectionPaint("Infected", Color.magenta);
+        ((PiePlot)chart.getPlot()).setSectionPaint("Super", Color.white);
+        ((PiePlot)chart.getPlot()).setSectionPaint("Dead", Color.black);
+        ((PiePlot)chart.getPlot()).setSectionPaint("Immune", Color.orange);
+
+        return chart;
+    }
+
 
     public WorldPanelView(WorldController cntrl) {
         super(cntrl);
     }
 
     public JComponent getOutputPanel() {
-        countryBlocks = new JPanel();
-        textOutput = new JPanel();
+        rightPanel = new JPanel();
+        leftPanel = new JPanel();
         JSplitPane splitOut = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                true, textOutput, countryBlocks);
+                true, leftPanel, rightPanel);
         splitOut.setOneTouchExpandable(true);
         splitOut.setDividerLocation(0.4);
         return splitOut;
@@ -177,12 +264,20 @@ public class WorldPanelView extends WorldView {
     }
 
     public void updateOutputPanel(List<Country.HealthStats> stats) {
+        Country.HealthStats summed =
+            stats.stream()
+            .reduce(new Country.HealthStats(), (s, a) -> {s.add(a); return s;});
+
         String out = "";
         for (int i = 0; i < components.length; i++) {
             InfoPanel panel = (InfoPanel) components[i];
             out = updateToHtml(stats.get(i).toString());
             panel.setLabelMsg(out);
+            panel.updateDat(new ChartPanel(statToChart(stats.get(i))), stats.get(i));
         }
+
+        leftPanel.removeAll();
+        leftPanel.add(new ChartPanel(statToChart(summed)));
     }
 
     private String updateToHtml(String val) {
@@ -195,12 +290,12 @@ public class WorldPanelView extends WorldView {
     public void initOutputPanel(int numVertical, int numHorizontal,
             int numPeople, double percentInfected,
             double percentSuper, double percentDoctor, int numVaccine) {
-        countryBlocks.setLayout(new GridLayout(numVertical, numHorizontal));
+        rightPanel.setLayout(new GridLayout(numVertical, numHorizontal));
         components = new JComponent[numVertical * numHorizontal];
 
         for (int i = 0; i < components.length; i++) {
             components[i] = getNewCell();
-            this.countryBlocks.add(components[i]);
+            this.rightPanel.add(components[i]);
         }
     }
 }

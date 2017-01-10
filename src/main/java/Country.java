@@ -9,7 +9,7 @@ public class Country {
     private HealthStats stats;
 
 
-    public class HealthStats {
+    public static class HealthStats {
         private long healthy;
         private long infected;
         private long sick;
@@ -20,6 +20,8 @@ public class Country {
         private long infectious;
         private long visiblyInfectious;
 
+        private long population;
+
         public long healthyCount() { return healthy; }
         public long infectedCount() { return infected; }
         public long sickCount() { return sick; }
@@ -29,6 +31,22 @@ public class Country {
 
         public long infectiousCount() { return infectious; }
         public long visiblyInfectiousCount() { return visiblyInfectious; }
+
+        public long population() { return population; }
+
+        public void add(HealthStats other) {
+            healthy += other.healthy;
+            infected += other.infected;
+            sick += other.sick;
+            immune += other.immune;
+            dead += other.dead;
+            superHealthy += other.superHealthy;
+
+            infectious += other.infectious;
+            visiblyInfectious += other.visiblyInfectious;
+
+            population += other.population;
+        }
 
         @Override
         public String toString() {
@@ -64,6 +82,7 @@ public class Country {
 
         newStats.infectious = people.stream().filter(p -> p.isInfectious()).count();
         newStats.visiblyInfectious = people.stream().filter(p -> p.isVisiblyInfectious()).count();
+        newStats.population = people.size();
         stats = newStats;
     }
 
