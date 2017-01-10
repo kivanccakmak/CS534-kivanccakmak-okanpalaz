@@ -1,8 +1,4 @@
 import java.util.*;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
-import org.json.simple.parser.ParseException;
-import org.json.simple.parser.JSONParser;
 
 public class Simulator {
     private ArrayList<Country> countries = new ArrayList<Country>();
