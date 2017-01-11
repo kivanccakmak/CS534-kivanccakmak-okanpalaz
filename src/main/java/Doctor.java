@@ -8,24 +8,25 @@ public class Doctor extends Human  {
 
     @Override
     public void passDay() {
-        SimulationRules rules = SimulationRules.getInstance();
-        // reset daily vaccines
-        int vaccines = rules.getDailyVaccines();
+        if (!health.isDead()) {
+            SimulationRules rules = SimulationRules.getInstance();
+            // reset daily vaccines
+            int vaccines = rules.getDailyVaccines();
 
-        List<Human> candidates = country.residents()
-            .stream()
-            .filter(h -> h.isVaccineCandiate())
-            .collect(Collectors.toList());
+            List<Human> candidates = country.residents()
+                .stream()
+                .filter(h -> h.isVaccineCandiate())
+                .collect(Collectors.toList());
 
-        for (Human h: candidates) {
-            if (vaccines > 0) {
-                h.vaccinate();
-                vaccines--;
-            } else {
-                break;
+            for (Human h: candidates) {
+                if (vaccines > 0) {
+                    h.vaccinate();
+                    vaccines--;
+                } else {
+                    break;
+                }
             }
         }
-
         // do regular passday
         super.passDay();
     }
