@@ -93,8 +93,8 @@ class InputFields extends JPanel {
     }
 
     private void fillButtonPanel() {
-        passButton = new JButton("pass day");
-        initButton = new JButton("init");
+        passButton = new JButton("Pass day");
+        initButton = new JButton("Re-initialize");
 
         buttonPanel.add(passButton);
         buttonPanel.add(initButton);
@@ -290,7 +290,7 @@ class InfoPanel extends JPanel{
         return chart;
     }
 
-    public void updateDat(Country.HealthStats stats) {
+    public void updateStats(Country.HealthStats stats) {
         health.setChart(genHealthChart(stats));
         breakdown.setChart(genBreakdown(stats));
         history.setChart(genPopulationHistory(stats));
@@ -301,9 +301,7 @@ class InfoPanel extends JPanel{
 public class WorldPanelView extends WorldView {
     private InfoPanel leftPanel;
     private JPanel rightPanel;
-    private JComponent[] components;
-
-
+    private InfoPanel[] components;
 
     public WorldPanelView(WorldController cntrl) {
         super(cntrl);
@@ -325,41 +323,25 @@ public class WorldPanelView extends WorldView {
         return inputPanel;
     }
 
-    private JPanel getNewCell() {
-        InfoPanel panel = new InfoPanel();
-        return (JPanel) panel;
-    }
-
-    public void updateOutputPanel(List<Country.HealthStats> stats) {
+    public void updateOutput(List<Country.HealthStats> stats) {
         Country.HealthStats summed =
             stats.stream()
             .reduce(new Country.HealthStats(), (s, a) -> {s.add(a); return s;});
 
-        leftPanel.updateDat(summed);
+        leftPanel.updateStats(summed);
 
-        String out = "";
         for (int i = 0; i < components.length; i++) {
-            InfoPanel panel = (InfoPanel) components[i];
-            out = updateToHtml(stats.get(i).toString());
-            panel.updateDat(stats.get(i));
+            InfoPanel panel = components[i];
+            panel.updateStats(stats.get(i));
         }
     }
 
-    private String updateToHtml(String val) {
-        String out = "";
-        out = val.replace("\n", "<br>");
-        out = "<html>" + out + "</html>";
-        return out;
-    }
-
-    public void initOutputPanel(int numVertical, int numHorizontal,
-            int numPeople, double percentInfected,
-            double percentSuper, double percentDoctor, int numVaccine) {
+    public void initOutputPanel(int numVertical, int numHorizontal) {
         rightPanel.setLayout(new GridLayout(numVertical, numHorizontal));
-        components = new JComponent[numVertical * numHorizontal];
+        components = new InfoPanel[numVertical * numHorizontal];
 
         for (int i = 0; i < components.length; i++) {
-            components[i] = getNewCell();
+            components[i] = new InfoPanel();
             this.rightPanel.add(components[i]);
         }
     }
