@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.*;
 
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
@@ -39,6 +40,9 @@ import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.RefineryUtilities;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.general.DatasetUtilities;
+import org.jfree.chart.plot.PlotOrientation;
 
 
 class InputFields extends JPanel {
@@ -165,6 +169,8 @@ class InfoPanel extends JPanel{
     private JTabbedPane tabs;
     private ChartPanel health;
     private ChartPanel breakdown;
+    private ChartPanel history;
+    private ArrayList<Country.HealthStats> statHistory;
 
     InfoPanel() {
         this.setBorder(new EtchedBorder());
@@ -172,9 +178,12 @@ class InfoPanel extends JPanel{
 
         health = new ChartPanel(null);
         breakdown = new ChartPanel(null);
+        history = new ChartPanel(null);
 
         tabs.addTab("Health", health);
         tabs.addTab("Population Breakdown", breakdown);
+        tabs.addTab("Population History", history);
+        statHistory = new ArrayList<Country.HealthStats>();
 
         this.setLayout(new BorderLayout());
         this.add(tabs);
@@ -182,14 +191,14 @@ class InfoPanel extends JPanel{
 
     private JFreeChart genHealthChart(Country.HealthStats stats) {
         DefaultPieDataset dataset = new DefaultPieDataset();
-        if (stats.sickCount() > 0) {
-            dataset.setValue("Sick", new Double(stats.sickCount()));
-        }
         if (stats.healthyCount() > 0) {
             dataset.setValue("Healthy", new Double(stats.healthyCount()));
         }
         if (stats.infectedCount() > 0) {
             dataset.setValue("Infected", new Double(stats.infectedCount()));
+        }
+        if (stats.sickCount() > 0) {
+            dataset.setValue("Sick", new Double(stats.sickCount()));
         }
         if (stats.immuneCount() > 0) {
             dataset.setValue("Immune", new Double(stats.immuneCount()));
@@ -210,11 +219,11 @@ class InfoPanel extends JPanel{
                 );
 
         ((PiePlot)chart.getPlot()).setSectionPaint("Healthy", Color.green);
-        ((PiePlot)chart.getPlot()).setSectionPaint("Sick", Color.red);
         ((PiePlot)chart.getPlot()).setSectionPaint("Infected", Color.magenta);
+        ((PiePlot)chart.getPlot()).setSectionPaint("Sick", Color.red);
+        ((PiePlot)chart.getPlot()).setSectionPaint("Immune", Color.orange);
         ((PiePlot)chart.getPlot()).setSectionPaint("Super", Color.white);
         ((PiePlot)chart.getPlot()).setSectionPaint("Dead", Color.black);
-        ((PiePlot)chart.getPlot()).setSectionPaint("Immune", Color.orange);
 
         return chart;
     }
@@ -245,9 +254,47 @@ class InfoPanel extends JPanel{
         return chart;
     }
 
+    private JFreeChart genPopulationHistory(Country.HealthStats stats) {
+        String[] categories = {"Healthy", "Infected", "Sick", "Immune", "Super", "Dead"};
+        statHistory.add(stats);
+
+        double[][] data = new double[][] {
+            statHistory.stream().mapToDouble(s -> s.healthyCount()).toArray(),
+            statHistory.stream().mapToDouble(s -> s.infectedCount()).toArray(),
+            statHistory.stream().mapToDouble(s -> s.sickCount()).toArray(),
+            statHistory.stream().mapToDouble(s -> s.immuneCount()).toArray(),
+            statHistory.stream().mapToDouble(s -> s.superHealthyCount()).toArray(),
+            statHistory.stream().mapToDouble(s -> s.deadCount()).toArray()
+        };
+
+        String[] days = IntStream.range(1, statHistory.size() + 1)
+            .mapToObj(String::valueOf)
+            .toArray(String[]::new);
+
+        CategoryDataset dataset = DatasetUtilities.createCategoryDataset(categories, days, data);
+
+        JFreeChart chart = ChartFactory.createStackedAreaChart(
+                stats.name(),
+                "",
+                "",
+                dataset,
+                PlotOrientation.VERTICAL, true, true, true
+                );
+
+        chart.getCategoryPlot().getRenderer().setSeriesPaint(0, Color.green);
+        chart.getCategoryPlot().getRenderer().setSeriesPaint(1, Color.magenta);
+        chart.getCategoryPlot().getRenderer().setSeriesPaint(2, Color.red);
+        chart.getCategoryPlot().getRenderer().setSeriesPaint(3, Color.orange);
+        chart.getCategoryPlot().getRenderer().setSeriesPaint(4, Color.white);
+        chart.getCategoryPlot().getRenderer().setSeriesPaint(5, Color.black);
+
+        return chart;
+    }
+
     public void updateDat(Country.HealthStats stats) {
         health.setChart(genHealthChart(stats));
         breakdown.setChart(genBreakdown(stats));
+        history.setChart(genPopulationHistory(stats));
         this.updateUI();
     }
 }
