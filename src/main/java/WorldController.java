@@ -1,6 +1,5 @@
 import java.util.*;
-import java.io.StringWriter;
-import java.io.PrintWriter;
+import javax.swing.JOptionPane;
 
 public class WorldController {
     private int numHorizontal;
@@ -40,95 +39,19 @@ public class WorldController {
     public void restart(String numVertical, String numHorizontal,
             String numPeople, String percentInfected,
             String percentSuper, String percentDoctor, String numVaccine) {
-        int ret = isValidInputs(numVertical, numHorizontal, numPeople,
-                percentInfected, percentSuper, percentDoctor, numVaccine);
-        System.out.println("ret: " + ret);
-        if (ret != 1) { return; }
-
-        this.numVertical = Integer.parseInt(numVertical);
-        this.numHorizontal = Integer.parseInt(numHorizontal);
-        this.numPeople = Integer.parseInt(numPeople);
-        this.percentInfected = Double.parseDouble(percentInfected);
-        this.percentSuper = Double.parseDouble(percentSuper);
-        this.percentDoctor = Double.parseDouble(percentDoctor);
-        this.numVaccine = Integer.parseInt(numVaccine);
-
-        startSimulation();
-    }
-
-    private int isValidInputs(String numVertical, String numHorizontal,
-            String numPeople, String percentInfected, String percentSuper,
-            String percentDoctor, String numVaccine) {
-        int iTemp;
-        double dTemp;
-
         try {
-            iTemp = Integer.parseInt(numVertical);
-            if (iTemp <= 0) { return 0; }
+            this.numVertical = Integer.parseInt(numVertical);
+            this.numHorizontal = Integer.parseInt(numHorizontal);
+            this.numPeople = Integer.parseInt(numPeople);
+            this.percentInfected = Double.parseDouble(percentInfected);
+            this.percentSuper = Double.parseDouble(percentSuper);
+            this.percentDoctor = Double.parseDouble(percentDoctor);
+            this.numVaccine = Integer.parseInt(numVaccine);
+
+            startSimulation();
         } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
+            JOptionPane.showMessageDialog(null, "Invalid input");
         }
-
-        try {
-            iTemp = Integer.parseInt(numHorizontal);
-            if (iTemp <= 0) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        try {
-            iTemp = Integer.parseInt(numPeople);
-            if (iTemp <= 0) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        try {
-            iTemp = Integer.parseInt(numVaccine);
-            if (iTemp < 0) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        try {
-            dTemp = Double.parseDouble(percentInfected);
-            if (dTemp < 0 || dTemp > 100) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        try {
-            dTemp = Double.parseDouble(percentDoctor);
-            if (dTemp < 0 || dTemp > 100) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        try {
-            dTemp = Double.parseDouble(percentSuper);
-            if (dTemp < 0 || dTemp > 100) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        return 1;
-    }
-
-    private void raiseException(Exception e) {
-        String errMsg = null;
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        errMsg = sw.toString();
-        //TODO: send event to quee, trigs pop-up
-        System.out.println(errMsg);
     }
 
     public void startSimulation() {

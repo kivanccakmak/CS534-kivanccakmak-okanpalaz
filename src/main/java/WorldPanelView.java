@@ -109,13 +109,13 @@ class InputFields extends JPanel {
         labVaccine = new JLabel("# Vaccine");
         labSuper = new JLabel("% Super");
 
-        txtVert = new JTextField(5);
-        txtHoriz = new JTextField(5);
-        txtPeople = new JTextField(5);
-        txtInfect = new JTextField(3);
-        txtDoctor = new JTextField(3);
-        txtVaccine = new JTextField(3);
-        txtSuper = new JTextField(3);
+        txtVert = new JTextField("3", 5);
+        txtHoriz = new JTextField("3", 5);
+        txtPeople = new JTextField("1000", 5);
+        txtInfect = new JTextField("20.0", 3);
+        txtDoctor = new JTextField("5.0", 3);
+        txtVaccine = new JTextField("2", 3);
+        txtSuper = new JTextField("2.0", 3);
 
         inputPanel.add(labVert);
         inputPanel.add(txtVert);
@@ -135,8 +135,7 @@ class InputFields extends JPanel {
 
     private void initButtonActions() {
         this.initButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 String numVertical = getVertCountry();
                 String numHorizontal = getHorizCountry();
                 String numPeople = getNumPeople();
