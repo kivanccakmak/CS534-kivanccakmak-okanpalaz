@@ -136,15 +136,9 @@ class InputFields extends JPanel {
     private void initButtonActions() {
         this.initButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String numVertical = getVertCountry();
-                String numHorizontal = getHorizCountry();
-                String numPeople = getNumPeople();
-                String percentInfected = getPercentInfected();
-                String percentSuper = getPercentSuper();
-                String percentDoctor = getPercentDoctor();
-                String numVaccine = getNumVaccine();
-                cntrl.restart(numVertical, numHorizontal, numPeople,
-                        percentInfected, percentSuper, percentDoctor, numVaccine);
+                cntrl.restart(getVertCountry(), getHorizCountry(), getNumPeople(),
+                        getPercentInfected(), getPercentSuper(), getPercentDoctor(),
+                        getNumVaccine());
             }
         });
         this.passButton.addActionListener(new ActionListener() {
