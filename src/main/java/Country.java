@@ -10,6 +10,7 @@ public class Country {
 
 
     public static class HealthStats {
+        private String name = "";
         private long healthy;
         private long infected;
         private long sick;
@@ -20,7 +21,10 @@ public class Country {
         private long infectious;
         private long visiblyInfectious;
 
+        private long doctors;
         private long population;
+
+        public String name() { return name; }
 
         public long healthyCount() { return healthy; }
         public long infectedCount() { return infected; }
@@ -33,6 +37,7 @@ public class Country {
         public long visiblyInfectiousCount() { return visiblyInfectious; }
 
         public long population() { return population; }
+        public long doctors() { return doctors; }
 
         public void add(HealthStats other) {
             healthy += other.healthy;
@@ -46,6 +51,7 @@ public class Country {
             visiblyInfectious += other.visiblyInfectious;
 
             population += other.population;
+            doctors += other.doctors;
         }
 
         @Override
@@ -73,6 +79,7 @@ public class Country {
     // Called to create a snapshot each time a day passes
     public void updateHealthStats() {
         HealthStats newStats = new HealthStats();
+        newStats.name = name;
         newStats.healthy = people.stream().filter(p -> p.isHealthy()).count();
         newStats.infected = people.stream().filter(p -> p.isInfected()).count();
         newStats.sick = people.stream().filter(p -> p.isSick()).count();
@@ -82,7 +89,9 @@ public class Country {
 
         newStats.infectious = people.stream().filter(p -> p.isInfectious()).count();
         newStats.visiblyInfectious = people.stream().filter(p -> p.isVisiblyInfectious()).count();
+
         newStats.population = people.size();
+        newStats.doctors = people.stream().filter(p -> p.isDoctor()).count();
         stats = newStats;
     }
 

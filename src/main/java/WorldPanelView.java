@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JSplitPane;
 import javax.swing.border.EtchedBorder;
 import java.awt.BorderLayout;
+import javax.swing.JTabbedPane;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -161,45 +162,25 @@ class InputFields extends JPanel {
 
 class InfoPanel extends JPanel{
     private JLabel label;
-    private ChartPanel panel;
+    private JTabbedPane tabs;
+    private ChartPanel health;
+    private ChartPanel breakdown;
 
     InfoPanel() {
-        label = new JLabel();
-        //this.add(label);
         this.setBorder(new EtchedBorder());
+        tabs = new JTabbedPane();
 
-        DefaultPieDataset dataset = new DefaultPieDataset();
+        health = new ChartPanel(null);
+        breakdown = new ChartPanel(null);
 
-        JFreeChart chart = ChartFactory.createPieChart(
-                "Test",
-                dataset,
-                false,
-                true,
-                false
-                );
-        panel = new ChartPanel(chart);
+        tabs.addTab("Health", health);
+        tabs.addTab("Population Breakdown", breakdown);
+
         this.setLayout(new BorderLayout());
-        this.add(panel);
+        this.add(tabs);
     }
 
-    public void setLabelMsg(String msg) {
-        this.label.setText(msg);
-    }
-
-    public void updateDat(JPanel chart, Country.HealthStats stats) {
-        this.removeAll();
-        this.setLayout(new BorderLayout());
-        this.add(chart);
-        this.updateUI();
-    }
-}
-
-public class WorldPanelView extends WorldView {
-    private JPanel leftPanel;
-    private JPanel rightPanel;
-    private JComponent[] components;
-
-    private JFreeChart statToChart(Country.HealthStats stats) {
+    private JFreeChart genHealthChart(Country.HealthStats stats) {
         DefaultPieDataset dataset = new DefaultPieDataset();
         if (stats.sickCount() > 0) {
             dataset.setValue("Sick", new Double(stats.sickCount()));
@@ -221,9 +202,9 @@ public class WorldPanelView extends WorldView {
         }
 
         JFreeChart chart = ChartFactory.createPieChart(
-                "Test",
+                stats.name(),
                 dataset,
-                false,
+                true,
                 true,
                 false
                 );
@@ -238,6 +219,45 @@ public class WorldPanelView extends WorldView {
         return chart;
     }
 
+    private JFreeChart genBreakdown(Country.HealthStats stats) {
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        long docs = stats.doctors();
+        long regular = stats.population() - docs;
+        if (docs > 0) {
+            dataset.setValue("Doctor", new Double(docs));
+        }
+
+        if (regular > 0) {
+            dataset.setValue("Regular", new Double(regular));
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart(
+                stats.name(),
+                dataset,
+                true,
+                true,
+                false
+                );
+
+        ((PiePlot)chart.getPlot()).setSectionPaint("Doctor", Color.white);
+        ((PiePlot)chart.getPlot()).setSectionPaint("Regular", Color.gray);
+
+        return chart;
+    }
+
+    public void updateDat(Country.HealthStats stats) {
+        health.setChart(genHealthChart(stats));
+        breakdown.setChart(genBreakdown(stats));
+        this.updateUI();
+    }
+}
+
+public class WorldPanelView extends WorldView {
+    private InfoPanel leftPanel;
+    private JPanel rightPanel;
+    private JComponent[] components;
+
+
 
     public WorldPanelView(WorldController cntrl) {
         super(cntrl);
@@ -245,7 +265,8 @@ public class WorldPanelView extends WorldView {
 
     public JComponent getOutputPanel() {
         rightPanel = new JPanel();
-        leftPanel = new JPanel();
+        leftPanel = new InfoPanel();
+
         JSplitPane splitOut = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 true, leftPanel, rightPanel);
         splitOut.setOneTouchExpandable(true);
@@ -268,16 +289,14 @@ public class WorldPanelView extends WorldView {
             stats.stream()
             .reduce(new Country.HealthStats(), (s, a) -> {s.add(a); return s;});
 
+        leftPanel.updateDat(summed);
+
         String out = "";
         for (int i = 0; i < components.length; i++) {
             InfoPanel panel = (InfoPanel) components[i];
             out = updateToHtml(stats.get(i).toString());
-            panel.setLabelMsg(out);
-            panel.updateDat(new ChartPanel(statToChart(stats.get(i))), stats.get(i));
+            panel.updateDat(stats.get(i));
         }
-
-        leftPanel.removeAll();
-        leftPanel.add(new ChartPanel(statToChart(summed)));
     }
 
     private String updateToHtml(String val) {

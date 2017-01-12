@@ -246,6 +246,8 @@ public class Human {
     protected void vaccinate() { health.vaccinate(); }
     //
 
+    public boolean isDoctor() { return false; }
+
     @Override
     public String toString() {
         String out = "";
