@@ -1,5 +1,4 @@
 import java.util.*;
-import javax.swing.JOptionPane;
 
 public class WorldController {
     private WorldView view;
@@ -14,31 +13,26 @@ public class WorldController {
     public void restart(String sNumVertical, String sNumHorizontal,
             String sNumPeople, String sPercentInfected,
             String sPercentSuper, String sPercentDoctor, String sNumVaccine,
-            String sAirChance) {
-        try {
-            SimulationRules rules = SimulationRules.getInstance();
-            int numVertical = Integer.parseInt(sNumVertical);
-            int numHorizontal = Integer.parseInt(sNumHorizontal);
-            int numPeople = Integer.parseInt(sNumPeople);
-            double percentInfected = Double.parseDouble(sPercentInfected);
-            double percentSuper = Double.parseDouble(sPercentSuper);
-            double percentDoctor = Double.parseDouble(sPercentDoctor);
-            int numVaccine = Integer.parseInt(sNumVaccine);
-            double airChance = Double.parseDouble(sAirChance);
+            String sAirChance) throws NumberFormatException, IllegalArgumentException {
 
-            rules.setDailyVaccines(numVaccine);
-            rules.setAirTravelChance(airChance);
+        SimulationRules rules = SimulationRules.getInstance();
+        int numVertical = Integer.parseInt(sNumVertical);
+        int numHorizontal = Integer.parseInt(sNumHorizontal);
+        int numPeople = Integer.parseInt(sNumPeople);
+        double percentInfected = Double.parseDouble(sPercentInfected);
+        double percentSuper = Double.parseDouble(sPercentSuper);
+        double percentDoctor = Double.parseDouble(sPercentDoctor);
+        int numVaccine = Integer.parseInt(sNumVaccine);
+        double airChance = Double.parseDouble(sAirChance);
 
-            simulator = new Simulator(numVertical, numHorizontal);
-            simulator.populate(numPeople, percentInfected, percentSuper, percentDoctor);
-            view.initOutput(numVertical, numHorizontal);
+        rules.setDailyVaccines(numVaccine);
+        rules.setAirTravelChance(airChance);
 
-            view.updateOutput(simulator.getCountryStats());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Invalid input");
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, "Invalid input");
-        }
+        simulator = new Simulator(numVertical, numHorizontal);
+        simulator.populate(numPeople, percentInfected, percentSuper, percentDoctor);
+        view.initOutput(numVertical, numHorizontal);
+
+        view.updateOutput(simulator.getCountryStats());
     }
 
     public void passDay() {

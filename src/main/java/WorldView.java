@@ -2,10 +2,10 @@ import java.util.*;
 import java.util.stream.*;
 
 import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
+import java.awt.BorderLayout;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.JFrame;
@@ -14,32 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JSplitPane;
 import javax.swing.border.EtchedBorder;
-import java.awt.BorderLayout;
 import javax.swing.JTabbedPane;
-
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Point;
-import java.awt.RadialGradientPaint;
-import java.awt.geom.Point2D;
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.title.TextTitle;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
-import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.HorizontalAlignment;
-import org.jfree.ui.RectangleEdge;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.ui.RefineryUtilities;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.chart.plot.PlotOrientation;
@@ -142,10 +124,16 @@ class InputFields extends JPanel {
 
     private void initButtonActions() {
         this.initButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                cntrl.restart(getVertCountry(), getHorizCountry(), getNumPeople(),
-                        getPercentInfected(), getPercentSuper(), getPercentDoctor(),
-                        getNumVaccine(), getAirChance());
+            public void actionPerformed(ActionEvent ev) {
+                try {
+                    cntrl.restart(getVertCountry(), getHorizCountry(), getNumPeople(),
+                            getPercentInfected(), getPercentSuper(), getPercentDoctor(),
+                            getNumVaccine(), getAirChance());
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid input");
+                } catch (IllegalArgumentException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid input");
+                }
             }
         });
         this.passButton.addActionListener(new ActionListener() {
