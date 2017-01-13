@@ -30,6 +30,8 @@ public class WorldController {
             view.updateOutput(simulator.getCountryStats());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid input");
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(null, "Invalid input");
         }
     }
 

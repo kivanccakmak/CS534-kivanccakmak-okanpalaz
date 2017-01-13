@@ -349,7 +349,11 @@ public class WorldView extends JFrame {
         }
     }
 
-    public void initOutput(int numVertical, int numHorizontal) {
+    public void initOutput(int numVertical, int numHorizontal) throws IllegalArgumentException {
+        if (numVertical < 1 || numHorizontal < 1) {
+            throw new IllegalArgumentException("Invalid dimentions");
+        }
+
         outputPanel.removeAll();
         outputPanel.add(getOutputPanel());
         rightPanel.setLayout(new GridLayout(numVertical, numHorizontal));

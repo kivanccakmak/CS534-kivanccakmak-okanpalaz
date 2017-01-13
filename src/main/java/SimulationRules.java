@@ -27,17 +27,20 @@ public class SimulationRules {
         return instance;
     }
 
-    public void setAirTravelChance(double percentVal) {
-        // TODO: Error if invalid
+    public void setAirTravelChance(double percentVal) throws IllegalArgumentException {
+        if (percentVal > 100.0 || percentVal < 0.0) {
+            throw new IllegalArgumentException("Invalid percentage value");
+        }
+
         probToAirtravel = percentVal / 100.0;
     }
 
     public void setDailyVaccines(int v) {
-        if (v >= 0) {
-            dailyVaccines = v;
-        } else {
-            // TODO: Error
+        if (v < 0) {
+            throw new IllegalArgumentException("Invalid vaccine count value");
         }
+
+        dailyVaccines = v;
     }
 
     public int getMaxDayToStay() {
