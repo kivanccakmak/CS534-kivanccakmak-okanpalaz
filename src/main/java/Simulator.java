@@ -3,7 +3,7 @@ import java.util.stream.*;
 
 public class Simulator {
     private ArrayList<Country> countries = new ArrayList<Country>();
-    private int dayPassed;
+    private int daysPassed;
     private int rows;
     private int cols;
 
@@ -48,9 +48,13 @@ public class Simulator {
     }
 
     // Generate a NxM grid
-    public Simulator(int n, int m) {
+    public Simulator(int n, int m) throws IllegalArgumentException {
+        if (n < 1 || m < 1) {
+            throw new IllegalArgumentException("Invalid dimentions");
+        }
+
         countries = new ArrayList<Country>();
-        dayPassed = 0;
+        daysPassed = 0;
         rows = n;
         cols = m;
 
@@ -70,9 +74,19 @@ public class Simulator {
         }
     }
 
-    public void populate(int count, double percentInfected, double percentSuper, double percentDoctor) {
+    public void populate(int count, double percentInfected, double percentSuper, double percentDoctor) throws IllegalArgumentException {
         Random rng = new Random();
-        // TODO: Throw error if percentages don't make sense
+        if (count <= 0) {
+            throw new IllegalArgumentException("count is invalid");
+        }
+
+        if (percentInfected > 100.0 || percentInfected < 0.0) {
+            throw new IllegalArgumentException("percentInfected is invalid");
+        }
+
+        if (percentDoctor > 100.0 || percentDoctor < 0.0) {
+            throw new IllegalArgumentException("percentDoctor is invalid");
+        }
 
         // Doctor percentage doesn't overlap with Super and Infected percentages
         int docs = Math.round(((float)(percentDoctor / 100.0)) * count);
@@ -80,6 +94,10 @@ public class Simulator {
 
         int supers = Math.round(((float)(percentSuper / 100.0)) * count);
         int infected = Math.round(((float)(percentInfected / 100.0)) * count);
+
+        if (supers + infected > count) {
+            throw new IllegalArgumentException("Super + Infected percentage is invalid");
+        }
 
         ArrayList<Human> ppl = new ArrayList<Human>();
 
@@ -107,7 +125,7 @@ public class Simulator {
             Human h = ppl.get(idx);
 
             if (h.isHealthy()) {
-                h.getInfected();
+                h.becomeInfected();
                 cnt++;
             }
         }
@@ -118,7 +136,7 @@ public class Simulator {
             Human h = ppl.get(idx);
 
             if (h.isHealthy()) {
-                h.getSuperHealthy();
+                h.becomeSuperHealthy();
                 cnt++;
             }
         }
@@ -134,8 +152,6 @@ public class Simulator {
     }
 
     public void passDay() {
-        System.out.println("== DAY " + dayPassed + " ==\n");
-
         // Run health related actions
         for (Country c: countries) {
             c.runHealthActions();
@@ -151,7 +167,7 @@ public class Simulator {
             c.updateHealthStats();
         }
 
-        dayPassed++;
+        daysPassed++;
     }
 
     public List<Country.HealthStats> getCountryStats() {
@@ -162,7 +178,7 @@ public class Simulator {
         return stats;
     }
 
-    public int getDayPassed() {
-        return this.dayPassed;
+    public int getDaysPassed() {
+        return daysPassed + 1;
     }
 }

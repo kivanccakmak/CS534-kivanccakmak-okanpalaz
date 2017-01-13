@@ -7,6 +7,9 @@ public class Doctor extends Human  {
     }
 
     @Override
+    public boolean isDoctor() { return true; }
+
+    @Override
     public void passDay() {
         if (!health.isDead()) {
             SimulationRules rules = SimulationRules.getInstance();

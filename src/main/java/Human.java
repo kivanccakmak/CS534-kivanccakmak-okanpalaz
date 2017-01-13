@@ -39,14 +39,14 @@ class Healthy extends HealthState {
     public boolean isHealthy() { return true; }
 
     @Override
-    public void vaccinate() { human.getSuperHealthy(); }
+    public void vaccinate() { human.becomeSuperHealthy(); }
 
     @Override
     public void infectionChance(boolean infectious) {
         SimulationRules rules = SimulationRules.getInstance();
 
         if (infectious && rules.infectionDiceThrow()) {
-            human.getInfected();
+            human.becomeInfected();
         }
     }
 }
@@ -68,7 +68,7 @@ class Infected extends HealthState {
 
         days++;
         if (days == rules.getDaysUntilSick()) {
-            human.getSick();
+            human.becomeSick();
         }
     }
 }
@@ -96,7 +96,7 @@ class Sick extends HealthState {
         days++;
         if (days == rules.getDaysUntilDeathChance()) {
             if (rules.dieDiceThrow()) {
-                human.die();
+                human.becomeDead();
             }
         }
 
@@ -123,7 +123,7 @@ class Immune extends HealthState {
 
         days++;
         if (days == rules.getDaysUntilHealthy()) {
-            human.getHealthy();
+            human.becomeHealthy();
         }
     }
 }
@@ -159,7 +159,7 @@ public class Human {
     public Human(Country c) {
         id = genId();
         country = c;
-        getHealthy();
+        becomeHealthy();
         genMoveDate();
         country.addHuman(this);
     }
@@ -237,14 +237,16 @@ public class Human {
     ////
 
     // Health releated actions
-    protected void getHealthy() { health = new Healthy(this); }
-    protected void getInfected() { health = new Infected(this); }
-    protected void getSick() { health = new Sick(this); }
+    protected void becomeHealthy() { health = new Healthy(this); }
+    protected void becomeInfected() { health = new Infected(this); }
+    protected void becomeSick() { health = new Sick(this); }
     protected void becomeImmune() { health = new Immune(this); }
-    protected void die() { health = new Dead(this); }
-    protected void getSuperHealthy() { health = new SuperHealthy(this); }
+    protected void becomeDead() { health = new Dead(this); }
+    protected void becomeSuperHealthy() { health = new SuperHealthy(this); }
     protected void vaccinate() { health.vaccinate(); }
     //
+
+    public boolean isDoctor() { return false; }
 
     @Override
     public String toString() {

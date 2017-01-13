@@ -1,151 +1,46 @@
 import java.util.*;
-import java.io.StringWriter;
-import java.io.PrintWriter;
 
 public class WorldController {
-    private int numHorizontal;
-    private int numVertical;
-    private int numPeople;
-    private int numDays;
-    private int numVaccine;
-    private double percentSuper;
-    private double percentDoctor;
-    private double percentInfected;
-
     private WorldView view;
     private Simulator simulator;
 
     public WorldController() {
-        this.view = new WorldPanelView(this);
-        this.view.setSize(300, 300);
-        this.view.setVisible(true);
+        view = new WorldView(this);
+        view.setSize(300, 300);
+        view.setVisible(true);
+        simulator = null;
     }
 
-    // for debugging purposes, won't be trigged from UI
-    public void initialize(int numVertical, int numHorizontal, int numPeople,
-            double percentInfected, double percentSuper, double percentDoctor,
-            int numVaccine) {
-        this.numHorizontal = numHorizontal;
-        this.numVertical = numVertical;
-        this.numPeople = numPeople;
-        this.percentInfected = percentInfected;
-        this.percentSuper = percentSuper;
-        this.percentDoctor = percentDoctor;
-        this.numVaccine = numVaccine;
+    public void restart(String sNumVertical, String sNumHorizontal,
+            String sNumPeople, String sPercentInfected,
+            String sPercentSuper, String sPercentDoctor, String sNumVaccine,
+            String sAirChance) throws NumberFormatException, IllegalArgumentException {
+
         SimulationRules rules = SimulationRules.getInstance();
+        int numVertical = Integer.parseInt(sNumVertical);
+        int numHorizontal = Integer.parseInt(sNumHorizontal);
+        int numPeople = Integer.parseInt(sNumPeople);
+        double percentInfected = Double.parseDouble(sPercentInfected);
+        double percentSuper = Double.parseDouble(sPercentSuper);
+        double percentDoctor = Double.parseDouble(sPercentDoctor);
+        int numVaccine = Integer.parseInt(sNumVaccine);
+        double airChance = Double.parseDouble(sAirChance);
+
         rules.setDailyVaccines(numVaccine);
-        rules.setAirTravelChance(30.0);
+        rules.setAirTravelChance(airChance);
+
+        simulator = new Simulator(numVertical, numHorizontal);
+        simulator.populate(numPeople, percentInfected, percentSuper, percentDoctor);
+        view.initOutput(numVertical, numHorizontal);
+
+        view.updateOutput(simulator.getCountryStats(), simulator.getDaysPassed());
     }
 
-    public void restart(String numVertical, String numHorizontal,
-            String numPeople, String percentInfected,
-            String percentSuper, String percentDoctor, String numVaccine) {
-        int ret = isValidInputs(numVertical, numHorizontal, numPeople,
-                percentInfected, percentSuper, percentDoctor, numVaccine);
-        System.out.println("ret: " + ret);
-        if (ret != 1) { return; }
-
-        this.numVertical = Integer.parseInt(numVertical);
-        this.numHorizontal = Integer.parseInt(numHorizontal);
-        this.numPeople = Integer.parseInt(numPeople);
-        this.percentInfected = Double.parseDouble(percentInfected);
-        this.percentSuper = Double.parseDouble(percentSuper);
-        this.percentDoctor = Double.parseDouble(percentDoctor);
-        this.numVaccine = Integer.parseInt(numVaccine);
-
-        startSimulation();
-    }
-
-    private int isValidInputs(String numVertical, String numHorizontal,
-            String numPeople, String percentInfected, String percentSuper,
-            String percentDoctor, String numVaccine) {
-        int iTemp;
-        double dTemp;
-
-        try {
-            iTemp = Integer.parseInt(numVertical);
-            if (iTemp <= 0) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
+    public void passDay() throws IllegalStateException {
+        if (simulator == null) {
+            throw new IllegalStateException("Simulator not initialized");
         }
-
-        try {
-            iTemp = Integer.parseInt(numHorizontal);
-            if (iTemp <= 0) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        try {
-            iTemp = Integer.parseInt(numPeople);
-            if (iTemp <= 0) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        try {
-            iTemp = Integer.parseInt(numVaccine);
-            if (iTemp < 0) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        try {
-            dTemp = Double.parseDouble(percentInfected);
-            if (dTemp < 0 || dTemp > 100) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        try {
-            dTemp = Double.parseDouble(percentDoctor);
-            if (dTemp < 0 || dTemp > 100) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        try {
-            dTemp = Double.parseDouble(percentSuper);
-            if (dTemp < 0 || dTemp > 100) { return 0; }
-        } catch (NumberFormatException e) {
-            raiseException(e);
-            return 0;
-        }
-
-        return 1;
-    }
-
-    private void raiseException(Exception e) {
-        String errMsg = null;
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        errMsg = sw.toString();
-        //TODO: send event to quee, trigs pop-up
-        System.out.println(errMsg);
-    }
-
-    public void startSimulation() {
-        this.simulator = new Simulator(this.numVertical, this.numHorizontal);
-        this.simulator.populate(numPeople, percentInfected, percentSuper, percentDoctor);
-        this.view.initOutput(numVertical, numHorizontal, numPeople,
-                percentInfected, percentSuper, percentDoctor,
-                numVaccine);
-        this.view.updateOutput(getCountryStats());
-    }
-
-    public void passDay() {
-        this.simulator.passDay();
-        this.view.updateOutput(getCountryStats());
-    }
-
-    private List<Country.HealthStats> getCountryStats() {
-        return simulator.getCountryStats();
+        simulator.passDay();
+        view.updateOutput(simulator.getCountryStats(), simulator.getDaysPassed());
     }
 }
