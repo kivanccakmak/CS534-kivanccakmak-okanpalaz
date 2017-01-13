@@ -74,6 +74,9 @@ class InputFields extends JPanel {
     private JLabel labSuper;
     private JTextField txtSuper;
 
+    private JLabel labAir;
+    private JTextField txtAir;
+
     InputFields(WorldController cntrl) {
         this.cntrl = cntrl;
 
@@ -108,6 +111,7 @@ class InputFields extends JPanel {
         labDoctor = new JLabel("% Doctor");
         labVaccine = new JLabel("# Vaccine");
         labSuper = new JLabel("% Super");
+        labAir = new JLabel("% Air Travel Chance");
 
         txtVert = new JTextField("3", 5);
         txtHoriz = new JTextField("3", 5);
@@ -116,6 +120,7 @@ class InputFields extends JPanel {
         txtDoctor = new JTextField("5.0", 3);
         txtVaccine = new JTextField("2", 3);
         txtSuper = new JTextField("2.0", 3);
+        txtAir = new JTextField("10.0", 3);
 
         inputPanel.add(labVert);
         inputPanel.add(txtVert);
@@ -131,6 +136,8 @@ class InputFields extends JPanel {
         inputPanel.add(txtVaccine);
         inputPanel.add(labSuper);
         inputPanel.add(txtSuper);
+        inputPanel.add(labAir);
+        inputPanel.add(txtAir);
     }
 
     private void initButtonActions() {
@@ -138,7 +145,7 @@ class InputFields extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 cntrl.restart(getVertCountry(), getHorizCountry(), getNumPeople(),
                         getPercentInfected(), getPercentSuper(), getPercentDoctor(),
-                        getNumVaccine());
+                        getNumVaccine(), getAirChance());
             }
         });
         this.passButton.addActionListener(new ActionListener() {
@@ -155,6 +162,7 @@ class InputFields extends JPanel {
     private String getPercentSuper() { return txtSuper.getText(); }
     private String getPercentDoctor() { return txtDoctor.getText(); }
     private String getNumVaccine() { return txtVaccine.getText(); }
+    private String getAirChance() { return txtAir.getText(); }
 }
 
 class InfoPanel extends JPanel{

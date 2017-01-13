@@ -13,8 +13,10 @@ public class WorldController {
 
     public void restart(String sNumVertical, String sNumHorizontal,
             String sNumPeople, String sPercentInfected,
-            String sPercentSuper, String sPercentDoctor, String sNumVaccine) {
+            String sPercentSuper, String sPercentDoctor, String sNumVaccine,
+            String sAirChance) {
         try {
+            SimulationRules rules = SimulationRules.getInstance();
             int numVertical = Integer.parseInt(sNumVertical);
             int numHorizontal = Integer.parseInt(sNumHorizontal);
             int numPeople = Integer.parseInt(sNumPeople);
@@ -22,6 +24,10 @@ public class WorldController {
             double percentSuper = Double.parseDouble(sPercentSuper);
             double percentDoctor = Double.parseDouble(sPercentDoctor);
             int numVaccine = Integer.parseInt(sNumVaccine);
+            double airChance = Double.parseDouble(sAirChance);
+
+            rules.setDailyVaccines(numVaccine);
+            rules.setAirTravelChance(airChance);
 
             simulator = new Simulator(numVertical, numHorizontal);
             simulator.populate(numPeople, percentInfected, percentSuper, percentDoctor);
