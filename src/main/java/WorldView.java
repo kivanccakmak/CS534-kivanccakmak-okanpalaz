@@ -130,15 +130,19 @@ class InputFields extends JPanel {
                             getPercentInfected(), getPercentSuper(), getPercentDoctor(),
                             getNumVaccine(), getAirChance());
                 } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null, "Invalid input");
+                    JOptionPane.showMessageDialog(null, "Invalid input: " + e.getMessage());
                 } catch (IllegalArgumentException e) {
-                    JOptionPane.showMessageDialog(null, "Invalid input");
+                    JOptionPane.showMessageDialog(null, "Invalid input: " + e.getMessage());
                 }
             }
         });
         this.passButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                cntrl.passDay();
+            public void actionPerformed(ActionEvent ev) {
+                try {
+                    cntrl.passDay();
+                } catch (IllegalStateException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid state: " + e.getMessage());
+                }
             }
         });
     }
@@ -316,14 +320,13 @@ public class WorldView extends JFrame {
         this.setVisible(true);
     }
 
-    public JComponent getOutputPanel() {
+    public JSplitPane getOutputPanel() {
         rightPanel = new JPanel();
         leftPanel = new InfoPanel();
 
         JSplitPane splitOut = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 true, leftPanel, rightPanel);
         splitOut.setOneTouchExpandable(true);
-        splitOut.setDividerLocation(0.4);
         return splitOut;
     }
 
@@ -351,7 +354,8 @@ public class WorldView extends JFrame {
         }
 
         outputPanel.removeAll();
-        outputPanel.add(getOutputPanel());
+        JSplitPane split = getOutputPanel();
+        outputPanel.add(split);
         rightPanel.setLayout(new GridLayout(numVertical, numHorizontal));
         components = new InfoPanel[numVertical * numHorizontal];
 
@@ -361,5 +365,6 @@ public class WorldView extends JFrame {
         }
 
         this.setVisible(true);
+        split.setDividerLocation(0.4);
     }
 }

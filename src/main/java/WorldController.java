@@ -8,6 +8,7 @@ public class WorldController {
         this.view = new WorldView(this);
         this.view.setSize(300, 300);
         this.view.setVisible(true);
+        simulator = null;
     }
 
     public void restart(String sNumVertical, String sNumHorizontal,
@@ -35,7 +36,10 @@ public class WorldController {
         view.updateOutput(simulator.getCountryStats());
     }
 
-    public void passDay() {
+    public void passDay() throws IllegalStateException {
+        if (simulator == null) {
+            throw new IllegalStateException("Simulator not initialized");
+        }
         simulator.passDay();
         view.updateOutput(simulator.getCountryStats());
     }
