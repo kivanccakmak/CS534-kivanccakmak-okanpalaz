@@ -42,19 +42,19 @@ TODO: main class relations
 <br/>
 
 ###Simulator
-![] (doc/Country.svg)
+![] (doc/Country.png)
 
 ###Human
-![] (doc/Human.svg)
+![] (doc/Human.png)
 
 ###Simulator
-![] (doc/Simulator.svg)
+![] (doc/Simulator.png)
 
 ###WorldController
-![] (doc/WorldController.svg)
+![] (doc/WorldController.png)
 
 ###WorldView
-![] (doc/WorldView.svg)
+![] (doc/WorldView.png)
 
 ##Compile
 
