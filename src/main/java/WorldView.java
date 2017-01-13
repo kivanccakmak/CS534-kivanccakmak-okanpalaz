@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
+import java.awt.Font;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.JFrame;
@@ -296,6 +298,7 @@ public class WorldView extends JFrame {
     private InfoPanel leftPanel;
     private JPanel rightPanel;
     private InfoPanel[] components;
+    private JLabel labDays;
 
     private JComponent inputPanel;
     private JPanel outputPanel;
@@ -315,6 +318,8 @@ public class WorldView extends JFrame {
         container.setDividerLocation(0.4);
 
         outputPanel.setLayout(new BorderLayout());
+        labDays = new JLabel("Day: ");
+        labDays.setFont(new Font("Default", Font.PLAIN, 32));
 
         this.add(container);
         this.setVisible(true);
@@ -335,7 +340,7 @@ public class WorldView extends JFrame {
         return inputPanel;
     }
 
-    public void updateOutput(List<Country.HealthStats> stats) {
+    public void updateOutput(List<Country.HealthStats> stats, int daysPassed) {
         Country.HealthStats summed =
             stats.stream()
             .reduce(new Country.HealthStats(), (s, a) -> {s.add(a); return s;});
@@ -346,6 +351,7 @@ public class WorldView extends JFrame {
             InfoPanel panel = components[i];
             panel.updateStats(stats.get(i));
         }
+        labDays.setText("Day: " + daysPassed);
     }
 
     public void initOutput(int numVertical, int numHorizontal) throws IllegalArgumentException {
@@ -355,6 +361,10 @@ public class WorldView extends JFrame {
 
         outputPanel.removeAll();
         JSplitPane split = getOutputPanel();
+        JPanel north = new JPanel();
+        north.setLayout(new GridBagLayout());
+        north.add(labDays);
+        outputPanel.add(north, BorderLayout.NORTH);
         outputPanel.add(split);
         rightPanel.setLayout(new GridLayout(numVertical, numHorizontal));
         components = new InfoPanel[numVertical * numHorizontal];

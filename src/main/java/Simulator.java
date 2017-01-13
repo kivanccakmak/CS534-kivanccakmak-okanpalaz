@@ -3,7 +3,7 @@ import java.util.stream.*;
 
 public class Simulator {
     private ArrayList<Country> countries = new ArrayList<Country>();
-    private int dayPassed;
+    private int daysPassed;
     private int rows;
     private int cols;
 
@@ -54,7 +54,7 @@ public class Simulator {
         }
 
         countries = new ArrayList<Country>();
-        dayPassed = 0;
+        daysPassed = 0;
         rows = n;
         cols = m;
 
@@ -152,8 +152,6 @@ public class Simulator {
     }
 
     public void passDay() {
-        System.out.println("== DAY " + dayPassed + " ==\n");
-
         // Run health related actions
         for (Country c: countries) {
             c.runHealthActions();
@@ -169,7 +167,7 @@ public class Simulator {
             c.updateHealthStats();
         }
 
-        dayPassed++;
+        daysPassed++;
     }
 
     public List<Country.HealthStats> getCountryStats() {
@@ -180,7 +178,7 @@ public class Simulator {
         return stats;
     }
 
-    public int getDayPassed() {
-        return this.dayPassed;
+    public int getDaysPassed() {
+        return this.daysPassed + 1;
     }
 }

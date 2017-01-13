@@ -33,7 +33,7 @@ public class WorldController {
         simulator.populate(numPeople, percentInfected, percentSuper, percentDoctor);
         view.initOutput(numVertical, numHorizontal);
 
-        view.updateOutput(simulator.getCountryStats());
+        view.updateOutput(simulator.getCountryStats(), simulator.getDaysPassed());
     }
 
     public void passDay() throws IllegalStateException {
@@ -41,6 +41,6 @@ public class WorldController {
             throw new IllegalStateException("Simulator not initialized");
         }
         simulator.passDay();
-        view.updateOutput(simulator.getCountryStats());
+        view.updateOutput(simulator.getCountryStats(), simulator.getDaysPassed());
     }
 }
