@@ -125,7 +125,7 @@ public class Simulator {
             Human h = ppl.get(idx);
 
             if (h.isHealthy()) {
-                h.getInfected();
+                h.becomeInfected();
                 cnt++;
             }
         }
@@ -136,7 +136,7 @@ public class Simulator {
             Human h = ppl.get(idx);
 
             if (h.isHealthy()) {
-                h.getSuperHealthy();
+                h.becomeSuperHealthy();
                 cnt++;
             }
         }
