@@ -88,6 +88,10 @@ public class Simulator {
             throw new IllegalArgumentException("percentDoctor is invalid");
         }
 
+        if (percentSuper > 100.0 || percentSuper < 0.0) {
+            throw new IllegalArgumentException("percentSuper is invalid");
+        }
+
         // Doctor percentage doesn't overlap with Super and Infected percentages
         int docs = Math.round(((float)(percentDoctor / 100.0)) * count);
         int regular = count - docs;
