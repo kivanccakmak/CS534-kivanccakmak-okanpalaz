@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>0</y>
+      <w>430</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>public class WorldView extends JFrame
+--
+private InfoPanel leftPanel
+private JPanel rightPanel
+private InfoPanel[] components
+private JComponent inputPanel
+private JPanel outputPanel
+private WorldController cntrl                                
+JSplitPane container
+--
+public WorldView(WorldController cntrl) 
+public JComponent getOutputPanel()
+public JComponent getInputPanel() 
+public void updateOutput(List&lt;Country.HealthStats&gt; stats) 
+public void initOutput(int numVertical, int numHorizontal)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>270</y>
+      <w>490</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>class InfoPanel extends JPanel
+--
+private JLabel label
+private JTabbedPane tabs
+private ChartPanel health
+private ChartPanel breakdown
+private ChartPanel history
+private ArrayList&lt;Country.HealthStats&gt; statHistory
+--
+InfoPanel() 
+private JFreeChart genHealthChart(Country.HealthStats stats)
+private JFreeChart genBreakdown(Country.HealthStats stats)
+private JFreeChart genPopulationHistory(Country.HealthStats stats)
+public void updateStats(Country.HealthStats stats)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>270</y>
+      <w>280</w>
+      <h>520</h>
+    </coordinates>
+    <panel_attributes>class InputFields extends JPanel
+--
+private WorldController cntrl
+private JPanel inputPanel
+private JPanel buttonPanel
+private JButton passButton
+private JButton initButton
+private JLabel labHoriz
+private JTextField txtHoriz
+private JLabel labVert
+private JTextField txtVert
+private JLabel labPeople
+private JTextField txtPeople
+private JLabel labInfect
+private JTextField txtInfect
+private JLabel labDoctor
+private JTextField txtDoctor
+private JLabel labVaccine
+private JTextField txtVaccine
+private JLabel labSuper
+private JTextField txtSuper
+--
+InputFields(WorldController cntrl) 
+private void fillButtonPanel() 
+private void fillInputPanel() 
+private void initButtonActions() 
+private String getVertCountry() 
+private String getHorizCountry()
+private String getNumPeople()
+private String getPercentInfected()
+private String getPercentSuper()
+private String getPercentDoctor()
+private String getNumVaccine()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>550</x>
+      <y>110</y>
+      <w>530</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Country.HealthStats summed =
+    stats.stream()
+    .reduce(new Country.HealthStats(), (s, a) -&gt; {s.add(a); return s;});                                                                     
+leftPanel.updateStats(summed);                                                                         
+for (int i = 0; i &lt; components.length; i++) {
+    InfoPanel panel = components[i];
+    panel.updateStats(stats.get(i));
+}
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>190</y>
+      <w>90</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>770</x>
+      <y>510</y>
+      <w>340</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>health.setChart(genHealthChart(stats));
+breakdown.setChart(genBreakdown(stats));
+history.setChart(genPopulationHistory(stats));
+this.updateUI();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>460</y>
+      <w>90</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>70.0;50.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>170</y>
+      <w>720</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>Simulator
+--
+private ArrayList&lt;Country&gt; countries = new ArrayList&lt;Country&gt;();
+private int dayPassed;
+private int rows;
+private int cols;
+--
+public Simulator(int row, int col) 
+private void westNeighborAdd(Country c, int index)
+private void eastNeighborAdd(Country c, int index) 
+private void northNeighborAdd(Country c, int index) 
+private void southNeighborAdd(Country c, int index)
+public void populate(int count, double percentInfected, double percentSuper, double percentDoctor)  
+public ArrayList&lt;Country&gt; countryList()
+public void passDay()
+public List&lt;Country.HealthStats&gt; getCountryStats() 
+public int getDayPassed()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>0</x>
+      <y>450</y>
+      <w>200</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>for (Country c: countries)
+    c.runHealthActions();
+                                                
+for (Country c: countries)
+    c.processMoves();
+                                                
+for (Country c: countries)
+    c.updateHealthStats();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>60</x>
+      <y>380</y>
+      <w>170</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0;150.0;10.0</additional_attributes>
+  </element>
+</diagram>

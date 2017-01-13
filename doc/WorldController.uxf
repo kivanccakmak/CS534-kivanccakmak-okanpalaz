@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>230</x>
+      <y>150</y>
+      <w>520</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>public class WorldController
+--
+private WorldView view;
+private Simulator simulator;
+--
+public WorldController() 
+public void restart(String sNumVertical, String sNumHorizontal,
+        String sNumPeople, String sPercentInfected,
+        String sPercentSuper, String sPercentDoctor, String sNumVaccine)
+public void passDay()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>0</x>
+      <y>350</y>
+      <w>580</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>/* 
+check inputs 
+int numVertical = Integer.parseInt(sNumVertical);
+...
+*/
+simulator = new Simulator(numVertical, numHorizontal);
+simulator.populate(numPeople, percentInfected, percentSuper, percentDoctor);
+view.initOutput(numVertical, numHorizontal);                                                                          
+view.updateOutput(simulator.getCountryStats());
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>60</x>
+      <y>230</y>
+      <w>190</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>610</x>
+      <y>350</y>
+      <w>370</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>simulator.passDay();
+view.updateOutput(simulator.getCountryStats());
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>740</x>
+      <y>280</y>
+      <w>120</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>100.0;70.0;100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
