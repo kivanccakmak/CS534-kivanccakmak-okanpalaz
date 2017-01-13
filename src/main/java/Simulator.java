@@ -179,6 +179,6 @@ public class Simulator {
     }
 
     public int getDaysPassed() {
-        return this.daysPassed + 1;
+        return daysPassed + 1;
     }
 }

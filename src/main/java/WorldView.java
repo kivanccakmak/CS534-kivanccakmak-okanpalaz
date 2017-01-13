@@ -61,8 +61,8 @@ class InputFields extends JPanel {
     private JLabel labAir;
     private JTextField txtAir;
 
-    InputFields(WorldController cntrl) {
-        this.cntrl = cntrl;
+    InputFields(WorldController c) {
+        cntrl = c;
 
         JSplitPane allInputs;
 
@@ -76,7 +76,7 @@ class InputFields extends JPanel {
         allInputs = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 true, inputPanel, buttonPanel);
 
-        this.add(allInputs);
+        add(allInputs);
     }
 
     private void fillButtonPanel() {
@@ -125,7 +125,7 @@ class InputFields extends JPanel {
     }
 
     private void initButtonActions() {
-        this.initButton.addActionListener(new ActionListener() {
+        initButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 try {
                     cntrl.restart(getVertCountry(), getHorizCountry(), getNumPeople(),
@@ -138,7 +138,7 @@ class InputFields extends JPanel {
                 }
             }
         });
-        this.passButton.addActionListener(new ActionListener() {
+        passButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 try {
                     cntrl.passDay();
@@ -169,7 +169,7 @@ class InfoPanel extends JPanel{
     private ArrayList<Country.HealthStats> statHistory;
 
     InfoPanel() {
-        this.setBorder(new EtchedBorder());
+        setBorder(new EtchedBorder());
         tabs = new JTabbedPane();
 
         health = new ChartPanel(null);
@@ -181,8 +181,8 @@ class InfoPanel extends JPanel{
         tabs.addTab("Population History", history);
         statHistory = new ArrayList<Country.HealthStats>();
 
-        this.setLayout(new BorderLayout());
-        this.add(tabs);
+        setLayout(new BorderLayout());
+        add(tabs);
     }
 
     private JFreeChart genHealthChart(Country.HealthStats stats) {
@@ -291,7 +291,7 @@ class InfoPanel extends JPanel{
         health.setChart(genHealthChart(stats));
         breakdown.setChart(genBreakdown(stats));
         history.setChart(genPopulationHistory(stats));
-        this.updateUI();
+        updateUI();
     }
 }
 
@@ -309,7 +309,7 @@ public class WorldView extends JFrame {
     JSplitPane container;
 
     public WorldView(WorldController cntrl) {
-        this.cntrl = cntrl;
+        cntrl = cntrl;
         setTitle("Epidemic Simulator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         inputPanel = getInputPanel();
@@ -323,8 +323,8 @@ public class WorldView extends JFrame {
         labDays = new JLabel("Day: ");
         labDays.setFont(new Font("Default", Font.PLAIN, 32));
 
-        this.add(container);
-        this.setVisible(true);
+        add(container);
+        setVisible(true);
     }
 
     public JSplitPane getOutputPanel() {
@@ -338,7 +338,7 @@ public class WorldView extends JFrame {
     }
 
     public JComponent getInputPanel() {
-        InputFields inputPanel = new InputFields(this.cntrl);
+        InputFields inputPanel = new InputFields(cntrl);
         return inputPanel;
     }
 
@@ -373,10 +373,10 @@ public class WorldView extends JFrame {
 
         for (int i = 0; i < components.length; i++) {
             components[i] = new InfoPanel();
-            this.rightPanel.add(components[i]);
+            rightPanel.add(components[i]);
         }
 
-        this.setVisible(true);
+        setVisible(true);
         split.setDividerLocation(0.4);
     }
 }

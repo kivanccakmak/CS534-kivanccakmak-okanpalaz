@@ -5,9 +5,9 @@ public class WorldController {
     private Simulator simulator;
 
     public WorldController() {
-        this.view = new WorldView(this);
-        this.view.setSize(300, 300);
-        this.view.setVisible(true);
+        view = new WorldView(this);
+        view.setSize(300, 300);
+        view.setVisible(true);
         simulator = null;
     }
 
