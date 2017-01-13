@@ -98,11 +98,11 @@ class InputFields extends JPanel {
         txtVert = new JTextField("3", 5);
         txtHoriz = new JTextField("3", 5);
         txtPeople = new JTextField("1000", 5);
-        txtInfect = new JTextField("20.0", 3);
-        txtDoctor = new JTextField("5.0", 3);
+        txtInfect = new JTextField("30.0", 3);
+        txtDoctor = new JTextField("1.0", 3);
         txtVaccine = new JTextField("2", 3);
         txtSuper = new JTextField("2.0", 3);
-        txtAir = new JTextField("10.0", 3);
+        txtAir = new JTextField("20.0", 3);
 
         inputPanel.add(labVert);
         inputPanel.add(txtVert);
