@@ -308,8 +308,8 @@ public class WorldView extends JFrame {
 
     JSplitPane container;
 
-    public WorldView(WorldController cntrl) {
-        cntrl = cntrl;
+    public WorldView(WorldController c) {
+        cntrl = c;
         setTitle("Epidemic Simulator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         inputPanel = getInputPanel();
