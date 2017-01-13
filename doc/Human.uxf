@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>120</y>
+      <w>390</w>
+      <h>540</h>
+    </coordinates>
+    <panel_attributes>public class Human
+--
+static int idGen = 0;
+private final int id;
+private int daysUntilMove;
+protected Country country;
+HealthState health;
+--
+public Human(Country c)
+private static int genId()
+private void genMoveDate()
+private Country selectDest() 
+private void move(Country destCountry)
+public void passDay()
+public int id()
+public Country country() 
+public boolean isHealthy() 
+public boolean isInfected() 
+public boolean isSick() 
+public boolean isImmune() 
+public boolean isDead()
+public boolean isSuperHealthy() 
+public boolean isInfectious() 
+public boolean isVisiblyInfectious() 
+public boolean isVaccineCandiate() 
+protected void getHealthy() 
+protected void getInfected() 
+protected void getSick() 
+protected void becomeImmune()
+protected void die()
+protected void getSuperHealthy() 
+protected void vaccinate()
+public boolean isDoctor()
+public String toString()
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>700</x>
+      <y>500</y>
+      <w>220</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>health = new Healthy(this);</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>650</x>
+      <y>500</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>40</x>
+      <y>360</y>
+      <w>200</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>return health.isHealthy();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>230</x>
+      <y>360</y>
+      <w>60</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0</additional_attributes>
+  </element>
+</diagram>

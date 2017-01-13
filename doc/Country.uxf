@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>0</y>
+      <w>390</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>public class Country
+--
+private String name
+private ArrayList&lt;Country&gt; neighbors
+private ArrayList&lt;Human&gt; people
+private ArrayList&lt;Human&gt; arrivals
+private Simulator simulator
+private HealthStats stats
+public ArrayList&lt;Country&gt; neighbors() 
+public ArrayList&lt;Country&gt; allCountries() 
+public ArrayList&lt;Human&gt; residents() 
+--
+public Country(Simulator s, String name)
+public void updateHealthStats()
+public HealthStats getStats()
+public void runHealthActions()
+public void processMoves() 
+public void addHuman(Human h) 
+public void removeHuman(Human h) 
+public void addNeighbor(Country c)
+public void moveHuman(Human h)
+public boolean hasVisiblyInfectious() 
+public boolean hasInfectious() 
+public String name() 
+public String toString() </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>0</x>
+      <y>310</y>
+      <w>270</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>return 
+    stats.visiblyInfectiousCount() &gt; 0;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>320</y>
+      <w>60</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>730</x>
+      <y>100</y>
+      <w>310</w>
+      <h>430</h>
+    </coordinates>
+    <panel_attributes>public static class HealthStats
+--
+private String name
+private long healthy
+private long infected
+private long sick
+private long immune
+private long dead
+private long superHealthy                
+private long infectious
+private long visiblyInfectious      
+private long doctors
+private long population
+--
+public String name() 
+public long healthyCount() 
+public long infectedCount() 
+public long sickCount()
+public long immuneCount() 
+public long deadCount() 
+public long superHealthyCount() 
+public long infectiousCount() 
+public long visiblyInfectiousCount() 
+public long population() 
+public long doctors() 
+public void add(HealthStats other) 
+public String toString() </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>110</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1070</x>
+      <y>430</y>
+      <w>190</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>return 
+    visiblyInfectious;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1030</x>
+      <y>440</y>
+      <w>60</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
