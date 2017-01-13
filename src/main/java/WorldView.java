@@ -28,7 +28,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.chart.plot.PlotOrientation;
 
-
+@SuppressWarnings("serial")
 class InputFields extends JPanel {
     private WorldController cntrl;
     private JPanel inputPanel;
@@ -159,6 +159,7 @@ class InputFields extends JPanel {
     private String getAirChance() { return txtAir.getText(); }
 }
 
+@SuppressWarnings("serial")
 class InfoPanel extends JPanel{
     private JLabel label;
     private JTabbedPane tabs;
@@ -294,6 +295,7 @@ class InfoPanel extends JPanel{
     }
 }
 
+@SuppressWarnings("serial")
 public class WorldView extends JFrame {
     private InfoPanel leftPanel;
     private JPanel rightPanel;
