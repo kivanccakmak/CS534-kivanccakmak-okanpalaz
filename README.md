@@ -62,6 +62,9 @@ TODO: main class relations
 ###WorldView
 ![] (doc/WorldView.png)
 
+###SimulationRules
+![] (doc/SimulationRules.png)
+
 ##Compile
 
 `./gradlew jar`
