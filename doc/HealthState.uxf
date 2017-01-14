@@ -3,7 +3,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>297</x>
+      <x>198</x>
       <y>0</y>
       <w>315</w>
       <h>234</h>
@@ -27,31 +27,9 @@ public boolean isVaccineCandiate()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>144</x>
-      <y>126</y>
-      <w>99</w>
-      <h>27</h>
-    </coordinates>
-    <panel_attributes>return false;</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>234</x>
-      <y>126</y>
-      <w>81</w>
-      <h>27</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>99</x>
+      <x>18</x>
       <y>243</y>
       <w>180</w>
       <h>63</h>
@@ -67,7 +45,7 @@ boolean isSuperHealthy()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>207</x>
+      <x>108</x>
       <y>468</y>
       <w>279</w>
       <h>90</h>
@@ -85,7 +63,7 @@ void infectionChance(boolean infectious)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>333</x>
+      <x>234</x>
       <y>225</y>
       <w>27</w>
       <h>261</h>
@@ -96,8 +74,8 @@ void infectionChance(boolean infectious)
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>504</x>
-      <y>549</y>
+      <x>396</x>
+      <y>612</y>
       <w>315</w>
       <h>45</h>
     </coordinates>
@@ -109,19 +87,19 @@ void infectionChance(boolean infectious)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>477</x>
+      <x>378</x>
       <y>531</y>
       <w>45</w>
-      <h>45</h>
+      <h>99</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>30.0;30.0;10.0;10.0</additional_attributes>
+    <additional_attributes>30.0;90.0;30.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>0</x>
-      <y>540</y>
+      <x>36</x>
+      <y>576</y>
       <w>189</w>
       <h>27</h>
     </coordinates>
@@ -131,18 +109,18 @@ void infectionChance(boolean infectious)
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>180</x>
+      <x>81</x>
       <y>522</y>
       <w>45</w>
-      <h>45</h>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;30.0;30.0;10.0</additional_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0;30.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>99</x>
+      <x>531</x>
       <y>0</y>
       <w>162</w>
       <h>72</h>
@@ -158,18 +136,18 @@ all methods are
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>180</x>
+      <x>153</x>
       <y>198</y>
-      <w>135</w>
+      <w>63</w>
       <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;50.0;10.0;10.0;130.0;10.0</additional_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0;50.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>576</x>
+      <x>477</x>
       <y>270</y>
       <w>153</w>
       <h>108</h>
@@ -187,8 +165,8 @@ void passDay()</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>783</x>
-      <y>351</y>
+      <x>639</x>
+      <y>396</y>
       <w>252</w>
       <h>54</h>
     </coordinates>
@@ -202,7 +180,7 @@ if (days == rules.getDaysUntilSick())
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>576</x>
+      <x>477</x>
       <y>225</y>
       <w>27</w>
       <h>63</h>
@@ -213,7 +191,7 @@ if (days == rules.getDaysUntilSick())
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>135</x>
+      <x>36</x>
       <y>342</y>
       <w>198</w>
       <h>90</h>
@@ -230,7 +208,7 @@ boolean isVisiblyInfectious()
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>297</x>
+      <x>198</x>
       <y>225</y>
       <w>27</w>
       <h>135</h>
@@ -241,7 +219,7 @@ boolean isVisiblyInfectious()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>351</x>
+      <x>252</x>
       <y>279</y>
       <w>198</w>
       <h>117</h>
@@ -261,8 +239,8 @@ void passDay()
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>558</x>
-      <y>414</y>
+      <x>414</x>
+      <y>459</y>
       <w>324</w>
       <h>108</h>
     </coordinates>
@@ -279,18 +257,18 @@ if (days == rules.getDaysUntilImmune())
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>540</x>
+      <x>441</x>
       <y>378</y>
-      <w>90</w>
-      <h>54</h>
+      <w>45</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>80.0;40.0;10.0;10.0</additional_attributes>
+    <additional_attributes>30.0;90.0;30.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>387</x>
+      <x>288</x>
       <y>225</y>
       <w>27</w>
       <h>72</h>
@@ -301,18 +279,18 @@ if (days == rules.getDaysUntilImmune())
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>720</x>
+      <x>621</x>
       <y>360</y>
-      <w>81</w>
-      <h>27</h>
+      <w>54</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>40.0;40.0;40.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>648</x>
+      <x>549</x>
       <y>144</y>
       <w>162</w>
       <h>108</h>
@@ -330,7 +308,7 @@ void passDay()</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>603</x>
+      <x>504</x>
       <y>144</y>
       <w>63</w>
       <h>27</h>
@@ -341,7 +319,7 @@ void passDay()</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>783</x>
+      <x>639</x>
       <y>270</y>
       <w>270</w>
       <h>63</h>
@@ -355,45 +333,12 @@ if (days == rules.getDaysUntilHealthy())
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>801</x>
+      <x>702</x>
       <y>234</y>
-      <w>63</w>
+      <w>36</w>
       <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>50.0;40.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>252</x>
-      <y>9</y>
-      <w>63</w>
-      <h>27</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>846</x>
-      <y>189</y>
-      <w>99</w>
-      <h>27</h>
-    </coordinates>
-    <panel_attributes>return true;</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>801</x>
-      <y>198</y>
-      <w>63</w>
-      <h>27</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>20.0;40.0;20.0;10.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

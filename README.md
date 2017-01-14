@@ -50,15 +50,21 @@ the whole world.
 
 #Code Documentation
 
-![] (doc/Summary.png)
+* ***MVC pattern*** used to establish interaction in between simulator and user interface.
+* Simulation rules are hard-coded into SimulationRules class, which uses ***Singleton pattern***.
+* On each day, simulator delegates daily operations into Country objects and country objects delegates to Human objects.
+* Human objects delegates health related processes to HealthState objects; where HealthState objects are allowed to change **health** field of Humans -***State pattern***.
 
-TODO: write used patterns
+![] (doc/Summary.png)
 
 ###Contry
 ![] (doc/Country.png)
 
 ###Human
 ![] (doc/Human.png)
+
+###HealthState
+![] (doc/HealthState.png)
 
 ###Simulator
 ![] (doc/Simulator.png)
@@ -71,4 +77,3 @@ TODO: write used patterns
 
 ###SimulationRules
 ![] (doc/SimulationRules.png)
-
