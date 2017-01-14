@@ -42,10 +42,9 @@ the whole world.
 
 #Code Documentation
 
-TODO: flow-chart
+![] (doc/Summary.png)
 
-TODO: main class relations
-
+TODO: write used patterns
 
 ###Simulator
 ![] (doc/Country.png)
