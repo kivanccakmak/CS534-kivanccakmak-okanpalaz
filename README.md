@@ -59,6 +59,8 @@ the whole world.
 ###Model Big Picture
 ![] (doc/Model.png)
 
+![] (doc/mvc.png)
+
 ###MVC
 ![] (doc/Summary.png)
 
