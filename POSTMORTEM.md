@@ -44,6 +44,18 @@ collecting but adding these queries for all was a bit tedious.
 
 Human and Doctor also query isDead to not take non healthstate related actions.
 
+### Patterns
+
+* ***MVC pattern*** used to establish interaction in between simulator and user
+  interface.
+* Simulation rules are hard-coded into SimulationRules class, which uses
+  ***Singleton pattern***.
+* On each day, simulator delegates daily operations into Country objects and
+  country objects delegates to Human objects.
+* Human objects delegates health related processes to HealthState objects;
+  where HealthState objects are allowed to change **health** field of Humans
+  -***State pattern***.
+
 ## New Requirements
 
 ### Round World
