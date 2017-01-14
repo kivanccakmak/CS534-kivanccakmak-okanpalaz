@@ -26,6 +26,7 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetUtilities;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.chart.plot.PlotOrientation;
 
 @SuppressWarnings("serial")
@@ -166,6 +167,7 @@ class InfoPanel extends JPanel{
     private ChartPanel health;
     private ChartPanel breakdown;
     private ChartPanel history;
+    private ChartPanel moves;
     private ArrayList<Country.HealthStats> statHistory;
 
     InfoPanel() {
@@ -175,10 +177,12 @@ class InfoPanel extends JPanel{
         health = new ChartPanel(null);
         breakdown = new ChartPanel(null);
         history = new ChartPanel(null);
+        moves = new ChartPanel(null);
 
         tabs.addTab("Health", health);
         tabs.addTab("Population Breakdown", breakdown);
         tabs.addTab("Population History", history);
+        tabs.addTab("Moves", moves);
         statHistory = new ArrayList<Country.HealthStats>();
 
         setLayout(new BorderLayout());
@@ -287,10 +291,34 @@ class InfoPanel extends JPanel{
         return chart;
     }
 
+    private JFreeChart genMovesChart(Country.HealthStats stats) {
+        Map<String, Long> moves = stats.moves();
+        if (moves == null) {
+            return null;
+        }
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        for (Map.Entry<String, Long> m: moves.entrySet()) {
+            dataset.addValue(m.getValue() , m.getKey(), m.getKey());
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+                "From " + stats.name(),
+                "",
+                "",
+                dataset,
+                PlotOrientation.VERTICAL,
+                false, false, false);
+
+        return chart;
+    }
+
     public void updateStats(Country.HealthStats stats) {
         health.setChart(genHealthChart(stats));
         breakdown.setChart(genBreakdown(stats));
         history.setChart(genPopulationHistory(stats));
+        moves.setChart(genMovesChart(stats));
         updateUI();
     }
 }

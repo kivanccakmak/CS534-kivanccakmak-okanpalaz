@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.*;
 
 public class Country {
     private String name;
@@ -8,6 +9,7 @@ public class Country {
     private Simulator simulator;
     private HealthStats stats;
 
+    private Map<String, Long> moves;
 
     public static class HealthStats {
         private String name = "";
@@ -24,6 +26,8 @@ public class Country {
         private long doctors;
         private long population;
 
+        private Map<String, Long> moves;
+
         public String name() { return name; }
 
         public long healthyCount() { return healthy; }
@@ -39,6 +43,8 @@ public class Country {
         public long population() { return population; }
         public long doctors() { return doctors; }
 
+        public Map<String, Long> moves() { return moves; }
+
         public void add(HealthStats other) {
             healthy += other.healthy;
             infected += other.infected;
@@ -52,6 +58,7 @@ public class Country {
 
             population += other.population;
             doctors += other.doctors;
+            moves = null;
         }
 
         @Override
@@ -92,6 +99,8 @@ public class Country {
 
         newStats.population = people.size();
         newStats.doctors = people.stream().filter(p -> p.isDoctor()).count();
+
+        newStats.moves = moves;
         stats = newStats;
     }
 
@@ -104,6 +113,11 @@ public class Country {
         for (Human p: people) {
             p.passDay();
         }
+
+        // Collect move actions
+        moves = people.stream()
+            .filter(p -> p.country() != this)
+            .collect(Collectors.groupingBy(p -> p.country().name(), Collectors.counting()));
 
         // remove people who moved
         people.removeIf(p -> p.country() != this);
