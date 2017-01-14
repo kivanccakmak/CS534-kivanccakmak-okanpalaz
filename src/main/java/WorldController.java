@@ -6,7 +6,7 @@ public class WorldController {
 
     public WorldController() {
         view = new WorldView(this);
-        view.setSize(300, 300);
+        view.setSize(1280, 720);
         view.setVisible(true);
         simulator = null;
     }
