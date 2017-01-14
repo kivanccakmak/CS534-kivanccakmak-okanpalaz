@@ -56,10 +56,14 @@ the whole world.
   where HealthState objects are allowed to change **health** field of Humans
   -***State pattern***.
 
+###MVC Design
+
+![] (doc/mvc.png)
+
 ###Model Big Picture
 ![] (doc/Model.png)
 
-![] (doc/mvc.png)
+<!-- regular html comment
 
 ###MVC
 ![] (doc/Summary.png)
@@ -84,3 +88,5 @@ the whole world.
 
 ###SimulationRules
 ![] (doc/SimulationRules.png)
+
+-->
