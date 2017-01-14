@@ -29,8 +29,8 @@ public void initOutput(int numVertical, int numHorizontal)
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>300</x>
-      <y>270</y>
+      <x>310</x>
+      <y>470</y>
       <w>490</w>
       <h>210</h>
     </coordinates>
@@ -97,8 +97,8 @@ private String getNumVaccine()
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>550</x>
-      <y>110</y>
+      <x>310</x>
+      <y>300</y>
       <w>530</w>
       <h>140</h>
     </coordinates>
@@ -118,17 +118,17 @@ for (int i = 0; i &lt; components.length; i++) {
     <coordinates>
       <x>480</x>
       <y>190</y>
-      <w>90</w>
-      <h>30</h>
+      <w>70</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>50.0;110.0;50.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>770</x>
-      <y>510</y>
+      <x>520</x>
+      <y>700</y>
       <w>340</w>
       <h>70</h>
     </coordinates>
@@ -142,12 +142,12 @@ this.updateUI();
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
-      <y>460</y>
-      <w>90</w>
-      <h>70</h>
+      <x>790</x>
+      <y>660</y>
+      <w>50</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>70.0;50.0;70.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>30.0;40.0;30.0;10.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

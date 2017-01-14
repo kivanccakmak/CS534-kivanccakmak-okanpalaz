@@ -40,13 +40,21 @@ the whole world.
    infected according to the transmissibility rate of 40%, unless the person is
    already infected or immune.
 
+##Compile
+
+`./gradlew jar`
+
+##Run Test
+
+`./gradlew runApp`
+
 #Code Documentation
 
 ![] (doc/Summary.png)
 
 TODO: write used patterns
 
-###Simulator
+###Contry
 ![] (doc/Country.png)
 
 ###Human
@@ -63,12 +71,4 @@ TODO: write used patterns
 
 ###SimulationRules
 ![] (doc/SimulationRules.png)
-
-##Compile
-
-`./gradlew jar`
-
-##Run Test
-
-`./gradlew runApp`
 

@@ -42,7 +42,7 @@ public Random getRng() </panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>780</x>
+      <x>740</x>
       <y>310</y>
       <w>140</w>
       <h>30</h>
@@ -55,16 +55,16 @@ public Random getRng() </panel_attributes>
     <coordinates>
       <x>700</x>
       <y>310</y>
-      <w>100</w>
+      <w>60</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>760</x>
+      <x>740</x>
       <y>90</y>
       <w>90</w>
       <h>60</h>
@@ -80,10 +80,10 @@ bg=blue</panel_attributes>
     <coordinates>
       <x>700</x>
       <y>100</y>
-      <w>80</w>
+      <w>60</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

@@ -186,7 +186,7 @@ HealthState health
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>300</x>
+      <x>330</x>
       <y>700</y>
       <w>340</w>
       <h>130</h>
@@ -228,6 +228,33 @@ cntrl.passDay()</panel_attributes>
 initButton.addActionListener
 */
 cntrl.restart()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>340</x>
+      <y>850</y>
+      <w>330</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>/*
+Human's passDay()
+*/
+health.passDay();
+                                 
+if (!health.isDead()) {
+    daysUntilMove--;
+}
+                                 
+if (daysUntilMove == 0) {
+    genMoveDate();
+    Country dest = selectDest();
+    if (dest != null) {
+        move(dest);
+    }
+}
+</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
