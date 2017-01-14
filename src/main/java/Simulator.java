@@ -29,8 +29,8 @@ public class Simulator {
 
     private void northNeighborAdd(Country c, int index) {
         int neighbor;
-        if (index - rows > 0) {
-            neighbor = index - rows;
+        if (index - cols >= 0) {
+            neighbor = index - cols;
         } else {
             neighbor = countries.size() - cols + (index % cols);
         }
@@ -39,8 +39,8 @@ public class Simulator {
 
     private void southNeighborAdd(Country c, int index) {
         int neighbor;
-        if (index + rows < countries.size()) {
-            neighbor = index + rows;
+        if (index + cols < countries.size()) {
+            neighbor = index + cols;
         } else {
             neighbor = index % cols;
         }

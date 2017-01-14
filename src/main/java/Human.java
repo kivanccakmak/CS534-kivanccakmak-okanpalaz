@@ -185,6 +185,7 @@ public class Human {
             candidates = country.neighbors()
                 .stream()
                 .filter(c -> !c.hasVisiblyInfectious())
+                .filter(c -> c != country)
                 .collect(Collectors.toList());
         }
 
