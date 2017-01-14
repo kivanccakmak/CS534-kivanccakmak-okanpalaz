@@ -1,4 +1,4 @@
-#Epidemic Simulator Game
+#Epidemic Simulator
 
 The world is a **MxN** grid of countries with unlimited number of people.
 
@@ -18,8 +18,11 @@ that hold visibly sick people.
 Unfortunately, travelling people means the virus finds opportunity to spread to
 the whole world.
 
-
 ![] (doc/ui.png)
+
+##Compile and Run
+
+`./gradlew runApp`
 
 ###Rules
 
@@ -40,24 +43,26 @@ the whole world.
    infected according to the transmissibility rate of 40%, unless the person is
    already infected or immune.
 
-##Compile
-
-`./gradlew jar`
-
-##Run Test
-
-`./gradlew runApp`
 
 #Code Documentation
 
-* ***MVC pattern*** used to establish interaction in between simulator and user interface.
-* Simulation rules are hard-coded into SimulationRules class, which uses ***Singleton pattern***.
-* On each day, simulator delegates daily operations into Country objects and country objects delegates to Human objects.
-* Human objects delegates health related processes to HealthState objects; where HealthState objects are allowed to change **health** field of Humans -***State pattern***.
+* ***MVC pattern*** used to establish interaction in between simulator and user
+  interface.
+* Simulation rules are hard-coded into SimulationRules class, which uses
+  ***Singleton pattern***.
+* On each day, simulator delegates daily operations into Country objects and
+  country objects delegates to Human objects.
+* Human objects delegates health related processes to HealthState objects;
+  where HealthState objects are allowed to change **health** field of Humans
+  -***State pattern***.
 
+###Model Big Picture
+![] (doc/Model.png)
+
+###MVC
 ![] (doc/Summary.png)
 
-###Contry
+###Country
 ![] (doc/Country.png)
 
 ###Human
