@@ -2,6 +2,8 @@
 
 ## Design Decisions
 
+This section discusses some of the key design descisions.
+
 ### Neighbors as a List
 
 Countries keep their neighbors in a list and the list is set at initialization.
@@ -48,7 +50,7 @@ Human and Doctor also query isDead to not take non healthstate related actions.
 
 * ***MVC pattern*** used to establish interaction in between simulator and user
   interface.
-* Simulation rules are hard-coded into SimulationRules class, which uses
+* Simulation rules are kept in a SimulationRules object, which uses the
   ***Singleton pattern***.
 * On each day, simulator delegates daily operations into Country objects and
   country objects delegates to Human objects.
@@ -58,16 +60,18 @@ Human and Doctor also query isDead to not take non healthstate related actions.
 
 ## New Requirements
 
+This section discusses the changes made for the new requirements.
+
 ### Round World
 
-[Related Change (Link)](https://github.com/ozusrl/CS534-kivanccakmak-okanpalaz/commit/824cb1fdc5306ff98c4ce2375f623f892dedcf70)
+[Related Change on GitHub (Link)](https://github.com/ozusrl/CS534-kivanccakmak-okanpalaz/commit/824cb1fdc5306ff98c4ce2375f623f892dedcf70)
 
 This change was fairly simple as it only required changing methods that
 calculated the neighbor indices.
 
 ### Super
 
-[Related Change (Link)](https://github.com/ozusrl/CS534-kivanccakmak-okanpalaz/commit/28ae1e4e1043619a4b947b959962962ce707260c)
+[Related Change on GitHub (Link)](https://github.com/ozusrl/CS534-kivanccakmak-okanpalaz/commit/28ae1e4e1043619a4b947b959962962ce707260c)
 
 This change introduced a new subclass for HealthState. For Human constructor to
 start with Super we modified the constructor from a isInfected boolean to a
@@ -76,7 +80,7 @@ complicated the initialization.
 
 ### Doctors
 
-[Related Change (Link)](https://github.com/ozusrl/CS534-kivanccakmak-okanpalaz/commit/5e09ceda9b9bde3a40f469fe9705150255f5d9a5)
+[Related Change on GitHub (Link)](https://github.com/ozusrl/CS534-kivanccakmak-okanpalaz/commit/5e09ceda9b9bde3a40f469fe9705150255f5d9a5)
 
 Doctor was implemented as a subclass of Human and was fairly simple. It has its
 own passDay that runs `super.passDay()` in the end.
@@ -93,7 +97,7 @@ Healthy/Infected/Super percentages was going to be complicated.
 
 ### Air Travel
 
-[Related Change (Link)](https://github.com/ozusrl/CS534-kivanccakmak-okanpalaz/commit/882c76ba24abf62756eb4cacd3f5f828fe21f1e6)
+[Related Change on GitHub (Link)](https://github.com/ozusrl/CS534-kivanccakmak-okanpalaz/commit/882c76ba24abf62756eb4cacd3f5f828fe21f1e6)
 
 This change required us to pass a Simulator handle to Country for querying the
 list of countries. Previously, they only had a list of neighbors.
@@ -102,14 +106,18 @@ We added another dice throw method to the SimulationRules object.
 
 ## Some Outstanding Bugs
 
+This section discusses some of the bugs that were caught late in development.
+
 ### Neighbor Index Calculation Bug
-![] (doc/index.png)
+
+![Neighbor Index Calculation Bug](./doc/index.png)
 
 Different map sizes weren't tested so "rows" related "cols" bug in neighbor
 association was caught late.
 
 ### Countries Neighboring Themselves
-![] (doc/move.png)
+
+![Countries Neighboring Themselves](doc/move.png)
 
 If countries were neighboring themselves due to round world rules, Human
 objects considered their own country a move candidate. In this case they were
@@ -118,8 +126,10 @@ calculations.
 
 
 ### Dead Doctors Still Vaccinating
-![] (doc/deaddoctor.png)
+
+![Dead Doctors Still Vaccinating](doc/deaddoctor.png)
 
 HealthState and Human's passDay actions unrelated to the health state are kept
 separate. So it was easy to miss Dead state check for Doctor as it was doing
 vaccination in it's own passDay and then just calling `super.passDay()`.
+

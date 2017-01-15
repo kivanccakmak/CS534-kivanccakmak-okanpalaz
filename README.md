@@ -3,7 +3,7 @@
 This is an implementation of the CS534 project defined
 [here](https://aktemur.github.io/cs534/project_epidemic.html)
 
-![] (doc/ui.png)
+![](doc/ui.png)
 
 ## To Compile and Run
 
