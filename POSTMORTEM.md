@@ -1,4 +1,27 @@
-# Project Post Mortem
+# Project Postmortem
+
+## Introduction
+
+This is a postmortem of the project. In the UMLs section an overview of the
+design is presented. The rest of the document discusses design decisions, the
+new requirements and some other relevant information.
+
+## UMLs
+
+This section presents UMLs of the design.
+
+### MVC Design
+
+This is an overview of the MVC model. Simulator acts as the Model in this case.
+
+![MVC UML](doc/mvc.png)
+
+### Model Big Picture
+
+This is an overview of the Model. To keep things simple it only shows the more
+important methods.
+
+![Model UML](doc/Model.png)
 
 ## Design Decisions
 

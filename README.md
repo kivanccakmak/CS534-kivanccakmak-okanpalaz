@@ -11,11 +11,11 @@ This is an implementation of the CS534 project defined
 
 ## Documents
 
-### Post Mortem
+### Post,ortem
 
-[Post Mortem report](./POSTMORTEM.md)
+[Postmortem report](./POSTMORTEM.md)
 
-This report is a post mortem of the project. It discusses the design decisions
+This report is a postmortem of the project. It discusses the design decisions
 and challenges.
 
 ### UMLs
