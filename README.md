@@ -11,7 +11,7 @@ This is an implementation of the CS534 project defined
 
 ## Documents
 
-### Post,ortem
+### Postmortem
 
 [Postmortem report](./POSTMORTEM.md)
 
